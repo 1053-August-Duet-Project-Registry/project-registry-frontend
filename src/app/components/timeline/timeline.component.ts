@@ -137,6 +137,7 @@ export class TimelineComponent implements OnInit {
     this.calculateUpperBound(this.batchArray);
     console.log(this.batchArray);
 
+    // vp,,rmy
     this.gstc = GSTC({
           element: this.gstcElement.nativeElement,
           state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray))
