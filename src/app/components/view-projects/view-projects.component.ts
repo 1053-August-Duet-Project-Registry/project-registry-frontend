@@ -24,6 +24,22 @@ export interface statusFilter { }
   styleUrls: ['./view-projects.component.css'],
 })
 export class ViewProjectsComponent implements OnInit {
+
+  // --------------------  End Group5 Iterator: Passing batch to detail-project --------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------------------------------
+
+
+  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService, private iterationService: IterationService, private route: Router, private location: Location) {
+    let numberOfTimesAround = 0;
+    route.events.subscribe(val => {
+      if (location.path() == '/project-detail' && numberOfTimesAround < 1) {
+        console.log('running');
+        this.getProjects();
+        numberOfTimesAround++;
+      }
+    });
+
+  }
   public projects: Project[] = []; // will be used by dataSource for the table
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -36,9 +52,9 @@ export class ViewProjectsComponent implements OnInit {
 
   public tagSelected: null;
   public phaseSelected: null;
-  public statusSelected?: string = "ACTIVE";
+  public statusSelected = 'ACTIVE';
 
-  //based on project.model.ts
+  // based on project.model.ts
   displayedColumns: string[] = [
     'id',
     'name',
@@ -66,57 +82,61 @@ export class ViewProjectsComponent implements OnInit {
   iterationSuccess?: string;
   iterationError?: string;
 
+  static getProjectsStatic() {
+  }
+
   changeBatch(value: BatchTemplate) {
     this.sendBatch = value as BatchTemplate;
-    console.log(this.sendBatch)
+    console.log(this.sendBatch);
   }
 
   getBatches() {
-    this.iterationService.getBatchServiceMock().subscribe(data => this.allBatches = data)
+    this.iterationService.getBatchServiceMock().subscribe(data => this.allBatches = data);
   }
 
   getIteration() {
-    console.log("all iteration")
+    console.log('all iteration');
     this.iterationService.getIteration().subscribe(iteration => {
-      this.allIterations = iteration
-      console.log("all", this.allIterations)
-    })
+      this.allIterations = iteration;
+      console.log('all', this.allIterations);
+    });
 
   }
 
   sendIteration(row: Project) {
     if (this.sendBatch) {
-      console.log(this.sendBatch)
+      console.log(this.sendBatch);
       this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate);
 
       let haventIterate: Boolean = true;
       for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == this.sendBatch.batchId)
-          haventIterate = false
+        if (this.allIterations[i].batchId == this.sendBatch.batchId) {
+          haventIterate = false;
+        }
       }
 
       if (this.allIterations.length > 0) {
         for (let i = 0; i < this.allIterations.length; i++) {
-          let projects: Project = this.allIterations[i].project as Project
-          console.log(row.id, projects.id, this.sendBatch.batchId, this.allIterations[i].batchId, this.allIterations.length)
+          const projects: Project = this.allIterations[i].project as Project;
+          console.log(row.id, projects.id, this.sendBatch.batchId, this.allIterations[i].batchId, this.allIterations.length);
           if (row.id != projects.id && this.sendBatch.batchId == this.allIterations[i].batchId) {
 
             this.iterationService.sendIteration(this.iteration).subscribe(data => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
-            this.getIteration()
-            this.selectedBatch = this.sendBatch.batchId
-            this.iterationError = ''
+            this.getIteration();
+            this.selectedBatch = this.sendBatch.batchId;
+            this.iterationError = '';
             break;
 
           } else {
             if (haventIterate == true) {
               this.iterationService.sendIteration(this.iteration).subscribe(data => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
-              this.getIteration()
-              this.iterationError = ''
+              this.getIteration();
+              this.iterationError = '';
               break;
             } else {
-              haventIterate = this.allIterations[i].batchId == this.sendBatch.batchId
-              console.log("same id same batch")
-              this.iterationSuccess = ''
+              haventIterate = this.allIterations[i].batchId == this.sendBatch.batchId;
+              console.log('same id same batch');
+              this.iterationSuccess = '';
               this.iterationError = `Project ${row.name.toUpperCase()} had already been assigned to batch ${this.sendBatch.batchId}`;
               break;
             }
@@ -124,8 +144,8 @@ export class ViewProjectsComponent implements OnInit {
         }
       } else {
         this.iterationService.sendIteration(this.iteration).subscribe(data => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
-        this.getIteration()
-        console.log("first time")
+        this.getIteration();
+        console.log('first time');
 
       }
 
@@ -133,36 +153,20 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   filterIteration(event: MatSelectChange): void {
-    console.log("FilterIteration method: (event.value): " + event.value)
+    console.log('FilterIteration method: (event.value): ' + event.value);
 
     if (this.allIterations && this.allIterations.length > 0) {
-      let filtered: Project[] = [];
+      const filtered: Project[] = [];
 
       for (let i = 0; i < this.allIterations.length; i++) {
         if (this.allIterations[i].batchId == event.value) {
-          filtered.push(this.allIterations[i].project as Project)
-          console.log("itera", this.allIterations[i].project as Project)
+          filtered.push(this.allIterations[i].project as Project);
+          console.log('itera', this.allIterations[i].project as Project);
         }
       }
-      console.log("iteration project", filtered)
+      console.log('iteration project', filtered);
       this.dataSource = new MatTableDataSource(filtered);
-    } else { console.log("error: no iterators receive from the database") }
-
-  }
-
-  // --------------------  End Group5 Iterator: Passing batch to detail-project --------------------------------------------------
-  // -----------------------------------------------------------------------------------------------------------------------------
-
-
-  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService, private iterationService: IterationService, private route: Router, private location: Location) {
-    var numberOfTimesAround = 0;
-    route.events.subscribe(val => {
-      if (location.path() == "/project-detail" && numberOfTimesAround < 1) {
-        console.log("running")
-        this.getProjects();
-        numberOfTimesAround++;
-      }
-    })
+    } else { console.log('error: no iterators receive from the database'); }
 
   }
 
@@ -183,9 +187,6 @@ export class ViewProjectsComponent implements OnInit {
     // perhaps a different method?
   }
 
-  static getProjectsStatic() {
-  }
-
 
   ngAfterViewInit() {
     // this.getProjects();
@@ -203,29 +204,29 @@ export class ViewProjectsComponent implements OnInit {
     console.log(filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
-    //todo add all filters, chain with if
+    // todo add all filters, chain with if
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  //returns all the projects in DB
+  // returns all the projects in DB
   public getProjectsInit(): void {
-    console.log("getProjects method: ");
+    console.log('getProjects method: ');
     this.viewProjectService.GetAllProjects().subscribe((report) => {
       this.projects = report as Project[];
       // console.log("this.projects =");
       // console.log(this.projects);
 
-      this.dataSource.data = this.projects.filter(p=>p.status.name == "ACTIVE");
+      this.dataSource.data = this.projects.filter(p => p.status.name == 'ACTIVE');
       // console.log("datasource: ");
       // console.log(this.dataSource.data);
     });
   }
 
   public getProjects(): void {
-    console.log("getProjects method: ");
+    console.log('getProjects method: ');
     this.viewProjectService.GetAllProjects().subscribe((report) => {
       this.projects = report as Project[];
       // console.log("this.projects =");
@@ -252,19 +253,19 @@ export class ViewProjectsComponent implements OnInit {
       .subscribe((data) => {
         (this.phase = data);
         console.log(this.phase);
-      })
+      });
   }
 
   // grabs all of the statuses
   getAllStatuses(): void {
     this.viewProjectService.getAllStatuses()
       .subscribe((data) => {
-        for (let d of data) {
+        for (const d of data) {
           this.status.push(d.name);
         }
-        console.log("getAllStatuses Method: ");
+        console.log('getAllStatuses Method: ');
         console.log(this.status);
-      })
+      });
   }
 
   getProjectStatus(): void {
@@ -282,14 +283,14 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   filterProjectsByStatus() {
-    if (this.statusSelected === "") {
+    if (this.statusSelected === '') {
       this.filteredProjects = this.projects;
     } else {
-      //grabbed projects array
+      // grabbed projects array
       console.log(this.projects);
       this.filteredStatuses = []; // need more descriptive name here
       for (const project of this.projects) {
-        //finds projects with status name the same as selected status
+        // finds projects with status name the same as selected status
         console.log(project);
 
         if (project.status.name === this.statusSelected) {
@@ -301,12 +302,12 @@ export class ViewProjectsComponent implements OnInit {
 
   filterStatus(event?: MatSelectChange): void {
     // //grabbed changed status value
-    //this.statusSelected = event.value;
+    // this.statusSelected = event.value;
     if (event) {
-      console.log("Filter Status Method: (with event): " + this.statusSelected);
+      console.log('Filter Status Method: (with event): ' + this.statusSelected);
       this.filterProjectsByStatus();
     } else {
-      console.log("Filter Status Method: (w/o event): " + this.statusSelected);
+      console.log('Filter Status Method: (w/o event): ' + this.statusSelected);
       this.filterProjectsByStatus();
     }
 
@@ -322,7 +323,7 @@ export class ViewProjectsComponent implements OnInit {
   // }
 
   filterTag(event: MatSelectChange): void {
-    //this.tagSelected = event.value;
+    // this.tagSelected = event.value;
     console.log(this.tagSelected);
 
     if (this.tagSelected === 'noTag') {
@@ -346,11 +347,11 @@ export class ViewProjectsComponent implements OnInit {
     if (this.phaseSelected === 'noPhase') {
       this.filteredProjects = this.projects;
     } else {
-      //grabbed projects array
+      // grabbed projects array
       console.log(this.projects);
       this.filteredPhase = [];
       for (const i of this.projects) {
-        //finds projects with status name the same as selected status
+        // finds projects with status name the same as selected status
         console.log(i);
         if (i.phase.kind === this.phaseSelected) {
           this.filteredPhase.push(i);
@@ -361,21 +362,21 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   filterResults(): void {
-    var temp: Project[] = [];
+    let temp: Project[] = [];
     if (
       this.tagSelected != null &&
-      this.statusSelected != "" &&
-      this.tagSelected != 'noTag' &&
-      this.statusSelected != 'noStatus'
+      this.statusSelected !== '' &&
+      this.tagSelected !== 'noTag' &&
+      this.statusSelected !== 'noStatus'
     ) {
-      console.log("filterResults Method: (this.filteredTags): " + this.filteredTags);
-      temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x))
+      console.log('filterResults Method: (this.filteredTags): ' + this.filteredTags);
+      temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
     } else if (this.tagSelected != null && this.tagSelected != 'noTag') {
       temp = this.filteredTags;
       console.log(this.dataSource);
     } else if (
-      this.statusSelected != "" &&
-      this.statusSelected != 'noStatus'
+      this.statusSelected !== '' &&
+      this.statusSelected !== 'noStatus'
     ) {
       temp = this.filteredStatuses;
       console.log(this.dataSource);
@@ -387,7 +388,7 @@ export class ViewProjectsComponent implements OnInit {
     if (this.phaseSelected != null && this.phaseSelected != 'noStatus') {
       this.dataSource = new MatTableDataSource(
         this.filteredPhase.filter((x) => temp.includes(x))
-      )
+      );
     }
     else {
       this.dataSource = new MatTableDataSource(temp);
@@ -402,19 +403,24 @@ export class ViewProjectsComponent implements OnInit {
     this.filteredPhase = [];
     this.filteredStatuses = [];
 
-    this.statusSelected = "";
+    this.statusSelected = '';
     this.tagSelected = null;
     this.phaseSelected = null;
-    this.selectedBatch = "";
+    this.selectedBatch = '';
   }
 
+  // TODO this method is current non-functional.
   rowClicked(projectId: number) {
-    if (projectId)
-      var currentProject: Project | undefined = this.projects.find(p => p.id == projectId);
+    let currentProject: Project | undefined;
+    if (projectId) {
+       currentProject = this.projects.find(p => p.id === projectId);
+    }
 
     console.log(currentProject);
-    if (currentProject != undefined)
+    if (currentProject !== undefined) {
       this.projectService.setCurrentProject(currentProject);
-    this.route.navigateByUrl('project-detail')
+    }
+    // TODO do something with this promise, most likely navigate to the appropriate project page.
+    this.route.navigateByUrl('project-detail');
   }
 }

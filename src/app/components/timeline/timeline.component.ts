@@ -24,10 +24,18 @@ import { mockData } from './timelineMockData';
 })
 
 export class TimelineComponent implements OnInit {
+
+  constructor(public iter: IterationService, private datePipe: DatePipe) { }
   /* START OF TIMELINE CONFIG */
 
   @ViewChild('gstcElement', { static: true }) gstcElement!: ElementRef;
   gstc!: GSTCResult;
+
+  currentDate = new Date();
+  timelineUpperBound: Date = this.currentDate;
+  timelineLowerBound: Date = this.currentDate;
+
+  batchArray?: Array<BatchTemplate>;
 
   generateConfig(batch: Array<BatchTemplate>): Config {
     const iterations = batch.length;
@@ -40,8 +48,8 @@ export class TimelineComponent implements OnInit {
       // @ts-ignore
       rows[id] = {
         id,
-        label: this.datePipe.transform(batch[i].startDate, "mediumDate")
-        + " - " + this.datePipe.transform(batch[i].endDate, "mediumDate"),
+        label: this.datePipe.transform(batch[i].startDate, 'mediumDate')
+        + ' - ' + this.datePipe.transform(batch[i].endDate, 'mediumDate'),
 
         parentId: undefined,
         expanded: true,
@@ -55,10 +63,10 @@ export class TimelineComponent implements OnInit {
     for (let i = 0; i < iterations; i++) {
       const id = GSTC.api.GSTCID(i.toString());
       start = start.add(0, 'day');
-      //@ts-ignore
+      // @ts-ignore
       items[id] = {
         id,
-        label: batch[i].batchId + " : " + batch[i].skill + " @ " + batch[i].location,
+        label: batch[i].batchId + ' : ' + batch[i].skill + ' @ ' + batch[i].location,
         time: {
           start: GSTC.api.date(batch[i].endDate).startOf('day').subtract(21, 'day'),
           end: GSTC.api.date(batch[i].endDate).endOf('day'),
@@ -119,29 +127,21 @@ export class TimelineComponent implements OnInit {
     this.timelineLowerBound.setDate(this.timelineUpperBound.getDate() - 7);
     this.iter.getBatchServiceMock().pipe(
       map(batch => batch.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()))
-    )
-//        .subscribe(batch => {
+    );
 
-        let batch = mockData;
+    const batch = mockData;
 
-        this.batchArray = batch.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()).filter(batch => new Date(batch.endDate).getTime() - this.timelineLowerBound.getTime() > 0);
-        this.calculateUpperBound(this.batchArray);
-        console.log(this.batchArray);
+    this.batchArray = batch.sort((a, b) =>
+      new Date(a.endDate).getTime() - new Date(b.endDate).getTime()).filter(batch =>
+      new Date(batch.endDate).getTime() - this.timelineLowerBound.getTime() > 0);
+    this.calculateUpperBound(this.batchArray);
+    console.log(this.batchArray);
 
-        this.gstc = GSTC({
+    this.gstc = GSTC({
           element: this.gstcElement.nativeElement,
-          state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray)),
-//          });
+          state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray))
     });
   }
-
-  currentDate = new Date();
-  timelineUpperBound: Date = this.currentDate;
-  timelineLowerBound: Date = this.currentDate;
-
-  batchArray?: Array<BatchTemplate>;
-
-  constructor(public iter: IterationService, private datePipe: DatePipe) { }
 
   calculateUpperBound(batchArray: Array<BatchTemplate>) {
     this.timelineUpperBound = new Date(batchArray[batchArray.length - 1].endDate);
