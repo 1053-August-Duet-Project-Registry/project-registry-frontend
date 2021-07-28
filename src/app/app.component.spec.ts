@@ -30,7 +30,7 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    pending("TypeError: Cannot read property 'textContent' of null");
+    pending('TypeError: Cannot read property \'textContent\' of null');
     expect(compiled.querySelector('.content span').textContent).toContain('p3-frontend app is running!');
   });
 });

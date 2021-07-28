@@ -11,7 +11,7 @@ import GSTC, { Config, GSTCResult } from 'gantt-schedule-timeline-calendar';
 import { Plugin as TimelinePointer } from 'gantt-schedule-timeline-calendar/dist/plugins/timeline-pointer.esm.min.js';
 import { Plugin as Selection } from 'gantt-schedule-timeline-calendar/dist/plugins/selection.esm.min.js';
 import { DatePipe } from '@angular/common';
-import { batchTemplate } from 'src/app/models/batch.model';
+import { BatchTemplate } from 'src/app/models/batch.model';
 import { mockData } from './timelineMockData';
 
 @Component({
@@ -29,7 +29,7 @@ export class TimelineComponent implements OnInit {
   @ViewChild('gstcElement', { static: true }) gstcElement!: ElementRef;
   gstc!: GSTCResult;
 
-  generateConfig(batch: Array<batchTemplate>): Config {
+  generateConfig(batch: Array<BatchTemplate>): Config {
     const iterations = batch.length;
     // GENERATE SOME ROWS
 
@@ -42,7 +42,7 @@ export class TimelineComponent implements OnInit {
         id,
         label: this.datePipe.transform(batch[i].startDate, "mediumDate")
         + " - " + this.datePipe.transform(batch[i].endDate, "mediumDate"),
-               
+
         parentId: undefined,
         expanded: true,
       };
@@ -119,7 +119,7 @@ export class TimelineComponent implements OnInit {
     this.timelineLowerBound.setDate(this.timelineUpperBound.getDate() - 7);
     this.iter.getBatchServiceMock().pipe(
       map(batch => batch.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()))
-    ) 
+    )
 //        .subscribe(batch => {
 
         let batch = mockData;
@@ -127,23 +127,23 @@ export class TimelineComponent implements OnInit {
         this.batchArray = batch.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()).filter(batch => new Date(batch.endDate).getTime() - this.timelineLowerBound.getTime() > 0);
         this.calculateUpperBound(this.batchArray);
         console.log(this.batchArray);
-      
+
         this.gstc = GSTC({
           element: this.gstcElement.nativeElement,
           state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray)),
 //          });
     });
   }
-  
+
   currentDate = new Date();
   timelineUpperBound: Date = this.currentDate;
   timelineLowerBound: Date = this.currentDate;
 
-  batchArray?: Array<batchTemplate>;
+  batchArray?: Array<BatchTemplate>;
 
   constructor(public iter: IterationService, private datePipe: DatePipe) { }
 
-  calculateUpperBound(batchArray: Array<batchTemplate>) {
+  calculateUpperBound(batchArray: Array<BatchTemplate>) {
     this.timelineUpperBound = new Date(batchArray[batchArray.length - 1].endDate);
     this.timelineUpperBound.setDate(this.timelineUpperBound.getDate() + 1);
     console.log(this.timelineUpperBound);

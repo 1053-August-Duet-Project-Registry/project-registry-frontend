@@ -13,25 +13,25 @@ import { Project } from '../models/project.model';
 export class PhaseService implements OnInit {
 
   constructor(private http: HttpClient) { }
-  ngOnInit(): void {
-    this.getPhases();
-  }
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  }
-  
+  };
 
-  public phases:Phase[]=[];
+
+  public phases: Phase[] = [];
+  ngOnInit(): void {
+    this.getPhases();
+  }
 
   public getPhases() {
     return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Phase[]>('getPhase', []))
-      ).subscribe(data=>{
+      ).subscribe(data => {
         this.phases = data;
         console.log(this.phases);
-      })
+      });
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -39,13 +39,13 @@ export class PhaseService implements OnInit {
 
       // TODO: send the error to a remote logging infrastructure
       // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);
-      console.error(error) // we'll just log it to the console
+      console.error(error); // we'll just log it to the console
 
       // TODO: better job transforming error for user consumption
       console.log(`${operation} failed: ${error.message}`);
 
       // we want to ensure that the app keeps running by returning an empty result
       return of(result as T);
-    }
+    };
   }
 }

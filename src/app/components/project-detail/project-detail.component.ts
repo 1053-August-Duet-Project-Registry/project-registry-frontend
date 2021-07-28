@@ -9,7 +9,7 @@ import { Iteration } from '../../models/iteration.model';
 import { Status } from 'src/app/models/status.model';
 import { User } from 'src/app/models/user.model';
 import { Role } from 'src/app/models/role.model';
-import { batchTemplate } from 'src/app/models/batch.model';
+import { BatchTemplate } from 'src/app/models/batch.model';
 
 import { IterationService } from 'src/app/service/iteration.service';
 import { Phase } from 'src/app/models/phase';
@@ -79,7 +79,7 @@ export class ProjectDetailComponent implements OnInit {
 
 
   // ----------- Group5 Iterator: Passing batch to detail-project
-  sendBatch ?: batchTemplate;
+  sendBatch ?: BatchTemplate;
   iteration?: Iteration ;
   tempIteration?: Iteration ;
 
@@ -88,7 +88,7 @@ export class ProjectDetailComponent implements OnInit {
   // set emit event value to batchIdNum and batchBatchIdStr
   // CHECK CONSOLE FOR ID AND BATCHID
 
-  changeBatch(value:batchTemplate){
+  changeBatch(value:BatchTemplate){
     this.sendBatch = value;
     console.log(this.sendBatch);
   }

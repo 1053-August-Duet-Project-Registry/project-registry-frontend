@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./add-tags.component.css']
 })
 export class AddTagsComponent implements OnInit {
-  //this component is a parent component of add-tags-added-tags and add-tags-search-bar component
+  // this component is a parent component of add-tags-added-tags and add-tags-search-bar component
 
   constructor() { }
 

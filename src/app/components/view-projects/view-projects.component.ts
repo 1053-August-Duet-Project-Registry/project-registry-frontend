@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { batchTemplate } from 'src/app/models/batch.model';
+import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
 import { Phase } from 'src/app/models/phase';
 import { Tag } from 'src/app/models/tag.model';
@@ -55,19 +55,19 @@ export class ViewProjectsComponent implements OnInit {
 
   // ----------------------------------------------------------------------------------------------------------------------------------
   // --------------------  Group5 Iterator: Passing batch to detail-project -----------------------------------------------------------
-  sendBatch?: batchTemplate;
+  sendBatch?: BatchTemplate;
   allIterations: Iteration[] = [];
   sub: Subscription = new Subscription();
   iteration?: Iteration;
-  allBatches?: batchTemplate[];
+  allBatches?: BatchTemplate[];
   selectedBatch?: string;
   filteredByIteration?: Project[];
   // message
   iterationSuccess?: string;
   iterationError?: string;
 
-  changeBatch(value: batchTemplate) {
-    this.sendBatch = value as batchTemplate;
+  changeBatch(value: BatchTemplate) {
+    this.sendBatch = value as BatchTemplate;
     console.log(this.sendBatch)
   }
 

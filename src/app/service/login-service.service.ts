@@ -7,6 +7,6 @@ import { SessionVar } from 'src/environments/environment';
 export class LoginServiceService {
 
   checkSessionLogin(){
-    return Boolean(sessionStorage.getItem(SessionVar.loginKey))
+    return Boolean(sessionStorage.getItem(SessionVar.loginKey));
   }
 }

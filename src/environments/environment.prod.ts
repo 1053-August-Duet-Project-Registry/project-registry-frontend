@@ -5,5 +5,5 @@ export const environment = {
 export const REGISTRY_URL = `${location.origin}/api/`;
 
 export const SessionVar = {
-  loginKey : "userLogin"
-}
+  loginKey : 'userLogin'
+};

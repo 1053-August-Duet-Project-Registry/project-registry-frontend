@@ -1,4 +1,4 @@
-import { batchTemplate } from './../../models/batch.model';
+import { BatchTemplate } from './../../models/batch.model';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IterationService } from 'src/app/service/iteration.service';
 import { forkJoin, Subscription } from 'rxjs';
@@ -13,12 +13,12 @@ import { Project } from 'src/app/models/project.model';
 export class IterationComponent implements OnInit, OnDestroy {
 
   //array of batchTemplates to put the 2 batch IDs into
-  theBatches: batchTemplate[] = [];
+  theBatches: BatchTemplate[] = [];
 
   sub:Subscription = new Subscription(); // just for clean up memory purpose
 
   // Send data to the parent component
-  @Output() sendBatch: EventEmitter<batchTemplate> = new EventEmitter<batchTemplate>();
+  @Output() sendBatch: EventEmitter<BatchTemplate> = new EventEmitter<BatchTemplate>();
 
   // Don't change this string value, it connected to the logic, the app will throw err. It's a placeholder/ first value for the selectBatch option
   seletedIdAndBatchId : String = "Batches"
@@ -39,9 +39,9 @@ selectBatch(){
   if(this.seletedIdAndBatchId != "Batches"){
     let separateBatchAndId = this.seletedIdAndBatchId.split("|");
     // id:number, batchId: string, skill:string,location:string, startDate:string, endDate:string
-    this.sendBatch.emit(new batchTemplate(Number(separateBatchAndId[0]),separateBatchAndId[1],"","",separateBatchAndId[2],separateBatchAndId[3]));
+    this.sendBatch.emit(new BatchTemplate(Number(separateBatchAndId[0]),separateBatchAndId[1],"","",separateBatchAndId[2],separateBatchAndId[3]));
 
-  } 
+  }
 }​
 
   //make a call to the API to retrieve all batches
@@ -53,7 +53,7 @@ selectBatch(){
         //this.theBatches = data as batchTemplate[] // cast t
         a =  ([] as batchTemplate[]).concat(...data);
         console.log("dsdsd get", a )
-      })  */  
+      })  */
   }
 
 }
