@@ -48,7 +48,7 @@ export class TagsComponent implements OnInit {
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')]; // [];
   temp: Tag[] = [];
 
   @ViewChild('tagInput')
@@ -83,14 +83,22 @@ message = '';
     console.log(this.tags);
   }
 
-  getAllTags() {
-    this.tagService.getAllTags().subscribe(data => {
-      this.tags = data;
-      data.forEach(tag => {
-        this.tagsNames.push(tag);
-      });
-    });
-  }  private _filter(value: any): Tag[] {
+   getAllTags() {
+
+   this.tags = [new Tag(3, 'tag1', 'description')];
+   this.tagsNames = this.tags;
+
+
+
+     /*this.tagService.getAllTags().subscribe(data => {
+       this.tags = data;
+       data.forEach(tag => {
+         this.tagsNames.push(tag);
+       });
+     });*/
+  }
+
+  private _filter(value: any): Tag[] {
     // const filterValue = value;
     const a: Tag = new Tag(0, value, '', true);
     return this.tagsNames.filter(tagName => tagName.name == a.name);
@@ -170,8 +178,9 @@ public registerTagFromService(): void {
       return ;
     }
   }
+  this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
 
-  this.tagService.registerTag(this.tag1).subscribe(data => this.message,
+  /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';
          // this.router.navigate(['tag']);
@@ -180,7 +189,7 @@ public registerTagFromService(): void {
            this.tag1.name = '';
            this.tag1.description = '';
            this.getAllTags(); },
-    2000);
+    2000);*/
   }
 }
 

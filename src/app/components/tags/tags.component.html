@@ -16,16 +16,17 @@
         ">
         <abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
       </h4>
+
     </div>
   </div>
 </div>
+
+<ng-container *ngTemplateOutlet="content1"></ng-container>
+
 <!--adding a custom tag upon modal-->
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h2 class="modal-title" id="modal-basic-title">Add a new custom Tag</h2>
-    <button type="button" class="close btn btn-orange" aria-label="Close" (click)="d('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h4>Make tag here</h4>
   </div>
   <div class="modal-body" style="overflow-y: visible; position: static">
     <form>
