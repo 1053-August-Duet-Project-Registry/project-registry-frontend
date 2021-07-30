@@ -16,7 +16,7 @@ import { Phase } from 'src/app/models/phase';
 import { PhaseService } from 'src/app/service/phase.service';
 import { ViewProjectsComponent } from '../view-projects/view-projects.component';
 import { Location } from '@angular/common';
-import {Tag} from "../../models/tag.model"
+import { Tag } from '../../models/tag.model';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 
 
@@ -81,7 +81,7 @@ export class ProjectDetailComponent implements OnInit {
     this.sendBatch = value;
     console.log(this.sendBatch);
   }
-  public desiredId:number=1 
+  public desiredId:number=1
   public projects?:Project[]=[]
 
   public project?:Project;

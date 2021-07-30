@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewProjectsComponent } from './components/view-projects/view-projects.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
+import { AddTagsComponent } from './components/add-tags/add-tags.component';
 
 
 const routes: Routes = [
@@ -15,7 +16,8 @@ const routes: Routes = [
   {path: 'project-detail', component: ProjectDetailComponent},
   {path: 'project-detail/:id', component: ProjectDetailComponent},
   {path: 'homepage-login' , component: ProjectLoginComponent},
-  {path: 'timeline' , component: TimelineComponent}
+  {path: 'timeline' , component: TimelineComponent},
+  {path: 'app', component: AddTagsComponent}
 ];
 
 @NgModule({
