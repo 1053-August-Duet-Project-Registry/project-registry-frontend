@@ -1,26 +1,22 @@
-import { IterationService } from 'src/app/service/iteration.service';
-import { map } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
-  ViewChild,
   ElementRef,
   OnInit,
-  ViewEncapsulation,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
-import GSTC, { Config, GSTCResult } from 'gantt-schedule-timeline-calendar';
-import { Plugin as TimelinePointer } from 'gantt-schedule-timeline-calendar/dist/plugins/timeline-pointer.esm.min.js';
-import { Plugin as Selection } from 'gantt-schedule-timeline-calendar/dist/plugins/selection.esm.min.js';
-import { DatePipe } from '@angular/common';
+import moment from 'moment';
+import { Item, Period, Section } from 'ngx-time-scheduler';
+import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
-import { mockData } from './timelineMockData';
+import { IterationService } from 'src/app/service/iteration.service';
 
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
-  styleUrls: [
-  './timeline.component.css',
-  '../../../../node_modules/gantt-schedule-timeline-calendar/dist/style.css'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./timeline.component.css'],
 })
 
 export class TimelineComponent implements OnInit {
@@ -131,13 +127,29 @@ export class TimelineComponent implements OnInit {
     };
   }
 
-  /* END OF TIMELINE CONFIG */
+  async ngOnInit() {
+    let batch: BatchTemplate[] = await this.iter
+      .getBatchServiceMock()
+      .pipe(
+        map((batch) =>
+          [...batch]
+            .sort(
+              (a, b) =>
+                new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+            )
+            .filter(
+              (batch) =>
+                new Date(batch['endDate']).getTime() -
+                  this.timelineLowerBound.toDate().getTime() >
+                0
+            )
+        )
+      )
+      .toPromise();
 
-  ngOnInit(): void {
-    this.timelineLowerBound = new Date();
-    this.timelineLowerBound.setDate(this.timelineUpperBound.getDate() - 7);
-    this.iter.getBatchServiceMock().pipe(
-      map(batch => batch.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime()))
+    this.timelineUpperBound = moment(batch[batch.length - 1].endDate).add(
+      1,
+      'day'
     );
 
     const batch = mockData;
@@ -158,9 +170,24 @@ export class TimelineComponent implements OnInit {
     });
   }
 
-  calculateUpperBound(batchArray: Array<BatchTemplate>) {
-    this.timelineUpperBound = new Date(batchArray[batchArray.length - 1].endDate);
-    this.timelineUpperBound.setDate(this.timelineUpperBound.getDate() + 1);
-    console.log(this.timelineUpperBound);
+    /**
+     * Find out how 'wide' the table should be by 'diffing' the upper and lower
+     * limit.
+     */
+    this.numOfDays =
+      this.timelineUpperBound.diff(this.timelineLowerBound, 'days') + 1;
+
+    /**
+     * Should never touch this array
+     */
+    this.periods = [
+      {
+        name: '',
+        classes: '',
+        timeFrameHeaders: ['MMM YYYY', 'DD(ddd)'],
+        timeFramePeriod: 1440,
+        timeFrameOverall: 1440 * this.numOfDays,
+      },
+    ];
   }
 }
