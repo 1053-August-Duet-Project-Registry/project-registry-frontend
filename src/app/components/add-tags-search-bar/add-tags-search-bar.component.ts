@@ -29,8 +29,8 @@ options: string[] = [];
 tags: Tag[] = [];
 filteredOptions!: Observable<string[]>;
   constructor(private TagsService: TagService, private tagManage: ProjectTagManagementService) {
-
   }
+
 ngOnInit(): void{
     this.tagManage.currentTagArray.subscribe(arr => this.currentTags = arr);
 
@@ -53,7 +53,6 @@ ngOnInit(): void{
   // extracts the name property from tags object and pushes into array of strings
   getTagNames(arr: any){
     for (const tag of arr){
-     // console.log(arr[i])
       this.options.push(tag.name);
     }
   }

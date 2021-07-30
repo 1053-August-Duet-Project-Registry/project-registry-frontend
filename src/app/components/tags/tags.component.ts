@@ -61,7 +61,6 @@ export class TagsComponent implements OnInit {
   public tags: Tag[] = [];
   public errorDetected = false;
   public tag1: Tag = new Tag(0, '', '');
-  // public clientMessage: ClientMessage = new ClientMessage('');
 
 message = '';
   ngOnInit(): void {
