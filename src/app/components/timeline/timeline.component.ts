@@ -40,39 +40,50 @@ export class TimelineComponent implements OnInit {
   generateConfig(batch: Array<BatchTemplate>): Config {
     const iterations = batch.length;
     // GENERATE SOME ROWS
-
+    console.log('mytest');
     const rows = {};
     for (let i = 0; i < iterations; i++) {
-
+      
       const id = GSTC.api.GSTCID(i.toString());
+      
       // @ts-ignore
       rows[id] = {
         id,
         label: this.datePipe.transform(batch[i].startDate, 'mediumDate')
         + ' - ' + this.datePipe.transform(batch[i].endDate, 'mediumDate'),
-
+        test: 'hi',
         parentId: undefined,
         expanded: true,
+        
       };
     }
-
+    
     // GENERATE SOME ROW -> ITEMS
-
+    
     let start = GSTC.api.date().startOf('day').subtract(2, 'day');
     const items = {};
     for (let i = 0; i < iterations; i++) {
       const id = GSTC.api.GSTCID(i.toString());
       start = start.add(0, 'day');
+      const button = document.createElement('a');
+      button.setAttribute('href','information');
+      button.appendChild(document.createTextNode('test value'));
+      // const button = document.createElement('button');
+      // button.setAttribute('href', 'Information');
       // @ts-ignore
       items[id] = {
         id,
-        label: batch[i].batchId + ' : ' + batch[i].skill + ' @ ' + batch[i].location,
+        label: batch[i].batchId + ' : ' + batch[i].skill + ' @ ' + batch[i].location + " " + button,
         time: {
           start: GSTC.api.date(batch[i].endDate).startOf('day').subtract(21, 'day'),
           end: GSTC.api.date(batch[i].endDate).endOf('day'),
+          
         },
+        button,
         rowId: id,
+        
       };
+      
     }
 
     // LEFT SIDE LIST COLUMNS
@@ -134,6 +145,8 @@ export class TimelineComponent implements OnInit {
     this.batchArray = batch.sort((a, b) =>
       new Date(a.endDate).getTime() - new Date(b.endDate).getTime()).filter(batch =>
       new Date(batch.endDate).getTime() - this.timelineLowerBound.getTime() > 0);
+      const button = document.createElement('a');
+      button.setAttribute('href', 'Information');
     this.calculateUpperBound(this.batchArray);
     console.log(this.batchArray);
 
@@ -141,6 +154,7 @@ export class TimelineComponent implements OnInit {
     this.gstc = GSTC({
           element: this.gstcElement.nativeElement,
           state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray))
+          
     });
   }
 
