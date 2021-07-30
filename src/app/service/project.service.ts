@@ -20,14 +20,15 @@ export class ProjectService {
 
   public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
     '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag(1, 'Revature', 'Made by Revature')], new Phase(1, 'BACKLOG_GENERATED',
+    [new Tag(1, 'Revature', 'Made by Revature'),
+      new Tag(2, 'Java', 'server language')], new Phase(1, 'BACKLOG_GENERATED',
       'CoE has completed the iterations backlog, awaiting trainer approval'));
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  public setCurrentProject(project: Project) {
+  public setCurrentProject(project: Project): void {
     window.localStorage.setItem('currentProject', JSON.stringify(project));
     this.currentProject = project;
   }

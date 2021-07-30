@@ -178,8 +178,13 @@ public registerTagFromService(): void {
       return ;
     }
   }
+  // adds tags to the list of tags in the box for tags
   this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
 
+  // adds tags to the (tags x) list of tags
+  // available to access project data from anywhere
+  // project is from project.service.ts
+  this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
   /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';
