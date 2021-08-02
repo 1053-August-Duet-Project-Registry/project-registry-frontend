@@ -73,7 +73,7 @@ message = '';
   }
 
 
-  // closeResult = '';
+  closeResult = '';
 
   open(content: any): void {
     this.modalService.open(content);
@@ -147,11 +147,11 @@ message = '';
     console.log(this.selectedTagNames);
     // TODO figure out wtf this note means and if it needs fixed.
     // when i come back i will do here
-    // for(let i = 0; i < this.selectedTagArr.length; i++){
-    //   if(this.selectedTagArr[i].name === tagName){
-    //     continue
-    //   }
-    // }
+    for(let i = 0; i < this.selectedTagArr.length; i++){
+      if(this.selectedTagArr[i].name === tagName){
+        continue
+      }
+    }
 
   }
 
@@ -194,7 +194,7 @@ public registerTagFromService(): void {
            this.tag1.name = '';
            this.tag1.description = '';
            this.getAllTags(); },
-    2000);*/
+    2000);
   }
 }
 
