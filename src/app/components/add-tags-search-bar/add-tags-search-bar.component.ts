@@ -36,13 +36,11 @@ ngOnInit(): void{
 
     this.getTags();
     this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''), map(value => this._filter(value))
-      );
+      .pipe(startWith(''), map(value => this._filter(value)));
   }
 
   // gets all tags from service and calls getTagNames function
-  getTags(){
+  getTags(): void {
     this.TagsService.getAllTags().subscribe(tag => {
       this.tags = tag;
 
@@ -51,7 +49,7 @@ ngOnInit(): void{
     });
   }
   // extracts the name property from tags object and pushes into array of strings
-  getTagNames(arr: any){
+  getTagNames(arr: any): void {
     for (const tag of arr){
       this.options.push(tag.name);
     }
@@ -63,9 +61,8 @@ ngOnInit(): void{
  }
 
  /* this gets the value of the selected tag, option.value only fires when a valid tag is selected,
- this will get array index of the object we will push for further processing
- */
- onTagSelected(option: MatOption){
+ this will get array index of the object we will push for further processing */
+ onTagSelected(option: MatOption): void {
   const tagName = (ele: any) => ele.name === option.value;
 
   const index = this.tags.findIndex(tagName);

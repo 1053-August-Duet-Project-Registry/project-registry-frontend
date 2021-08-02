@@ -72,6 +72,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
     this.project = this.projectService.getCurrentProject();
     this.arr = [];
 
+    // this adds a tag that can be removed from the screen
     this.selectedTagArr = this.project.tags;
     this.selectedTagArr.forEach(e => {
     this.selectedTagNames.push(e.name);
