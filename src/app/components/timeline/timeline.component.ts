@@ -1,3 +1,4 @@
+import { D } from '@angular/cdk/keycodes';
 import { DatePipe } from '@angular/common';
 import {
   AfterViewInit,
@@ -8,7 +9,8 @@ import {
   ViewChildren,
 } from '@angular/core';
 import moment from 'moment';
-import { Item, Period, Section } from 'ngx-time-scheduler';
+import { Events, Item, Period, Section, NgxTimeSchedulerService } from 'ngx-time-scheduler';
+import { Button } from 'protractor';
 import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { IterationService } from 'src/app/service/iteration.service';
@@ -18,116 +20,73 @@ import { IterationService } from 'src/app/service/iteration.service';
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.css'],
 })
+export class TimelineComponent implements OnInit, AfterViewInit {
+  events: Events = new Events();
+  periods: Period[] = [];
+  sections: Section[] = [];
+  items: Item[] = [];
+  numOfDays = 0;
 
-export class TimelineComponent implements OnInit {
+  /**
+   * I use 2020-03-01 here because it is the earliest start date from the
+   * mocking api https://caliber2-mock.revaturelabs.com/mock/training/batch
+   * should be using following in production:
+   */
+  // timelineLowerBound = moment().subtract(7, 'days');
+  timelineLowerBound = moment('2020-03-01');
 
-  constructor(public iter: IterationService, private datePipe: DatePipe) { }
-  /* START OF TIMELINE CONFIG */
+  timelineUpperBound = moment();
+  topLeftHeaderName = 'Batch';
+  @ViewChildren('ngxTs', { read: ElementRef }) ngxTs!: QueryList<ElementRef>;
 
-  @ViewChild('gstcElement', { static: true }) gstcElement!: ElementRef;
-  gstc!: GSTCResult;
+  constructor(public iter: IterationService, private datePipe: DatePipe, private service: NgxTimeSchedulerService) {}
 
-  currentDate = new Date();
-  timelineUpperBound: Date = this.currentDate;
-  timelineLowerBound: Date = this.currentDate;
-
-  batchArray?: Array<BatchTemplate>;
-
-  generateConfig(batch: Array<BatchTemplate>): Config {
-    const iterations = batch.length;
-    // GENERATE SOME ROWS
-    console.log('mytest');
-    const rows = {};
-    for (let i = 0; i < iterations; i++) {
-      
-      const id = GSTC.api.GSTCID(i.toString());
-      
-      // @ts-ignore
-      rows[id] = {
-        id,
-        label: this.datePipe.transform(batch[i].startDate, 'mediumDate')
-        + ' - ' + this.datePipe.transform(batch[i].endDate, 'mediumDate'),
-        test: 'hi',
-        parentId: undefined,
-        expanded: true,
-        
+  ngAfterViewInit() {
+    /**
+     * ngx-time-scheduler css hack heavy lifting.
+     * Code below is to make sure the timeline table is ready to be
+     * querySelected.
+     */
+    this.ngxTs.changes.subscribe((next: QueryList<ElementRef>) => {
+      const ngxTs = next.first.nativeElement;
+      const colWidthCoefficient = 90;
+      ngxTs.querySelector('.time-sch-table-wrapper').style['width'] = `${
+        200 + colWidthCoefficient * this.numOfDays
+      }px`;
+      const topLeftHeader: HTMLElement = ngxTs.querySelector(
+        '.time-sch-section'
+      );
+      topLeftHeader.innerHTML = this.topLeftHeaderName;
+      topLeftHeader.setAttribute('rowspan', '2');
+      const timeScheduleTable: HTMLElement = ngxTs.querySelector(
+        '.time-sch-table'
+      );
+      const colHeaders = timeScheduleTable.querySelectorAll(
+        'tr:nth-of-type(2) > td'
+      );
+      const weekDayMapper: Record<string, string> = {
+        Mon: 'Monday',
+        Tue: 'Tuesday',
+        Wed: 'Wednesday',
+        Thu: 'Thursday',
+        Fri: 'Friday',
+        Sat: 'Saturday',
+        Sun: 'Sunday',
       };
-    }
-    
-    // GENERATE SOME ROW -> ITEMS
-    
-    let start = GSTC.api.date().startOf('day').subtract(2, 'day');
-    const items = {};
-    for (let i = 0; i < iterations; i++) {
-      const id = GSTC.api.GSTCID(i.toString());
-      start = start.add(0, 'day');
-      const button = document.createElement('a');
-      button.setAttribute('href','information');
-      button.appendChild(document.createTextNode('test value'));
-      // const button = document.createElement('button');
-      // button.setAttribute('href', 'Information');
-      // @ts-ignore
-      items[id] = {
-        id,
-        label: batch[i].batchId + ' : ' + batch[i].skill + ' @ ' + batch[i].location + " " + button,
-        time: {
-          start: GSTC.api.date(batch[i].endDate).startOf('day').subtract(21, 'day'),
-          end: GSTC.api.date(batch[i].endDate).endOf('day'),
-          
-        },
-        button,
-        rowId: id,
-        
-      };
-      
-    }
-
-    // LEFT SIDE LIST COLUMNS
-
-    const columns = {
-      percent: 100,
-      resizer: {
-        inRealTime: true,
-      },
-      data: {
-        [GSTC.api.GSTCID('label')]: {
-          id: GSTC.api.GSTCID('label'),
-          data: 'label',
-          expander: true,
-          isHtml: true,
-          width: 230,
-          minWidth: 100,
-          header: {
-            content: 'Batch',
-          },
-        },
-      },
-    };
-
-    return {
-      innerHeight: 420,
-      licenseKey:
-        '====BEGIN LICENSE KEY====\nfVZYaLOuQUCwIHSxRwRdtSjNw3AW38hz28xN3U3XhJgRgJK1y+TyM6VodjaSsvuMMfP4YOiqEBuhL0SuM5PTLRdYI459kSM7N1X93M5QLxghxzER975gud3URquky8MiStbIvFAcF1/vjmY0qt6rGKpc2fGNl+3hWRT0+lAKHdMmtY4XpXf6WvycmssiiXlW0vGWk3AWDiUDAHxE1OrmI1a2BrxX6zOALRQqeNcxWjf9Jj9RZkxPTMqPPMRdqTU7Qhzq3PWzmIWCgpOz5ggITsCi2hQQCjz+FzeKkUWBG0Kh6fcaP/tunhpWxT+UtRYAvtunH3YXKMVpn6tf4Bf3rQ==||U2FsdGVkX1+1WAv9e4U7OPZLTQtjJ+8HtC9NHPo144Ap9u1bpPMeUnp4CIq4GXERbjGG276Se7f9qPduT3S6zIWxMI1NRXsb16ZHOtibmKY=\nTD66OA9qd67s12GL91M9IlFqtjcAgS/xaHIBia6bjI9JOEWwrf8xdOLbUo07n4apCxj8jf+AroOJmOjwDa2p5NJDer4TRgO4SDam8TV7rIWdV1KbAmKKA8OjfulSDH9a5G1MD55DTeAdx5n48lnz220y1rKs9th5ECFOJoiLjlh12LxvuvpLwN7g9hOsuaKgbIVkbpa1UEdwdEpgZOd4zCpn3g4gKOJm6KIrZUWPpI0fh0dZG+nbqX/FBtLFeQF42zaXeBw0lvy2xiq1QGCRKt/U1bhIu1Mi33ZIFIO+qZLQ4x6ECFEb/8AjRP27GqmfwIIfTYjuGJL9cad58+L61A==\n====END LICENSE KEY====',
-      list: {
-        rows,
-        columns,
-        toggle: {
-          display: false
-        }
-      },
-      chart: {
-        items,
-        time: {
-          from: GSTC.api.date().startOf('day').subtract(7, 'day').valueOf(),
-          leftGlobal: 0, // default value, don't know what it does but config requires it
-          to: GSTC.api.date(this.timelineUpperBound).valueOf(),
-        },
-      },
-      plugins: [TimelinePointer(), Selection()],
-    };
+      colHeaders.forEach((elm) => {
+        const res = /(\d+)\(([A-z]+)\)/.exec(elm.innerHTML) as Array<string>;
+        elm.innerHTML = `
+      <div style="display: flex; flex-direction: column;">
+        <span style="font-size:16px">${res[1]}</span>
+        <span style="font-size:13px">${weekDayMapper[res[2]]}</span>
+      </div>`;
+      });
+    });
   }
 
   async ngOnInit() {
+    this.events.SectionClickEvent = (section) => { console.log(section); };
+    this.events.ItemClicked = (test) => {console.log('test')};
     let batch: BatchTemplate[] = await this.iter
       .getBatchServiceMock()
       .pipe(
@@ -152,23 +111,40 @@ export class TimelineComponent implements OnInit {
       'day'
     );
 
-    const batch = mockData;
-
-    this.batchArray = batch.sort((a, b) =>
-      new Date(a.endDate).getTime() - new Date(b.endDate).getTime()).filter(batch =>
-      new Date(batch.endDate).getTime() - this.timelineLowerBound.getTime() > 0);
-      const button = document.createElement('a');
-      button.setAttribute('href', 'Information');
-    this.calculateUpperBound(this.batchArray);
-    console.log(this.batchArray);
-
-    // vp,,rmy
-    this.gstc = GSTC({
-          element: this.gstcElement.nativeElement,
-          state: GSTC.api.stateFromConfig(this.generateConfig(this.batchArray))
-          
-    });
-  }
+    /**
+     * Iterate over the batch data and populate the Timeline table by putting
+     * together batch details into format the Library(ngx-time-scheduler) likes.
+     */
+    //elements for displaying batch info on click
+    let myDiv = document.createElement('div');
+    let parentDiv = document.querySelector('.displayInfo');
+    for (let i = 0; i < batch.length; i++) {
+      this.sections.push({
+        id: i + 1,
+        name:
+        this.datePipe.transform(batch[i].startDate, 'mediumDate') +
+        ' - ' +
+        this.datePipe.transform(batch[i].endDate, 'mediumDate'),
+      });
+      this.items.push({
+        
+        id: i + 1,
+        sectionID: i + 1,
+        name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
+        start: moment(new Date(batch[i].startDate)).startOf('day'),
+        end: moment(new Date(batch[i].endDate)),
+        classes: '',
+        
+      })
+      
+      // added onclick event to display batch data under chart
+        this.events.ItemClicked = (items) => {
+        myDiv.innerHTML = items.classes + " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
+        " <br />StartDate: " + items.start.toDate() + " <br />EndDate: " + items.end.toDate();
+        parentDiv?.appendChild(myDiv);
+        console.log(myDiv);
+        };
+    }
 
     /**
      * Find out how 'wide' the table should be by 'diffing' the upper and lower
