@@ -72,7 +72,7 @@ export class TagsComponent implements OnInit {
   public tag1: Tag = new Tag(0, '', '', true);
   // public clientMessage: ClientMessage = new ClientMessage('');
 
-message = '';
+  message = '';
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -81,23 +81,30 @@ message = '';
     });
   }
 
-
-  closeResult = '';
-
-  open(content: any): void {
+  open(content: any) {
     this.modalService.open(content);
   }
 
-  Tag(): void {
+  // I don't think this is needed?
+  Tag() {
     console.log(this.tags);
   }
 
-   getAllTags(): void {
+  getAllTags() {
+    // temporary hardcoding
+    this.tags = [new Tag(3, 'tag1', 'description')];
+    this.tagsNames = this.tags;
 
-   this.tags = [new Tag(3, 'tag1', 'description', true),
-     new Tag(4, 'tag2', 'i want my mommy', false)];
-   this.tagsNames = this.tags;
 
+      /*
+      * This block gets tags from the db
+      */
+    // this.tagService.getAllTags().subscribe(data => {
+    //   this.tags = data;
+    //   data.forEach(tag => {
+    //     this.tagsNames.push(tag);
+    //   });
+    // });
   }
 
   private _filter(value: any): Tag[] {
@@ -109,27 +116,15 @@ message = '';
   // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
-    const input = event.input;
+    // seems like this isn't used so is it not needed?
+    const input = event.input ? event.input : '';
     const value = event.value;
-    console.log('value' + value);
 
     if ((value || '').trim()){
       this.tagsNames.forEach(names => {
-
-        if (names.name === event.value)
-        {
-          if (!this.selectedTagNames.includes(value.trim())){
-
-            this.selectedTagNames.push(value.trim());
-          }
-        }
+        if (names.name === event.value && !this.selectedTagNames.includes(value.trim()))
+          this.selectedTagNames.push(value.trim());
       });
-
-
-
-    }
-    if (input) {
-      input.value = '';
     }
     // may not be needed
     // this.tagCtrl.setValue(null);
@@ -141,18 +136,13 @@ message = '';
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
   }
 
-
-selected(event: MatAutocompleteSelectedEvent): void {
-   // let index = this.selectedTagNames.indexOf(event.option.value);
-
+  selected(event: MatAutocompleteSelectedEvent): void {
     if (!this.selectedTagArr.includes(event.option.value))
-    {
       this.selectedTagNames.push(event.option.viewValue);
-    }
   }
 
-  // filter out own selected method
-filterSelectedTag(tag: Tag): void {
+    // filter out own selected method
+  filterSelectedTag(tag: Tag): void {
     if (!this.selectedTagArr.includes(tag)){
     this.selectedTagArr.push(tag); }
   }
