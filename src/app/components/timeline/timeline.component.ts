@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { LoginServiceService } from 'src/app/service/login-service.service';
 import { mockData } from './timelineMockData';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-timeline',
@@ -121,7 +121,7 @@ export class TimelineComponent implements OnInit {
       },
       plugins: [TimelinePointer(), Selection()],
     };
-  };
+  }
 
   /* END OF TIMELINE CONFIG */
 
