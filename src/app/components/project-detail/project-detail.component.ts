@@ -35,6 +35,16 @@ import {LoginServiceService} from "../../service/login-service.service";
 
 export class ProjectDetailComponent implements OnInit {
 
+   arr!: Tag[];
+  public desiredId = 1;
+  public projects?: Project[] = [];
+
+  public project?: Project;
+
+  sendBatch?: BatchTemplate;
+  iteration?: Iteration ;
+  tempIteration?: Iteration ;
+
   constructor(
               public data: ProjectTagManagementService,
               private viewProjectService: ViewProjectService,
@@ -45,8 +55,6 @@ export class ProjectDetailComponent implements OnInit {
               private location: Location,
               private phaseService: PhaseService,
               private loginService: LoginServiceService) { }
-
-   arr!: Tag[];
 
 
   // In future link to status table?
@@ -63,33 +71,24 @@ export class ProjectDetailComponent implements OnInit {
 
 
   public statuses = ['ACTIVE', 'NEEDS_ATTENTION', 'ARCHIVED', 'CODE_REVIEW'];
-  public phases = ['BACKLOG_GENERATED', 'TRAINER_APPROVED', 'HANDOFF_SCHEDULED', 'RESOURCE_ALLOCATION', 'CHECKPOINT_MEETING', 'CODE_REVIEW', 'COMPLETE'];
+  public phases = ['BACKLOG_GENERATED', 'TRAINER_APPROVED', 'HANDOFF_SCHEDULED',
+    'RESOURCE_ALLOCATION', 'CHECKPOINT_MEETING', 'CODE_REVIEW', 'COMPLETE'];
 
 
 
   // Temporary model
-  model = new Project(1, "name", new Status(1, "name"), "sample desc", new User(1, "username", new Role(1, "string")), [], []);
+
+  model = new Project(1,  'name', new Status(1, 'name'), 'sample desc',
+    new User(1, 'username', new Role(1, 'string')), [], []);
 
   submitted = false;
 
-  sendBatch ?: BatchTemplate;
-  iteration?: Iteration ;
-  tempIteration?: Iteration ;
+  onSubmit(): void { this.submitted = true; }
 
-  public desiredId = 1;
-  public project?: Project;
-  public projects?: Project[] = [];
-
-  onSubmit() { this.submitted = true; }
-
-  changeBatch(value: BatchTemplate){
+  changeBatch(value: BatchTemplate): void {
     this.sendBatch = value;
     console.log(this.sendBatch);
   }
-  
-  public desiredId:number=1
-  public projects?:Project[]=[]
-
 
   ngOnInit(): void {
 
@@ -102,41 +101,42 @@ export class ProjectDetailComponent implements OnInit {
 
     this.phaseService.getPhases();
     this.project = this.projectService.getCurrentProject();
-    if (this.project.id === 0){
+    if (this.project.id == 0){
       this.route.navigate(['']);
     }
   }
 
   // Update Project in the backend
-  public submit(): void{
+  public submit(): void {
     if (!this.project){ return; }
 
     if (this.sendBatch){
-      this.iteration = new Iteration(this.sendBatch.batchId,
-        this.project,
-        this.sendBatch.id,
-        this.sendBatch.startDate,
-        this.sendBatch.endDate, null);
+      // TODO change final parameter to a phase
+      this.iteration = new Iteration(this.sendBatch.batchId, this.project, this.sendBatch.id,
+        this.sendBatch.startDate, this.sendBatch.endDate, null);
     }
 
     // Setting the status id
-    this.project.status.id = this.statusMap[this.project.status.name];
+    this.project.status.id=this.statusMap[this.project.status.name];
 
     if(this.project != undefined){
-      // let phaseFound = this.phaseService.phases.find(p=>{
-      //   if(this.project){
-      //     // return p.kind==this.project.phase.kind
-      //   }
-      //   else {
-      //     return false
-      //   }
-      // });
-      // if(phaseFound!=undefined)
-      //   this.project.phase = phaseFound;
+      const phaseFound = this.phaseService.phases.find(p => {
+        if (this.project){
+          // TODO edit this line so it doesn't call project.phase directly and fix.
+          // return p.kind == this.project.phase.kind;
+        }
+        else {
+          return false;
+        }
+      });
+      if (phaseFound != undefined) {
+        // TODO edit this line so it doesn't call project.phase directly and fix.
+        // this.project.phase = phaseFound;
+      }
     }
     this.project.tags = this.arr;
 
-    this.projectService.updateProject(this.project).subscribe((data) => {
+    this.projectService.updateProject(this.project).subscribe((data)=>{
       this.project = data;
       this.route.navigate(['viewProject']);
     });

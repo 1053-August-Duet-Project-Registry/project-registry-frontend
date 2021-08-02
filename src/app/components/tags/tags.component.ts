@@ -48,7 +48,7 @@ export class TagsComponent implements OnInit {
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')]; // [];
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true)]; // [];
   temp: Tag[] = [];
 
   @ViewChild('tagInput')
@@ -75,17 +75,17 @@ message = '';
 
   // closeResult = '';
 
-  open(content: any) {
+  open(content: any): void {
     this.modalService.open(content);
   }
 
-  Tag() {
+  Tag(): void {
     console.log(this.tags);
   }
 
-   getAllTags() {
+   getAllTags(): void {
 
-   this.tags = [new Tag(3, 'tag1', 'description')];
+   this.tags = [new Tag(3, 'tag1', 'description', true)];
    this.tagsNames = this.tags;
 
 
@@ -139,9 +139,9 @@ message = '';
     }
     for (let i = 0; i < this.selectedTagArr.length; i++){
 
-      this.selectedTagArr = this.selectedTagArr.filter( e => e.name !== tagName);
+      this.selectedTagArr = this.selectedTagArr.filter(e => e.name !== tagName);
       if (this.project !== undefined){
-        this.project.tags = this.project.tags.filter(e => e.name != tagName);
+        this.project.tags = this.project.tags.filter(e => e.name !== tagName);
       }
     }
     console.log(this.selectedTagNames);
@@ -172,19 +172,19 @@ filterSelectedTag(tag: Tag): void {
 
 
 public registerTagFromService(): void {
-  for (let i = 0; i < this.tags.length; i++){
-    if (this.tags[i].name === this.tag1.name){
+  for (let loopTag of this.tags){
+    if (loopTag.name === this.tag1.name){
       this.message = 'Tag is already exist';
       return ;
     }
   }
   // adds tags to the list of tags in the box for tags
-  this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
+  this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
 
   // adds tags to the (tags x) list of tags
   // available to access project data from anywhere
   // project is from project.service.ts
-  this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
+  this.project?.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
   /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';

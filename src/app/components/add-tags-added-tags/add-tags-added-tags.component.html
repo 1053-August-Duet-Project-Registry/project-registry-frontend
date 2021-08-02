@@ -1,9 +1,10 @@
-<label for="tags">Tags:</label>
+<label id="tags">Tags:</label>
 <div>
 	<div class="input-group">
 		<mat-chip-list #chipList aria-label="Tag selection" [multiple]="multiple">
-			<mat-chip style="background-color: rgb(242, 105, 38); color: #fff;" *ngFor="let tag of arr" [selectable]="selectable" [removable]="removable" (removed)="remove(tag)">
-				<abbr title="{{ tag.description }}">{{ tag.name }}</abbr> 
+			<mat-chip style="background-color: rgb(242, 105, 38); color: #fff;" *ngFor="let tag of arr" [selectable]="selectable"
+                [removable]="removable" (removed)="remove(tag)">
+				<abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
 		</mat-chip-list>
