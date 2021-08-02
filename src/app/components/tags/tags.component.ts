@@ -62,7 +62,7 @@ export class TagsComponent implements OnInit {
   public errorDetected = false;
   public tag1: Tag = new Tag(0, '', '');
 
-message = '';
+  message = '';
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -71,30 +71,30 @@ message = '';
     });
   }
 
-
-  // closeResult = '';
-
   open(content: any) {
     this.modalService.open(content);
   }
 
+  // I don't think this is needed?
   Tag() {
     console.log(this.tags);
   }
 
-   getAllTags() {
+  getAllTags() {
+    // temporary hardcoding
+    this.tags = [new Tag(3, 'tag1', 'description')];
+    this.tagsNames = this.tags;
 
-   this.tags = [new Tag(3, 'tag1', 'description')];
-   this.tagsNames = this.tags;
 
-
-
-     /*this.tagService.getAllTags().subscribe(data => {
-       this.tags = data;
-       data.forEach(tag => {
-         this.tagsNames.push(tag);
-       });
-     });*/
+      /*
+      * This block gets tags from the db
+      */
+    // this.tagService.getAllTags().subscribe(data => {
+    //   this.tags = data;
+    //   data.forEach(tag => {
+    //     this.tagsNames.push(tag);
+    //   });
+    // });
   }
 
   private _filter(value: any): Tag[] {
@@ -106,27 +106,15 @@ message = '';
   // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
-    const input = event.input;
+    // seems like this isn't used so is it not needed?
+    const input = event.input ? event.input : '';
     const value = event.value;
-    console.log('value' + value);
 
     if ((value || '').trim()){
       this.tagsNames.forEach(names => {
-
-        if (names.name === event.value)
-        {
-          if (!this.selectedTagNames.includes(value.trim())){
-
-            this.selectedTagNames.push(value.trim());
-          }
-        }
+        if (names.name === event.value && !this.selectedTagNames.includes(value.trim()))
+          this.selectedTagNames.push(value.trim());
       });
-
-
-
-    }
-    if (input) {
-      input.value = '';
     }
     this.tagCtrl.setValue(null);
   }
@@ -137,11 +125,9 @@ message = '';
       this.selectedTagNames.splice(index, 1);
     }
     for (let i = 0; i < this.selectedTagArr.length; i++){
-
       this.selectedTagArr = this.selectedTagArr.filter( e => e.name !== tagName);
-      if (this.project !== undefined){
+      if (this.project !== undefined)
         this.project.tags = this.project.tags.filter(e => e.name != tagName);
-      }
     }
     console.log(this.selectedTagNames);
     // TODO figure out wtf this note means and if it needs fixed.
@@ -154,46 +140,42 @@ message = '';
 
   }
 
-selected(event: MatAutocompleteSelectedEvent): void {
-   // let index = this.selectedTagNames.indexOf(event.option.value);
-
+  selected(event: MatAutocompleteSelectedEvent): void {
     if (!this.selectedTagArr.includes(event.option.value))
-    {
       this.selectedTagNames.push(event.option.viewValue);
-    }
   }
 
-  // filter out own selected method
-filterSelectedTag(tag: Tag): void {
+    // filter out own selected method
+  filterSelectedTag(tag: Tag): void {
     if (!this.selectedTagArr.includes(tag)){
     this.selectedTagArr.push(tag); }
   }
 
 
-public registerTagFromService(): void {
-  for (let i = 0; i < this.tags.length; i++){
-    if (this.tags[i].name === this.tag1.name){
-      this.message = 'Tag is already exist';
-      return ;
+  public registerTagFromService(): void {
+    for (let i = 0; i < this.tags.length; i++){
+      if (this.tags[i].name === this.tag1.name){
+        this.message = 'Tag is already exist';
+        return ;
+      }
     }
-  }
-  // adds tags to the list of tags in the box for tags
-  this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
+    // adds tags to the list of tags in the box for tags
+    this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
 
-  // adds tags to the (tags x) list of tags
-  // available to access project data from anywhere
-  // project is from project.service.ts
-  this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
-  /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
-          error => this.message = 'INVALID FIELD');
-  this.message = 'Tag is successfully created';
-         // this.router.navigate(['tag']);
+    // adds tags to the (tags x) list of tags
+    // available to access project data from anywhere
+    // project is from project.service.ts
+    this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
+    /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
+            error => this.message = 'INVALID FIELD');
+    this.message = 'Tag is successfully created';
+          // this.router.navigate(['tag']);
 
-  setTimeout(() => {
-           this.tag1.name = '';
-           this.tag1.description = '';
-           this.getAllTags(); },
-    2000);*/
+    setTimeout(() => {
+            this.tag1.name = '';
+            this.tag1.description = '';
+            this.getAllTags(); },
+      2000);*/
   }
 }
 
