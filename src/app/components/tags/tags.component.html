@@ -29,7 +29,7 @@ Adding a custom tag upon modal
     <h4>Make tag here</h4>
   </div>
   <div class="modal-body" style="overflow-y: visible; position: static">
-    <form>
+    <form id="create-new-tag-form">
       <div class="form-group">
         <label for="tag-name-box">Tag Name:</label>
         <input type="text" class="form-control" id="tag-name-box" name="Name" [(ngModel)]="tag1.name" />
@@ -46,10 +46,9 @@ Adding a custom tag upon modal
     <button type="button" class="btn btn-orange" (click)="registerTagFromService()">
       Add
     </button>
-
-<!--    <button type="button" class="btn btn-orange" (click)="d('Cross click')">-->
-<!--      Exit-->
-<!--    </button>-->
+    <button type="button" class="btn btn-orange" (click)="d('Cross click')">
+      Exit
+    </button>
   </div>
 
   <div id="anime" *ngIf="message.length > 0">

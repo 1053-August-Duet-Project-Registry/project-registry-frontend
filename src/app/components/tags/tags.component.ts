@@ -147,9 +147,9 @@ message = '';
     console.log(this.selectedTagNames);
     // TODO figure out wtf this note means and if it needs fixed.
     // when i come back i will do here
-    for(let i = 0; i < this.selectedTagArr.length; i++){
-      if(this.selectedTagArr[i].name === tagName){
-        continue
+    for (let i = 0; i < this.selectedTagArr.length; i++){
+      if (this.selectedTagArr[i].name === tagName){
+        continue;
       }
     }
 
@@ -170,31 +170,57 @@ filterSelectedTag(tag: Tag): void {
     this.selectedTagArr.push(tag); }
   }
 
-
+ // takes the information from the create-new-tag-form in the html and makes a new tag
+  // the check for tag already in use not working, unsure why
 public registerTagFromService(): void {
+
+  // TODO Gavin just added the parameter "foundTag" to make this compile, but it probably won't work as intended. Fix this.
+  let foundTag;
+
   for (let loopTag of this.tags){
     if (loopTag.name === this.tag1.name){
-      this.message = 'Tag is already exist';
+      foundTag = true;
       return ;
     }
   }
-  // adds tags to the list of tags in the box for tags
-  this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+    // displays a message saying if the tag was created or not
+    this.message = foundTag ? 'Tag already exists' : `Tag ${this.tag1.name} has been created`;
 
-  // adds tags to the (tags x) list of tags
-  // available to access project data from anywhere
-  // project is from project.service.ts
-  this.project?.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
-  /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
-          error => this.message = 'INVALID FIELD');
-  this.message = 'Tag is successfully created';
-         // this.router.navigate(['tag']);
+    // add new tag to this.selectedTagArr, this.project.tags, and this.tags
+    if (!foundTag) {
+      // adds tags to the list of tags in the box for tags
+      this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
 
-  setTimeout(() => {
-           this.tag1.name = '';
-           this.tag1.description = '';
-           this.getAllTags(); },
-    2000);
+      // adds tags to the (tags x) list of tags
+      // available to access project data from anywhere
+      // project is from project.service.ts
+      this.project?.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+
+      // @ts-ignore
+      this.tags = this.project.tags;
+      /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
+              error => this.message = 'INVALID FIELD');
+      this.message = 'Tag is successfully created';
+             // this.router.navigate(['tag']); */
+    
+      // removes the information in the tag name and description in the create new tag box
+      this.clearTagNameDescription(this.tag1);
+
+      setTimeout(() => {
+          this.tag1.name = '';
+          this.tag1.description = '';
+          this.getAllTags();
+          this.message = '';
+        },
+        4000);
+    }
+  }
+  
+  
+
+  public clearTagNameDescription(tagInQuestion: Tag): void {
+    tagInQuestion.name = '';
+    tagInQuestion.description = '';
   }
 }
 
