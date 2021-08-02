@@ -135,7 +135,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
         end: moment(new Date(batch[i].endDate)),
         classes: '',
         
-      })
+      });
       
       // added onclick event to display batch data under chart
         this.events.ItemClicked = (items) => {
