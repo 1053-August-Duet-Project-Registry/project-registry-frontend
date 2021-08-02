@@ -6,8 +6,8 @@
           type="reset"
           (click)="reset()"
           value="Reset Filters"
-         
-          >  
+
+          >
           <mat-icon>
             <span class="material-icons-outlined">
                 restart_alt
@@ -47,6 +47,8 @@
               <mat-option value="ACTIVE">Active</mat-option>
               <mat-option value="CODE_REVIEW">Code-Review</mat-option>
               <mat-option value="FINISH">Finished</mat-option>
+              <mat-option value="PLANNED">Planned</mat-option>
+              <mat-option value="AVAILABLE">Available</mat-option>
 
               <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
                 {{ statuses }}
@@ -128,14 +130,14 @@
         </mat-grid-tile>
 
         <!-- Reset button -->
-        
-     
-         
+
+
+
       </mat-grid-list>
-      
 
 
-      
+
+
 
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>
