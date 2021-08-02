@@ -30,6 +30,7 @@ export class CreateProjectComponent implements OnInit {
               private route: Router, public loginService: LoginServiceService) { }
 
   ngOnInit(): void {
+    // Check if user is logged in, otherwise redirect.
     if (!this.loginService.checkSessionLogin()) {
       this.route.navigate(['/homepage-login']);
     }
