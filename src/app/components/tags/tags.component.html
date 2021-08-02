@@ -1,28 +1,10 @@
-<<<<<<< HEAD
-<label for="tags">Project Tags:</label>
-=======
-<label id="tags">Tags</label>
->>>>>>> Sean-Tags
-<!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
-
-<div class="input-group">
-  <mat-chip-list #chipList aria-label="Tag selection" [multiple]="multiple">
-    <mat-chip style="background-color: rgb(242, 105, 38); color: #fff;"
-              *ngFor="let tag of selectedTagArr"
-              [selectable]="selectable"
-              [removable]="removable"
-              (removed)="remove(tag)">
-      <abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
-      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
-</div>
-<ng-container *ngTemplateOutlet="content1"></ng-container>
-
-<!--adding a custom tag upon modal-->
+<!--**************************
+    Add Custom Tags Modal
+****************************-->
+<hr>
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4>Make tag here</h4>
+    <h4>Create Tag Here</h4>
   </div>
   <div class="modal-body" style="overflow-y: visible; position: static">
     <form id="create-new-tag-form">
