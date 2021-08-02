@@ -1,4 +1,4 @@
-<label for="tags">Tags</label>
+<label for="tags">Project Tags:</label>
 <!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
 <div style="border: 1px solid #ced4da; border-radius: 5px; height: 88px">
    <!-- display tags selected inside html from project detail-->
@@ -21,9 +21,9 @@
   </div>
 </div>
 
-<ng-container *ngTemplateOutlet="content1"></ng-container>
-
-<!--adding a custom tag upon modal-->
+<!-- ***************************
+Adding a custom tag upon modal
+*******************************-->
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Make tag here</h4>
@@ -44,14 +44,18 @@
 
   <div class="modal-footer">
     <button type="button" class="btn btn-orange" (click)="registerTagFromService()">
-      Save
+      Add
     </button>
 
     <button type="button" class="btn btn-orange" (click)="d('Cross click')">
       Exit
     </button>
   </div>
+
   <div id="anime" *ngIf="message.length > 0">
     {{ message }}
   </div>
 </ng-template>
+
+<button class="btn btn-orange" (click)="open(content1)">Create New Tag</button>
+
