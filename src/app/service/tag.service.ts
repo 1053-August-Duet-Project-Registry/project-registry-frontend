@@ -23,7 +23,6 @@ export class TagService {
     return this.http.get<Tag[]>(`${REGISTRY_URL}tag`);
   }
 
-
   public registerTag(newTag: Tag): Observable<string> {
     return this.http.post<Tag>(`${REGISTRY_URL}tag`, newTag)
       .pipe(tap(_ => console.log('posting tag..')),

@@ -40,6 +40,7 @@ export class TagsComponent implements OnInit {
       map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));*/
   }
 
+  // The current project being viewed/edited
   public project?: Project;
 
   faEdit = faEdit;
@@ -64,15 +65,15 @@ export class TagsComponent implements OnInit {
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
-
+  message = '';
 
   public tagsNames: Tag[] = [];
+  // contains all tags found in the db
   public tags: Tag[] = [];
   public errorDetected = false;
   public tag1: Tag = new Tag(0, '', '', true);
   // public clientMessage: ClientMessage = new ClientMessage('');
 
-  message = '';
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -85,14 +86,9 @@ export class TagsComponent implements OnInit {
     this.modalService.open(content);
   }
 
-  // I don't think this is needed?
-  Tag() {
-    console.log(this.tags);
-  }
-
   getAllTags() {
     // temporary hardcoding
-    this.tags = [new Tag(3, 'tag1', 'description')];
+    this.tags = [new Tag(3, 'tag1', 'description', true)];
     this.tagsNames = this.tags;
 
 
@@ -116,7 +112,7 @@ export class TagsComponent implements OnInit {
   // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
-    // seems like this isn't used so is it not needed?
+    // seems like this variable isn't used so is it not needed?
     const input = event.input ? event.input : '';
     const value = event.value;
 
@@ -136,6 +132,7 @@ export class TagsComponent implements OnInit {
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
   }
 
+  // TODO not used...
   selected(event: MatAutocompleteSelectedEvent): void {
     if (!this.selectedTagArr.includes(event.option.value))
       this.selectedTagNames.push(event.option.viewValue);
