@@ -56,6 +56,7 @@ export class TagsComponent implements OnInit {
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
 
+  closeResult = '';
 
   public tagsNames: Tag[] = [];
   public tags: Tag[] = [];
@@ -73,7 +74,6 @@ message = '';
   }
 
 
-  // closeResult = '';
 
   open(content: any): void {
     this.modalService.open(content);
@@ -147,11 +147,11 @@ message = '';
     console.log(this.selectedTagNames);
     // TODO figure out wtf this note means and if it needs fixed.
     // when i come back i will do here
-    // for(let i = 0; i < this.selectedTagArr.length; i++){
-    //   if(this.selectedTagArr[i].name === tagName){
-    //     continue
-    //   }
-    // }
+    for(let i = 0; i < this.selectedTagArr.length; i++){
+      if (this.selectedTagArr[i].name === tagName){
+        continue;
+      }
+    }
 
   }
 
@@ -172,7 +172,7 @@ filterSelectedTag(tag: Tag): void {
 
 
 public registerTagFromService(): void {
-  for (let loopTag of this.tags){
+  for (const loopTag of this.tags){
     if (loopTag.name === this.tag1.name){
       this.message = 'Tag is already exist';
       return ;
@@ -192,12 +192,12 @@ public registerTagFromService(): void {
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';
          // this.router.navigate(['tag']);
-
+*/
   setTimeout(() => {
            this.tag1.name = '';
            this.tag1.description = '';
            this.getAllTags(); },
-    2000);*/
+    2000);
   }
 }
 
