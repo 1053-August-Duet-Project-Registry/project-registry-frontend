@@ -15,6 +15,7 @@ existing array tag if an existing project otherwise if new, this array is just e
   currentTagArray = this.tagArray.asObservable();
 
   constructor() { }
+  
   // simply overwrites previous tag to new one
   updateTagArray(arr: Tag[]){
     this.tagArray.next(arr);
