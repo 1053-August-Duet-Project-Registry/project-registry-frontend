@@ -185,54 +185,36 @@ filterSelectedTag(tag: Tag): void {
  // takes the information from the create-new-tag-form in the html and makes a new tag
   // the check for tag already in use not working, unsure why
 public registerTagFromService(): void {
-
-  // TODO Gavin just added the parameter "foundTag" to make this compile, but it probably won't work as intended. Fix this.
-  let foundTag;
-
-  for (let loopTag of this.tags){
-    if (loopTag.name === this.tag1.name){
-      foundTag = true;
+  for (let i = 0; i < this.tags.length; i++){
+    if (this.tags[i].name === this.tag1.name || this.tag1.name === ''){
+      this.message = 'Tag already exists';
       return ;
     }
   }
-    // displays a message saying if the tag was created or not
-    this.message = foundTag ? 'Tag already exists' : `Tag ${this.tag1.name} has been created`;
+  // adds tags to the list of tags in the box for tags
+  this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description, true));
+  // this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
 
-    // add new tag to this.selectedTagArr, this.project.tags, and this.tags
-    if (!foundTag) {
-      // adds tags to the list of tags in the box for tags
-      this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+  // adds tags to the (tags x) list of tags
+  // available to access project data from anywhere
+  // project is from project.service.ts
+  this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description, true));
 
-      // adds tags to the (tags x) list of tags
-      // available to access project data from anywhere
-      // project is from project.service.ts
-      this.project?.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+  this.data.universalTags.push(new Tag(3, this.tag1.name, this.tag1.description, true));
 
-      // @ts-ignore
-      this.tags = this.project.tags;
-      /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
-              error => this.message = 'INVALID FIELD');
-      this.message = 'Tag is successfully created';
-             // this.router.navigate(['tag']); */
-    
-      // removes the information in the tag name and description in the create new tag box
-      this.clearTagNameDescription(this.tag1);
+  // @ts-ignore
+  this.tags = this.project.tags;
+  /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
+          error => this.message = 'INVALID FIELD');
+  this.message = 'Tag is successfully created';
+         // this.router.navigate(['tag']);
 
-      setTimeout(() => {
-          this.tag1.name = '';
-          this.tag1.description = '';
-          this.getAllTags();
-          this.message = '';
-        },
-        4000);
-    }
-  }
-  
-  
+  setTimeout(() => {
+           this.tag1.name = '';
+           this.tag1.description = '';
+           this.getAllTags(); },
+    2000);*/
 
-  public clearTagNameDescription(tagInQuestion: Tag): void {
-    tagInQuestion.name = '';
-    tagInQuestion.description = '';
   }
 
 
