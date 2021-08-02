@@ -14,7 +14,7 @@ export class NavComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  logout(){
-    sessionStorage.removeItem(SessionVar.loginKey)
+  logout(): void {
+    sessionStorage.removeItem(SessionVar.loginKey);
   }
 }

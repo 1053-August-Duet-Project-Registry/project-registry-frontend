@@ -30,7 +30,7 @@ export class CreateProjectComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public registerProject() {
+  public registerProject(): void {
     this.newProject.name = this.projectName;
     this.newProject.description = this.projectDescription;
     // this.newProject.tags =
@@ -48,7 +48,7 @@ export class CreateProjectComponent implements OnInit {
             this.errorDetected = true;
             const errorElement = document.getElementById('errorText');
             if (errorElement){
-              errorElement.innerHTML = 'An error Occured';
+              errorElement.innerHTML = 'An error Occurred';
             }
           }
         });

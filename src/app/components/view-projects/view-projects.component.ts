@@ -29,7 +29,7 @@ export class ViewProjectsComponent implements OnInit {
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService, private iterationService: IterationService, private route: Router, private location: Location) {
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
-      if (location.path() == '/project-detail' && numberOfTimesAround < 1) {
+      if (location.path() === '/project-detail' && numberOfTimesAround < 1) {
         console.log('running');
         this.getProjects();
         numberOfTimesAround++;
@@ -37,7 +37,7 @@ export class ViewProjectsComponent implements OnInit {
     });
 
   }
-  public projects: Project[] = 
+  public projects: Project[] =
   [
       {
           "id": 1,
@@ -108,7 +108,7 @@ export class ViewProjectsComponent implements OnInit {
           },
           "tags": []
       }
-  ]; 
+  ];
 
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -121,7 +121,7 @@ export class ViewProjectsComponent implements OnInit {
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
-  public statusSelected?: string = "ACTIVE";
+  public statusSelected ? = 'ACTIVE';
 
 
   // based on project.model.ts
@@ -149,43 +149,49 @@ export class ViewProjectsComponent implements OnInit {
   iterationSuccess?: string;
   iterationError?: string;
 
-  changeBatch(value: BatchTemplate) {
+  changeBatch(value: BatchTemplate): void {
     this.sendBatch = value as BatchTemplate;
   }
 
-  getBatches() {
-    this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data)
+  getBatches(): void {
+    this.iterationService.getBatchServiceMock()
+      .subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
   }
 
-  getIteration() {
-    console.log("all iteration")
+  getIteration(): void {
+    console.log('all iteration');
     this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
-      this.allIterations = iteration
-      console.log("all", this.allIterations)
-    })
+      this.allIterations = iteration;
+      console.log('all', this.allIterations);
+    });
 
 
   }
 
-  sendIteration(row: Project) {
+  sendIteration(row: Project): void {
     if (this.sendBatch) {
-      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate);
+      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id,
+        this.sendBatch.startDate, this.sendBatch.endDate);
 
-      let haventIterate: Boolean = true;
-      for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == this.sendBatch.batchId) {
+      let haventIterate = true;
+      for (const anIteration of this.allIterations) {
+        if (anIteration.batchId === this.sendBatch.batchId) {
           haventIterate = false;
         }
       }
 
-      //commented out doesn't work as is since there's no iterations to go off of
+      // commented out doesn't work as is since there's no iterations to go off of
       // if (this.allIterations.length > 0) {
       //   for (let i = 0; i < this.allIterations.length; i++) {
       //     let projects: Project = this.allIterations[i].project as Project
       //     console.log(row.id, projects.id, this.sendBatch.batchId, this.allIterations[i].batchId, this.allIterations.length)
       //     if (row.id != projects.id && this.sendBatch.batchId == this.allIterations[i].batchId) {
 
-      //       this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //       this.iterationService.sendIteration(this.iteration)
+      //       .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //       startDate: any; batchId: any; }) => this.iterationSuccess =
+      //       `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //       to batch ${data.startDate} ${data.batchId}`);
       //       this.getIteration()
       //       this.selectedBatch = this.sendBatch.batchId
       //       this.iterationError = ''
@@ -193,7 +199,11 @@ export class ViewProjectsComponent implements OnInit {
 
       //     } else {
       //       if (haventIterate == true) {
-      //         this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //         this.iterationService.sendIteration(this.iteration)
+      //         .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //         startDate: any; batchId: any; }) => this.iterationSuccess =
+      //         `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //         to batch ${data.startDate} ${data.batchId}`);
       //         this.getIteration()
       //         this.iterationError = ''
       //         break;
@@ -207,7 +217,11 @@ export class ViewProjectsComponent implements OnInit {
       //     }
       //   }
       // } else {
-      //   this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //   this.iterationService.sendIteration(this.iteration)
+      //   .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //   startDate: any; batchId: any; }) => this.iterationSuccess =
+      //   `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //   to batch ${data.startDate} ${data.batchId}`);
       //   this.getIteration()
       //   console.log("first time")
 
@@ -229,7 +243,7 @@ export class ViewProjectsComponent implements OnInit {
       this.dataSource = new MatTableDataSource(filtered);
     }
   }
-  
+
 
   ngOnInit(): void {
     this.getProjectsInit();
@@ -266,7 +280,7 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnChanges() {
     this.filterProjectsByStatus();
-    
+
   }
   // Filter the columns
   applyFilter(event: Event) {
@@ -374,7 +388,7 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
-    
+
     //temp to make sure tag filtering works
     this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }

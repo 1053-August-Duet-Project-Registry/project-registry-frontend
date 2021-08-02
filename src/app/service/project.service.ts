@@ -61,7 +61,7 @@ export class ProjectService {
         );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to a remote logging infrastructure

@@ -82,7 +82,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   }
 
-  ngOnChange(){
+  ngOnChange(): void {
 
   }
 
@@ -94,6 +94,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
 
 
+  // removes tags from view not from persistent storage
   remove(tagName: Tag): void {
     this.arr = this.arr.filter(tag => tag.name !== tagName.name);
 
