@@ -128,7 +128,10 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       });
       
     }
-    
+
+    /**
+     * Creating a div to hold information from clicking items in chart and appending it to Batch Information div, also added events to HTML
+     */
     let myDiv = document.createElement('div');
     let parentDiv = document.querySelector('.displayInfo');
     this.events.ItemClicked = (items) => {
