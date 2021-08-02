@@ -31,38 +31,34 @@ export class TagsComponent implements OnInit {
 
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
-      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));
+      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice())
+    );
   }
 
+  // The current project being viewed/edited
   public project?: Project;
 
   faEdit = faEdit;
 
-  // TODO determine which of these fields can be deleted.
-  visible = true;
-  multiple = true;
-  selectable = true;
-  removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl();
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')]; // [];
-  temp: Tag[] = [];
+  // array of tags attached to current project
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')];
 
   @ViewChild('tagInput')
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
-
+  message = '';
 
   public tagsNames: Tag[] = [];
+  // contains all tags found in the db
   public tags: Tag[] = [];
   public errorDetected = false;
+  // contains the text entered in the description and name input boxes
   public tag1: Tag = new Tag(0, '', '');
 
-  message = '';
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -73,11 +69,6 @@ export class TagsComponent implements OnInit {
 
   open(content: any) {
     this.modalService.open(content);
-  }
-
-  // I don't think this is needed?
-  Tag() {
-    console.log(this.tags);
   }
 
   getAllTags() {
@@ -98,7 +89,6 @@ export class TagsComponent implements OnInit {
   }
 
   private _filter(value: any): Tag[] {
-    // const filterValue = value;
     const a: Tag = new Tag(0, value, '');
     return this.tagsNames.filter(tagName => tagName.name == a.name);
   }
@@ -106,7 +96,7 @@ export class TagsComponent implements OnInit {
   // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
-    // seems like this isn't used so is it not needed?
+    // seems like this variable isn't used so is it not needed?
     const input = event.input ? event.input : '';
     const value = event.value;
 
@@ -129,7 +119,6 @@ export class TagsComponent implements OnInit {
       if (this.project !== undefined)
         this.project.tags = this.project.tags.filter(e => e.name != tagName);
     }
-    console.log(this.selectedTagNames);
     // TODO figure out wtf this note means and if it needs fixed.
     // when i come back i will do here
     // for(let i = 0; i < this.selectedTagArr.length; i++){
@@ -140,32 +129,29 @@ export class TagsComponent implements OnInit {
 
   }
 
+  // TODO not used...
   selected(event: MatAutocompleteSelectedEvent): void {
     if (!this.selectedTagArr.includes(event.option.value))
       this.selectedTagNames.push(event.option.viewValue);
   }
 
-    // filter out own selected method
-  filterSelectedTag(tag: Tag): void {
-    if (!this.selectedTagArr.includes(tag)){
-    this.selectedTagArr.push(tag); }
-  }
-
-
   public registerTagFromService(): void {
+    const newTag = new Tag(0, this.tag1.name, this.tag1.description);
+
     for (let i = 0; i < this.tags.length; i++){
-      if (this.tags[i].name === this.tag1.name){
-        this.message = 'Tag is already exist';
-        return ;
+      if (this.tags[i].name.toLowerCase() === newTag.name.toLowerCase()) {
+        this.message = 'Tag already exists';
+        return;
       }
     }
-    // adds tags to the list of tags in the box for tags
-    this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
 
-    // adds tags to the (tags x) list of tags
-    // available to access project data from anywhere
-    // project is from project.service.ts
-    this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
+    this.tags.push(newTag);
+
+    // adds tag to the list of tags in the box for tags
+    this.selectedTagArr.push(newTag);
+
+    // adds the tag to the current project
+    this.project?.tags.push(newTag);
     /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
             error => this.message = 'INVALID FIELD');
     this.message = 'Tag is successfully created';
@@ -176,6 +162,9 @@ export class TagsComponent implements OnInit {
             this.tag1.description = '';
             this.getAllTags(); },
       2000);*/
+
+    // this resets the message in case it was set if a user entered a duplicate tag name 
+    this.message = '';
   }
 }
 
