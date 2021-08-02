@@ -1,29 +1,27 @@
-<label for="tags">Project Tags:</label>
+<label id="tags">Tags</label>
 <!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
-<div style="border: 1px solid #ced4da; border-radius: 5px; height: 88px">
-   <!-- display tags selected inside html from project detail-->
-  <div style="display: inline-block; margin-left: 10px" id="tags" *ngFor="let tag of selectedTagArr">
-    <div>
-      <h4 style="
-          margin-top: 15px;
-          border: 1px solid transparent;
-          border-radius: 5px;
-          padding: 4px 8px 4px 8px;
-          background-color: rgb(242, 105, 38);
 
-          color: #fff;
-          flex-grow: 1;
-        ">
-        <abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
-      </h4>
-
-    </div>
-  </div>
+<div class="input-group">
+  <mat-chip-list #chipList aria-label="Tag selection" [multiple]="multiple">
+    <mat-chip style="background-color: rgb(242, 105, 38); color: #fff;"
+              *ngFor="let tag of selectedTagArr"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove(tag)">
+      <abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
 </div>
 
-<!-- ***************************
-Adding a custom tag upon modal
-*******************************-->
+
+
+
+
+
+<ng-container *ngTemplateOutlet="content1"></ng-container>
+
+<!--adding a custom tag upon modal-->
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4>Make tag here</h4>

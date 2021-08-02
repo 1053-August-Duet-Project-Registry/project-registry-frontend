@@ -28,13 +28,21 @@ myControl = new FormControl();
 options: string[] = [];
 tags: Tag[] = [];
 filteredOptions!: Observable<string[]>;
-
-  constructor(private TagsService: TagService, private tagManage: ProjectTagManagementService) {
+searchTags: string[] = [];
+  constructor(private TagsService: TagService, private data: ProjectTagManagementService) {
 
   }
-ngOnInit(): void{
-    this.tagManage.currentTagArray.subscribe(arr => this.currentTags = arr);
 
+  /*******************
+   Continue from here!
+   *******************/
+
+
+ngOnInit(): void{
+    this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
+    for(let i = 0; i < this.data.universalTags.length; i++){
+      this.searchTags.push(this.data.universalTags[i].name);
+    }
     this.getTags();
     this.filteredOptions = this.myControl.valueChanges
       .pipe(startWith(''), map(value => this._filter(value)));
@@ -59,7 +67,7 @@ ngOnInit(): void{
 
  private _filter(value: string): string[]{
    const filterValue = value.toLowerCase();
-   return this.options.filter(option => option.toLowerCase().includes(filterValue));
+   return this.searchTags.filter(option => option.toLowerCase().includes(filterValue));
  }
 
  /* this gets the value of the selected tag, option.value only fires when a valid tag is selected,

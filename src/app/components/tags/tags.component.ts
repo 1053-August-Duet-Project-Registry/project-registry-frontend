@@ -14,6 +14,7 @@ import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Project } from 'src/app/models/project.model';
+import {ProjectTagManagementService} from '../../service/project-tag-management.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { Project } from 'src/app/models/project.model';
 export class TagsComponent implements OnInit {
 
   constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
-              config: NgbModalConfig, private modalService: NgbModal) {
+              config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
     config.backdrop = 'static';
     config.keyboard = false;
 
@@ -50,6 +51,7 @@ export class TagsComponent implements OnInit {
   // store tags of current project, this will be passed to other teams
   @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true)]; // [];
   temp: Tag[] = [];
+
 
   @ViewChild('tagInput')
   tagInput!: any;
@@ -132,28 +134,38 @@ message = '';
     this.tagCtrl.setValue(null);
   }
 
-  remove(tagName: string): void {
-    const index = this.selectedTagNames.indexOf(tagName);
-    if (index >= 0) {
-      this.selectedTagNames.splice(index, 1);
-    }
-    for (let i = 0; i < this.selectedTagArr.length; i++){
+  remove(tagName: Tag): void {
+    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
-      this.selectedTagArr = this.selectedTagArr.filter(e => e.name !== tagName);
-      if (this.project !== undefined){
-        this.project.tags = this.project.tags.filter(e => e.name !== tagName);
-      }
-    }
-    console.log(this.selectedTagNames);
-    // TODO figure out wtf this note means and if it needs fixed.
-    // when i come back i will do here
-    for (let i = 0; i < this.selectedTagArr.length; i++){
-      if (this.selectedTagArr[i].name === tagName){
-        continue;
-      }
-    }
+    this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
+    // this.data.updateTagArray(this.selectedTagArr);
+
+    // this.data.updateTagArray(this.data.universalTags);
   }
+
+  // remove(tagName: string): void {
+  //   const index = this.selectedTagNames.indexOf(tagName);
+  //   if (index >= 0) {
+  //     this.selectedTagNames.splice(index, 1);
+  //   }
+  //   for (let i = 0; i < this.selectedTagArr.length; i++){
+  //
+  //     this.selectedTagArr = this.selectedTagArr.filter( e => e.name !== tagName);
+  //     if (this.project !== undefined){
+  //       this.project.tags = this.project.tags.filter(e => e.name != tagName);
+  //     }
+  //   }
+  //   console.log(this.selectedTagNames);
+  //   // TODO figure out wtf this note means and if it needs fixed.
+  //   // when i come back i will do here
+  //   // for(let i = 0; i < this.selectedTagArr.length; i++){
+  //   //   if(this.selectedTagArr[i].name === tagName){
+  //   //     continue
+  //   //   }
+  //   // }
+  //
+  // }
 
 selected(event: MatAutocompleteSelectedEvent): void {
    // let index = this.selectedTagNames.indexOf(event.option.value);
@@ -222,5 +234,8 @@ public registerTagFromService(): void {
     tagInQuestion.name = '';
     tagInQuestion.description = '';
   }
+
+
+
 }
 

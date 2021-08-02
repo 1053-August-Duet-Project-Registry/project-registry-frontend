@@ -20,7 +20,7 @@ import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Output, EventEmitter } from '@angular/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-
+import { TagsComponent } from '../tags/tags.component';
 
 @Component({
   selector: 'app-add-tags-added-tags',
@@ -30,7 +30,7 @@ import { ProjectTagManagementService } from 'src/app/service/project-tag-managem
 export class AddTagsAddedTagsComponent implements OnInit {
 
   // Constructor for add-tags-added-tags
-  constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
+  constructor(/*public universalTags: TagsComponent,*/ public router: Router, public projectService: ProjectService, public tagService: TagService,
               config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
     config.backdrop = 'static';
     config.keyboard = false;
@@ -80,7 +80,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
     // this.arr = this.project.tags;
 
     // this adds a tag that can be removed from the screen
-    this.selectedTagArr = this.project.tags;
+    this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
     this.selectedTagArr.forEach(e => {
     this.selectedTagNames.push(e.name);
     });
