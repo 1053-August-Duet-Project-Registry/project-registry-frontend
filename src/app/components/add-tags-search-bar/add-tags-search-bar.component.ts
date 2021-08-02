@@ -28,6 +28,7 @@ myControl = new FormControl();
 options: string[] = [];
 tags: Tag[] = [];
 filteredOptions!: Observable<string[]>;
+
   constructor(private TagsService: TagService, private tagManage: ProjectTagManagementService) {
 
   }
