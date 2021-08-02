@@ -77,7 +77,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnInit(): void {
     this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
-    //this.arr = this.project.tags;
+    // this.arr = this.project.tags;
 
     // this adds a tag that can be removed from the screen
     this.selectedTagArr = this.project.tags;
