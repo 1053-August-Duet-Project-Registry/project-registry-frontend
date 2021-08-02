@@ -15,6 +15,7 @@ import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
 import { ViewProjectService } from 'src/app/service/view-project.service';
 import { Project } from '../../models/project.model';
+import {LoginServiceService} from '../../service/login-service.service';
 
 export interface statusFilter { }
 
@@ -26,7 +27,10 @@ export interface statusFilter { }
 export class ViewProjectsComponent implements OnInit {
 
 
-  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService, private iterationService: IterationService, private route: Router, private location: Location) {
+  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
+              private iterationService: IterationService, private route: Router, private location: Location,
+              private loginService: LoginServiceService) {
+
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
       if (location.path() == '/project-detail' && numberOfTimesAround < 1) {
@@ -37,78 +41,78 @@ export class ViewProjectsComponent implements OnInit {
     });
 
   }
-  public projects: Project[] = 
+  public projects: Project[] =
   [
       {
-          "id": 1,
-          "name": "rideforce",
-          "status": {
-              "id": 3,
-              "name": "ACTIVE"
+          id: 1,
+          name: 'rideforce',
+          status: {
+              id: 3,
+              name: 'ACTIVE'
           },
-          "description": "rideforce project",
-          "owner": {
-              "id": 3,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
+          description: 'rideforce project',
+          owner: {
+              id: 3,
+              username: 'william',
+              role: {
+                  id: 1,
+                  type: 'admin'
               }
           },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
+          phase: {
+              id: 2,
+              kind: 'TRAINER_APPROVED',
+              description: 'Trainer has reviewed backlog and approves of scope and domain'
           },
-          "tags": []
+          tags: []
       },
       {
-          "id": 2,
-          "name": "Make A Recruiting Application",
-          "status": {
-              "id": 2,
-              "name": "ACTIVE"
+          id: 2,
+          name: 'Make A Recruiting Application',
+          status: {
+              id: 2,
+              name: 'ACTIVE'
           },
-          "description": "Finds potential condadites by scrapping facebook.",
-          "owner": {
-              "id": 1,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
+          description: 'Finds potential condadites by scrapping facebook.',
+          owner: {
+              id: 1,
+              username: 'william',
+              role: {
+                  id: 1,
+                  type: 'admin'
               }
           },
-          "phase": {
-              "id": 3,
-              "kind": "HANDOFF_SCHEDULED",
-              "description": "Scheduled the Handoff meeting to introduce P3"
+          phase: {
+              id: 3,
+              kind: 'HANDOFF_SCHEDULED',
+              description: 'Scheduled the Handoff meeting to introduce P3'
           },
-          "tags": []
+          tags: []
       },
       {
-          "id": 3,
-          "name": "Caliber Staging Module",
-          "status": {
-              "id": 3,
-              "name": "CODE_REVIEW"
+          id: 3,
+          name: 'Caliber Staging Module',
+          status: {
+              id: 3,
+              name: 'CODE_REVIEW'
           },
-          "description": "Allows for staging to be remote",
-          "owner": {
-              "id": 4,
-              "username": "Bob",
-              "role": {
-                  "id": 2,
-                  "type": "user"
+          description: 'Allows for staging to be remote',
+          owner: {
+              id: 4,
+              username: 'Bob',
+              role: {
+                  id: 2,
+                  type: 'user'
               }
           },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
+          phase: {
+              id: 2,
+              kind: 'TRAINER_APPROVED',
+              description: 'Trainer has reviewed backlog and approves of scope and domain'
           },
-          "tags": []
+          tags: []
       }
-  ]; 
+  ];
 
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -121,7 +125,7 @@ export class ViewProjectsComponent implements OnInit {
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
-  public statusSelected?: string = "ACTIVE";
+  public statusSelected = 'ACTIVE';
 
 
   // based on project.model.ts
@@ -154,15 +158,15 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   getBatches() {
-    this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data)
+    this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
   }
 
   getIteration() {
-    console.log("all iteration")
+    console.log('all iteration');
     this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
-      this.allIterations = iteration
-      console.log("all", this.allIterations)
-    })
+      this.allIterations = iteration;
+      console.log('all', this.allIterations);
+    });
 
 
   }
@@ -178,7 +182,7 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
 
-      //commented out doesn't work as is since there's no iterations to go off of
+      // commented out doesn't work as is since there's no iterations to go off of
       // if (this.allIterations.length > 0) {
       //   for (let i = 0; i < this.allIterations.length; i++) {
       //     let projects: Project = this.allIterations[i].project as Project
@@ -229,9 +233,15 @@ export class ViewProjectsComponent implements OnInit {
       this.dataSource = new MatTableDataSource(filtered);
     }
   }
-  
+
 
   ngOnInit(): void {
+
+    // Check if user is logged in, otherwise redirect.
+    if (! this.loginService.checkSessionLogin()) {
+      this.route.navigate(['/homepage-login']);
+    }
+
     this.getProjectsInit();
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
@@ -266,7 +276,7 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnChanges() {
     this.filterProjectsByStatus();
-    
+
   }
   // Filter the columns
   applyFilter(event: Event) {
@@ -278,7 +288,7 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  //returns all the projects in DB
+  // returns all the projects in DB
   public getProjectsInit(): void {
     /*
     * This code is to get the projects from localhost:8085
@@ -293,7 +303,7 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   public getProjects(): void {
-    console.log("getProjects method: ");
+    console.log('getProjects method: ');
     this.viewProjectService.GetAllProjects().subscribe((report: any) => {
 
       this.projects = report as Project[];
@@ -322,10 +332,10 @@ export class ViewProjectsComponent implements OnInit {
   getAllStatuses(): void {
     this.viewProjectService.getAllStatuses()
       .subscribe((data: any) => {
-        for (let d of data) {
+        for (const d of data) {
           this.status.push(d.name);
         }
-      })
+      });
 
   }
 
@@ -374,8 +384,8 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
-    
-    //temp to make sure tag filtering works
+
+    // temp to make sure tag filtering works
     this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }
 
@@ -394,7 +404,7 @@ export class ViewProjectsComponent implements OnInit {
     this.filterResults();
   }
 
-  //function that causes issues with filtering, anything that hits this will fail atm
+  // function that causes issues with filtering, anything that hits this will fail atm
   filterResults(): void {
     let temp: Project[] = [];
     if (
