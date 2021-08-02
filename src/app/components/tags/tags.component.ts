@@ -48,7 +48,7 @@ export class TagsComponent implements OnInit {
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')]; // [];
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')]; // [];
   temp: Tag[] = [];
 
   @ViewChild('tagInput')
@@ -85,7 +85,7 @@ message = '';
 
    getAllTags() {
 
-   this.tags = [new Tag(3, 'tag1', 'description')];
+   this.tags = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
    this.tagsNames = this.tags;
 
 
@@ -174,17 +174,20 @@ filterSelectedTag(tag: Tag): void {
 public registerTagFromService(): void {
   for (let i = 0; i < this.tags.length; i++){
     if (this.tags[i].name === this.tag1.name){
-      this.message = 'Tag is already exist';
+      this.message = 'Tag already exists';
       return ;
     }
   }
   // adds tags to the list of tags in the box for tags
   this.selectedTagArr.push(new Tag(3, this.tag1.name, this.tag1.description));
+  //this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
 
   // adds tags to the (tags x) list of tags
   // available to access project data from anywhere
   // project is from project.service.ts
   this.project?.tags.push(new Tag(3, this.tag1.name, this.tag1.description));
+  // @ts-ignore
+  this.tags = this.project.tags;
   /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';

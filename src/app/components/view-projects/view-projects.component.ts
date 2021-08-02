@@ -37,7 +37,7 @@ export class ViewProjectsComponent implements OnInit {
     });
 
   }
-  public projects: Project[] = 
+  public projects: Project[] =
   [
       {
           "id": 1,
@@ -60,7 +60,7 @@ export class ViewProjectsComponent implements OnInit {
               "kind": "TRAINER_APPROVED",
               "description": "Trainer has reviewed backlog and approves of scope and domain"
           },
-          "tags": []
+          "tags": [new Tag(1, 'Revature', 'Made by Revature')]
       },
       {
           "id": 2,
@@ -108,7 +108,7 @@ export class ViewProjectsComponent implements OnInit {
           },
           "tags": []
       }
-  ]; 
+  ];
 
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -229,7 +229,7 @@ export class ViewProjectsComponent implements OnInit {
       this.dataSource = new MatTableDataSource(filtered);
     }
   }
-  
+
 
   ngOnInit(): void {
     this.getProjectsInit();
@@ -266,7 +266,7 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnChanges() {
     this.filterProjectsByStatus();
-    
+
   }
   // Filter the columns
   applyFilter(event: Event) {
@@ -374,7 +374,7 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
-    
+
     //temp to make sure tag filtering works
     this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }

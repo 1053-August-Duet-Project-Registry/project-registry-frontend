@@ -22,8 +22,6 @@ import { Output, EventEmitter } from '@angular/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 
 
-
-
 @Component({
   selector: 'app-add-tags-added-tags',
   templateUrl: './add-tags-added-tags.component.html',
@@ -31,7 +29,7 @@ import { ProjectTagManagementService } from 'src/app/service/project-tag-managem
 })
 export class AddTagsAddedTagsComponent implements OnInit {
 
-
+  // Constructor for add-tags-added-tags
   constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
               config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
     config.backdrop = 'static';
@@ -44,19 +42,28 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
  public project?: Project;
 
- arr!: Tag[];
+  //arr!: Tag[];
+  //separatorKeysCodes: number[] = [ENTER, COMMA];
 
-
+  /***********
+   Chip events
+   ***********/
   visible = true;
   multiple = true;
   selectable = true;
   removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+
   tagCtrl = new FormControl();
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
+
+  // To hold all tags?
+  public tags: Tag[] = [];
+
+
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')]; // [];
+
 
   @ViewChild('tagInput')
   tagInput!: any;
@@ -68,9 +75,9 @@ export class AddTagsAddedTagsComponent implements OnInit {
   public errorDetected = false;
 
   ngOnInit(): void {
-    this.data.currentTagArray.subscribe(arr => this.arr = arr);
+    this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
-    this.arr = [];
+    //this.arr = this.project.tags;
 
     // this adds a tag that can be removed from the screen
     this.selectedTagArr = this.project.tags;
@@ -95,9 +102,9 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
 
   remove(tagName: Tag): void {
-    this.arr = this.arr.filter(tag => tag.name !== tagName.name);
+    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
-    this.data.updateTagArray(this.arr);
+    this.data.updateTagArray(this.selectedTagArr);
 
   }
 
