@@ -185,9 +185,14 @@ filterSelectedTag(tag: Tag): void {
  // takes the information from the create-new-tag-form in the html and makes a new tag
   // the check for tag already in use not working, unsure why
 public registerTagFromService(): void {
-  for (let i = 0; i < this.tags.length; i++){
-    if (this.tags[i].name === this.tag1.name || this.tag1.name === ''){
-      this.message = 'Tag already exists';
+    if (this.tag1.name === ''){
+      this.message = 'Tag must have a name';
+      return;
+    }
+    // make sure the new tag name does not exist already
+    for (const loopTag of this.tags){
+    if (loopTag.name === this.tag1.name){
+      this.message = `The ${this.tag1.name} tag already exists`;
       return ;
     }
   }
@@ -203,17 +208,20 @@ public registerTagFromService(): void {
   this.data.universalTags.push(new Tag(3, this.tag1.name, this.tag1.description, true));
 
   // @ts-ignore
-  this.tags = this.project.tags;
+    this.tags = this.project.tags;
   /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
           error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';
          // this.router.navigate(['tag']);
+*/  // lets the user know the tag was created successfully
+    this.message = `The ${this.tag1.name} tag was created`;
 
-  setTimeout(() => {
-           this.tag1.name = '';
-           this.tag1.description = '';
-           this.getAllTags(); },
-    2000);*/
+    setTimeout(() => {
+      this.message = '';
+      this.tag1.name = '';
+      this.tag1.description = '';
+      this.getAllTags(); },
+    3000);
 
   }
 
