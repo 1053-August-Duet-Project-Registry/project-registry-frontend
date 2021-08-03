@@ -72,20 +72,11 @@ export class TagsComponent implements OnInit {
   }
 
   getAllTags() {
-    // temporary hardcoding
-    this.tags = [new Tag(3, 'tag1', 'description')];
-    this.tagsNames = this.tags;
-
-
-      /*
-      * This block gets tags from the db
-      */
-    // this.tagService.getAllTags().subscribe(data => {
-    //   this.tags = data;
-    //   data.forEach(tag => {
-    //     this.tagsNames.push(tag);
-    //   });
-    // });
+    this.tagService.getAllTags().subscribe(data => {
+      this.tags = data;
+      this.selectedTagArr = data;
+      this.tagsNames = data;
+    });
   }
 
   private _filter(value: any): Tag[] {
