@@ -19,18 +19,11 @@ import { Location } from '@angular/common';
 import { Tag } from '../../models/tag.model';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 
-
-
-
-
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.css']
 })
-
-
-
 
 export class ProjectDetailComponent implements OnInit {
 
@@ -82,6 +75,7 @@ export class ProjectDetailComponent implements OnInit {
 
   submitted = false;
 
+  // needs logic
   onSubmit(): void { this.submitted = true; }
 
   changeBatch(value: BatchTemplate): void {
@@ -95,7 +89,7 @@ export class ProjectDetailComponent implements OnInit {
 
     this.phaseService.getPhases();
     this.project = this.projectService.getCurrentProject();
-    if (this.project.id == 0){
+    if (this.project.id === 0){
       this.route.navigate(['']);
     }
   }
@@ -110,24 +104,24 @@ export class ProjectDetailComponent implements OnInit {
     }
 
     // Setting the status id
-    this.project.status.id=this.statusMap[this.project.status.name];
+    this.project.status.id = this.statusMap[this.project.status.name];
 
-    if(this.project != undefined){
+    if (this.project !== undefined){
       const phaseFound = this.phaseService.phases.find(p => {
         if (this.project){
-          return p.kind == this.project.phase.kind;
+          return p.kind === this.project.phase.kind;
         }
         else {
           return false;
         }
       });
-      if (phaseFound != undefined) {
+      if (phaseFound !== undefined) {
         this.project.phase = phaseFound;
       }
     }
     this.project.tags = this.arr;
 
-    this.projectService.updateProject(this.project).subscribe((data)=>{
+    this.projectService.updateProject(this.project).subscribe((data) => {
       this.project = data;
       this.route.navigate(['viewProject']);
     });
