@@ -15,7 +15,7 @@ import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
 import { ViewProjectService } from 'src/app/service/view-project.service';
 import { Project } from '../../models/project.model';
-import {LoginServiceService} from '../../service/login-service.service';
+import { LoginServiceService } from '../../service/login-service.service';
 
 export interface statusFilter { }
 

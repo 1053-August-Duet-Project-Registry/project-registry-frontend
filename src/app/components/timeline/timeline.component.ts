@@ -7,6 +7,7 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import moment from 'moment';
 import { Item, Period, Section } from 'ngx-time-scheduler';
 import { map } from 'rxjs/operators';
@@ -88,7 +89,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     if (! this.loginService.checkSessionLogin()) {
       this.route.navigate(['/homepage-login']);
     }
-  
+
     let batch: BatchTemplate[] = await this.iter
       .getBatchServiceMock()
       .pipe(
