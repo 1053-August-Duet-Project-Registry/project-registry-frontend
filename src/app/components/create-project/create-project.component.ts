@@ -7,7 +7,7 @@ import { Status } from 'src/app/models/status.model';
 import { Tag } from 'src/app/models/tag.model';
 import { User } from 'src/app/models/user.model';
 import { ProjectService } from 'src/app/service/project.service';
-import {LoginServiceService} from '../../service/login-service.service';
+import { LoginServiceService } from 'src/app/service/login-service.service';
 
 @Component({
   selector: 'app-create-project',
