@@ -41,7 +41,7 @@ searchTags: string[] = [];
 
 ngOnInit(): void{
     this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
-    for(let i = 0; i < this.data.universalTags.length; i++){
+    for (let i = 0; i < this.data.universalTags.length; i++){
       this.searchTags.push(this.data.universalTags[i].name);
     }
     this.getTags();
