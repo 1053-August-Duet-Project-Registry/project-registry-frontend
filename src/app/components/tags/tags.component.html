@@ -1,7 +1,8 @@
-
-<label id="tags">Tags</label>
+<!-- start of create new tag button -->
+<label id="tags"></label>
+<br />
 <!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
-
+<!--
 <div class="input-group">
   <mat-chip-list #chipList aria-label="Tag selection" [multiple]="multiple">
     <mat-chip style="background-color: rgb(242, 105, 38); color: #fff;"
@@ -15,11 +16,16 @@
   </mat-chip-list>
 </div>
 <ng-container *ngTemplateOutlet="content1"></ng-container>
-
+-->
 <!--adding a custom tag upon modal-->
+
+<!--**************************
+    Add Custom Tags Modal
+****************************-->
+
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4>Make tag here</h4>
+    <h4>Create Tag Here</h4>
   </div>
   <div class="modal-body" style="overflow-y: visible; position: static">
     <form id="create-new-tag-form">
