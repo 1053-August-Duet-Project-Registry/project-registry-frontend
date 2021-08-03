@@ -30,8 +30,9 @@ import { TagsComponent } from '../tags/tags.component';
 export class AddTagsAddedTagsComponent implements OnInit {
 
   // Constructor for add-tags-added-tags
-  constructor(/*public universalTags: TagsComponent,*/ public router: Router, public projectService: ProjectService, public tagService: TagService,
-              config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
+  constructor(public router: Router, /*public universalTags: TagsComponent,*/ public projectService: ProjectService,
+              public tagService: TagService, config: NgbModalConfig, private modalService: NgbModal,
+              public data: ProjectTagManagementService) {
     config.backdrop = 'static';
     config.keyboard = false;
 
@@ -42,8 +43,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
  public project?: Project;
 
-  //arr!: Tag[];
-  //separatorKeysCodes: number[] = [ENTER, COMMA];
+  // arr!: Tag[];
+  // separatorKeysCodes: number[] = [ENTER, COMMA];
 
   /***********
    Chip events
