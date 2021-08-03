@@ -13,11 +13,12 @@ existing array tag if an existing project otherwise if new, this array is just e
  */
   private tagArray = new BehaviorSubject<Tag[]>([]);
   currentTagArray = this.tagArray.asObservable();
+  public universalTags = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
 
   constructor() { }
   
   // simply overwrites previous tag to new one
-  updateTagArray(arr: Tag[]){
+  updateTagArray(arr: Tag[]): void{
     this.tagArray.next(arr);
   }
 }

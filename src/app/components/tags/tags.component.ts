@@ -14,6 +14,7 @@ import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Project } from 'src/app/models/project.model';
+import {ProjectTagManagementService} from '../../service/project-tag-management.service';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { Project } from 'src/app/models/project.model';
 export class TagsComponent implements OnInit {
 
   constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
-              config: NgbModalConfig, private modalService: NgbModal) {
+              config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
     config.backdrop = 'static';
     config.keyboard = false;
 
@@ -46,11 +47,13 @@ export class TagsComponent implements OnInit {
   // array of tags attached to current project
   @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description')];
 
+
   @ViewChild('tagInput')
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
   message = '';
+  closeResult = '';
 
   public tagsNames: Tag[] = [];
   // contains all tags found in the db
@@ -81,7 +84,7 @@ export class TagsComponent implements OnInit {
 
   private _filter(value: any): Tag[] {
     const a: Tag = new Tag(0, value, '');
-    return this.tagsNames.filter(tagName => tagName.name == a.name);
+    return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
   // tagName.indexOf(filterValue) === 0
@@ -100,32 +103,23 @@ export class TagsComponent implements OnInit {
     this.tagCtrl.setValue(null);
   }
 
-  remove(tagName: string): void {
-    const index = this.selectedTagNames.indexOf(tagName);
-    if (index >= 0) {
-      this.selectedTagNames.splice(index, 1);
-    }
-    for (let i = 0; i < this.selectedTagArr.length; i++){
-      this.selectedTagArr = this.selectedTagArr.filter( e => e.name !== tagName);
-      if (this.project !== undefined)
-        this.project.tags = this.project.tags.filter(e => e.name != tagName);
-    }
-    // TODO figure out wtf this note means and if it needs fixed.
-    // when i come back i will do here
-    // for(let i = 0; i < this.selectedTagArr.length; i++){
-    //   if(this.selectedTagArr[i].name === tagName){
-    //     continue
-    //   }
-    // }
+  remove(tagName: Tag): void {
+    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
+    this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
+
+    // this.data.updateTagArray(this.selectedTagArr);
+
+    // this.data.updateTagArray(this.data.universalTags);
   }
-
+  
   // TODO not used...
   selected(event: MatAutocompleteSelectedEvent): void {
     if (!this.selectedTagArr.includes(event.option.value))
       this.selectedTagNames.push(event.option.viewValue);
   }
 
+  // takes the information from the create-new-tag-form in the html and makes a new tag
   public registerTagFromService(): void {
     const newTag = new Tag(0, this.tag1.name, this.tag1.description);
 
@@ -155,7 +149,7 @@ export class TagsComponent implements OnInit {
       2000);*/
 
     // this resets the message in case it was set if a user entered a duplicate tag name 
-    this.message = '';
+    this.message = ''; 
   }
 }
 

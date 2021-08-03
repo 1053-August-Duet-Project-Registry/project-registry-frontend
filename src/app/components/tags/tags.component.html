@@ -1,35 +1,13 @@
-<label for="tags">Existing Tags</label>
-<!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
-<div style="border: 1px solid #ced4da; border-radius: 5px; height: 88px">
-   <!-- display tags selected inside html from project detail-->
-  <div style="display: inline-block; margin-left: 10px" id="tags" *ngFor="let tag of selectedTagArr">
-    <div>
-      <h4 style="
-          margin-top: 15px;
-          border: 1px solid transparent;
-          border-radius: 5px;
-          padding: 4px 8px 4px 8px;
-          background-color: rgb(242, 105, 38);
-
-          color: #fff;
-          flex-grow: 1;
-        ">
-        <abbr title="{{ tag.description }}">{{ tag.name }}</abbr>
-      </h4>
-
-    </div>
-  </div>
-</div>
-
-<ng-container *ngTemplateOutlet="content1"></ng-container>
-
-<!--adding a custom tag upon modal-->
+<!--**************************
+    Add Custom Tags Modal
+****************************-->
+<hr>
 <ng-template #content1 let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4>Make tag here</h4>
+    <h4>Create Tag Here</h4>
   </div>
   <div class="modal-body" style="overflow-y: visible; position: static">
-    <form>
+    <form id="create-new-tag-form">
       <div class="form-group">
         <label for="tag-name-box">Tag Name:</label>
         <input type="text" class="form-control" id="tag-name-box" name="Name" [(ngModel)]="tag1.name" />
@@ -43,14 +21,17 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-orange" (click)="registerTagFromService()">
-      Save
+      Add
     </button>
-
     <button type="button" class="btn btn-orange" (click)="d('Cross click')">
       Exit
     </button>
   </div>
+
   <div id="anime" *ngIf="message.length > 0">
     {{ message }}
   </div>
 </ng-template>
+
+<button class="btn btn-orange" (click)="open(content1)">Create New Tag</button>
+

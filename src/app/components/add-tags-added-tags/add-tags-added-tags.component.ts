@@ -20,9 +20,7 @@ import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Output, EventEmitter } from '@angular/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-
-
-
+import { TagsComponent } from '../tags/tags.component';
 
 @Component({
   selector: 'app-add-tags-added-tags',
@@ -31,8 +29,8 @@ import { ProjectTagManagementService } from 'src/app/service/project-tag-managem
 })
 export class AddTagsAddedTagsComponent implements OnInit {
 
-
-  constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
+  // Constructor for add-tags-added-tags
+  constructor(/*public universalTags: TagsComponent,*/ public router: Router, public projectService: ProjectService, public tagService: TagService,
               config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
     config.backdrop = 'static';
     config.keyboard = false;
@@ -44,19 +42,28 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
  public project?: Project;
 
- arr!: Tag[];
+  //arr!: Tag[];
+  //separatorKeysCodes: number[] = [ENTER, COMMA];
 
-
+  /***********
+   Chip events
+   ***********/
   visible = true;
   multiple = true;
   selectable = true;
   removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+
   tagCtrl = new FormControl();
   filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
+
+  // To hold all tags?
+  public tags: Tag[] = [];
+
+
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
+  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')]; // [];
+
 
   @ViewChild('tagInput')
   tagInput!: any;
@@ -68,12 +75,12 @@ export class AddTagsAddedTagsComponent implements OnInit {
   public errorDetected = false;
 
   ngOnInit(): void {
-    this.data.currentTagArray.subscribe(arr => this.arr = arr);
+    this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
-    this.arr = [];
+    // this.arr = this.project.tags;
 
     // this adds a tag that can be removed from the screen
-    this.selectedTagArr = this.project.tags;
+    this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
     this.selectedTagArr.forEach(e => {
     this.selectedTagNames.push(e.name);
     });
@@ -82,7 +89,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   }
 
-  ngOnChange(){
+  ngOnChange(): void {
 
   }
 
@@ -94,10 +101,11 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
 
 
+  // removes tags from view not from persistent storage
   remove(tagName: Tag): void {
-    this.arr = this.arr.filter(tag => tag.name !== tagName.name);
+    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
-    this.data.updateTagArray(this.arr);
+    this.data.updateTagArray(this.selectedTagArr);
 
   }
 
