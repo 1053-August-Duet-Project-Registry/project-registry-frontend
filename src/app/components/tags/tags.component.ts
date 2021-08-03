@@ -55,10 +55,8 @@ export class TagsComponent implements OnInit {
   // may not be needed
   // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // store tags of current project, this will be passed to other teams. IS NOT an @Input()
-  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
-    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
-  temp: Tag[] = [];
+  // array of tags attached to current project
+  @Input() selectedTagArr: Tag[] = [];
 
 
   @ViewChild('tagInput')
@@ -88,10 +86,19 @@ export class TagsComponent implements OnInit {
 
   getAllTags() {
     this.tagService.getAllTags().subscribe(data => {
-      this.tags = data;
-      this.selectedTagArr = data;
-      this.tagsNames = data;
+      // this.tags = data;
+      // this.tagsNames = data;
+      // this.selectedTagArr = data;
+      data.forEach(tag => {
+        this.selectedTagArr.push(tag);
+        this.tags.push(tag);
+        this.tagsNames.push(tag);
+      });
     });
+    console.log(this.selectedTagArr);
+    console.log(this.tags);
+    console.log(this.tagsNames);
+    
   }
 
   private _filter(value: any): Tag[] {
@@ -100,7 +107,6 @@ export class TagsComponent implements OnInit {
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
-  // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
     // seems like this variable isn't used so is it not needed?
@@ -121,6 +127,13 @@ export class TagsComponent implements OnInit {
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
+
+    // TODO remove tag from db
+    this.tagService
+
+    // this.data.updateTagArray(this.selectedTagArr);
+
+    // this.data.updateTagArray(this.data.universalTags);
   }
 
   // TODO not used...
