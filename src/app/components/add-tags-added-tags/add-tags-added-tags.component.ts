@@ -62,7 +62,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
 
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')]; // [];
+  @Input() selectedTagArr: Tag[] = [];
 
 
   @ViewChild('tagInput')
@@ -77,12 +77,12 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnInit(): void {
     this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
-    // this.arr = this.project.tags;
 
-    // this adds a tag that can be removed from the screen
-    this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
+    // gets all tags and adds them to view
+    this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
+
     this.selectedTagArr.forEach(e => {
-    this.selectedTagNames.push(e.name);
+      this.selectedTagNames.push(e.name);
     });
 
     this.data.updateTagArray(this.selectedTagArr);
@@ -105,8 +105,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
   remove(tagName: Tag): void {
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
-    this.data.updateTagArray(this.selectedTagArr);
 
+    this.data.updateTagArray(this.selectedTagArr);
   }
 
 }
