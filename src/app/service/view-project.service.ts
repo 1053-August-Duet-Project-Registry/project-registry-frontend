@@ -17,7 +17,7 @@ export class ViewProjectService {
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  }
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -26,7 +26,7 @@ export class ViewProjectService {
     return this.http.get<Project[]>(`${REGISTRY_URL}project`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Project[]>('GetProject', []))
-      )
+      );
   }
 
   /* intended to get all status type projects in the DB**/
@@ -34,23 +34,23 @@ export class ViewProjectService {
     return this.http.get<Project[]>(`${REGISTRY_URL}project`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Project[]>('GetProject', []))
-      )
+      );
   }
 
-  //Return all the available type of tags
+  // Return all the available type of tags
   public GetAllProjectTags(): Observable<Tag[]> {
     return this.http.get<Tag[]>(`${REGISTRY_URL}tag`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Tag[]>('GetTag', []))
-      )
+      );
   }
 
-  //Return all the available phases
+  // Return all the available phases
   public GetAllProjectPhase(): Observable<Phase[]> {
     return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Phase[]>('GetPhase', []))
-      )
+      );
   }
 
 
@@ -58,13 +58,13 @@ export class ViewProjectService {
     return (error: any): Observable<T> => {
       console.error(error); // log it to the console if something goes wrong
       return of(result as T);
-    }
+    };
   }
 
   public getAllStatuses(): Observable<Status[]> {
     return this.http.get<Status[]>(`${REGISTRY_URL}status`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Status[]>('GetPhase', []))
-      )
+      );
   }
 }
