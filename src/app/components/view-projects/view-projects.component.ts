@@ -247,7 +247,6 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProjectsInit();
-    console.log(this.projects); // empty array because getProjectsInit() is async??
     
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
@@ -264,7 +263,7 @@ export class ViewProjectsComponent implements OnInit {
     // this.filterStatus();
 
     // mattabledataasource determines what goes in table on page/ functions put project data into datasource
-    this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
+    this.dataSource = new MatTableDataSource(this.projects);
 
     // console.log("ngOnInit projects: " + this.projects);
     // perhaps a different method?
@@ -294,16 +293,10 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  //returns all the projects in DB
+  // gets data from localhost:8085/api/project and puts data in dataSource.data
   public getProjectsInit(): void {
-    /*
-    * This code is to get the projects from localhost:8085
-    */
-    this.viewProjectService.GetAllProjects().subscribe((report: Project[]) => {
-      this.projects = report;
-      console.log(this.projects);
-      this.dataSource.data = this.projects.filter;
-    });
+    this.viewProjectService.GetAllProjects()
+      .subscribe((report: Project[]) => this.dataSource.data = report);
   }
 
   public getProjects(): void {
@@ -312,7 +305,7 @@ export class ViewProjectsComponent implements OnInit {
 
       this.projects = report;
 
-      this.dataSource.data = this.projects.filter;
+      this.dataSource.data = this.projects;
     });
   }
 
