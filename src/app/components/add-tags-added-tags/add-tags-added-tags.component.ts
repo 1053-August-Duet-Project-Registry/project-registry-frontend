@@ -63,7 +63,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
   // do we need this?
   /*selectedTagNames: string[] = [];*/
 
-  // To hold all tags? used in view-projects as part of the displayedColumns (maybe?) May not be needed
+  // do we need this?
+  // To hold all tags? used in view-projects as part of the displayedColumns (maybe?)
  // public tags: Tag[] = [];
 
 
@@ -73,6 +74,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   // testing to see if the @ViewChild does anything here. So far, no it does not
  // @ViewChild('tagInput')
   tagInput!: any;
+
  // @ViewChild('auto')
   // looks like matAutocomplete is not used yet
   matAutocomplete!: MatAutocomplete;
