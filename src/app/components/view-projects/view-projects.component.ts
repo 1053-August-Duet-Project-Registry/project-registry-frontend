@@ -60,7 +60,7 @@ export class ViewProjectsComponent implements OnInit {
               "kind": "TRAINER_APPROVED",
               "description": "Trainer has reviewed backlog and approves of scope and domain"
           },
-          "tags": [new Tag(1, 'Revature', 'Made by Revature')]
+          "tags": [new Tag(1, 'Revature', 'Made by Revature', false)]
       },
       {
           "id": 2,

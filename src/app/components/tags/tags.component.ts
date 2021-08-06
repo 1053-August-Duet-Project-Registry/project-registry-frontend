@@ -55,7 +55,8 @@ export class TagsComponent implements OnInit {
   // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
   // store tags of current project, this will be passed to other teams. IS NOT an @Input()
-  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')]; // [];
+  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
+    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
   temp: Tag[] = [];
 
 
@@ -69,7 +70,7 @@ export class TagsComponent implements OnInit {
   public tagsNames: Tag[] = [];
   public tags: Tag[] = [];
   public errorDetected = false;
-  public tag1: Tag = new Tag(0, '', '');
+  public tag1: Tag = new Tag(0, '', '', true);
   // public clientMessage: ClientMessage = new ClientMessage('');
 
 message = '';
@@ -93,14 +94,15 @@ message = '';
 
    getAllTags(): void {
 
-   this.tags = [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
+   this.tags = [new Tag(3, 'tag1', 'description', true),
+     new Tag(4, 'tag2', 'i want my mommy', false)];
    this.tagsNames = this.tags;
 
   }
 
   private _filter(value: any): Tag[] {
     // const filterValue = value;
-    const a: Tag = new Tag(0, value, '');
+    const a: Tag = new Tag(0, value, '', true);
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
@@ -170,15 +172,15 @@ public registerTagFromService(): void {
     }
   }
   // adds tags to the list of tags in the box for tags
-    this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description));
+    this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
 
   // adds tags to the mat-chip list of tags
   // available to access project data from anywhere
   // project is from project.service.ts
     if (this.project) {
-      this.project.tags.push(new Tag(0, this.tag1.name, this.tag1.description));
+      this.project.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
     }
-    this.data.universalTags.push(new Tag(0, this.tag1.name, this.tag1.description));
+    this.data.universalTags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
 
     if (this.project) {
       this.tags = this.project.tags;
