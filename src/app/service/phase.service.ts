@@ -30,7 +30,6 @@ export class PhaseService implements OnInit {
         catchError(this.handleError<Phase[]>('getPhase', []))
       ).subscribe(data => {
         this.phases = data;
-        console.log(this.phases);
       });
   }
 

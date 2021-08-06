@@ -30,6 +30,7 @@ tags: Tag[] = [];
 filteredOptions!: Observable<string[]>;
 
 searchTags: string[] = [];
+
   constructor(private TagsService: TagService, private data: ProjectTagManagementService) {
 
   }
@@ -55,13 +56,12 @@ ngOnInit(): void{
       this.tags = tag;
 
       this.getTagNames(this.tags);
-
     });
   }
+
   // extracts the name property from tags object and pushes into array of strings
   getTagNames(arr: any): void {
     for (const tag of arr){
-     // console.log(arr[i])
       this.options.push(tag.name);
     }
   }

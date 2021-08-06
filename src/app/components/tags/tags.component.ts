@@ -33,47 +33,42 @@ export class TagsComponent implements OnInit {
     // prevents the closing of the create-new-tag pop-up window by pressing the Esc key
     config.keyboard = false;
 
-
     // may not be needed
    /*this.filteredTags = this.tagCtrl.valueChanges
       .pipe(startWith(null),
       map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));*/
+
   }
 
+  // The current project being viewed/edited
   public project?: Project;
 
   faEdit = faEdit;
 
-  // TODO determine which of these fields can be deleted.
-  visible = true;
-  multiple = true;
-  selectable = true;
-  // removable = true;
-  // separatorKeysCodes: number[] = [ENTER, COMMA];
- // tagCtrl = new FormControl();
-  // may not be needed
+
+  tagCtrl = new FormControl();
+  // do we need this?
   // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // store tags of current project, this will be passed to other teams. IS NOT an @Input()
-  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
-    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
-  temp: Tag[] = [];
+  // array of tags attached to current project
+  @Input() selectedTagArr: Tag[] = [];
 
 
   @ViewChild('tagInput')
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
-
+  message = '';
   closeResult = '';
 
   public tagsNames: Tag[] = [];
+  // contains all tags found in the db
   public tags: Tag[] = [];
   public errorDetected = false;
-  public tag1: Tag = new Tag(0, '', '', true);
-  // public clientMessage: ClientMessage = new ClientMessage('');
 
-message = '';
+  // contains the text entered in the description and name input boxes
+  public tag1: Tag = new Tag(0, '', '', true);
+
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -82,54 +77,45 @@ message = '';
     });
   }
 
-
-
   open(content: any): void {
     this.modalService.open(content);
   }
 
-  Tag(): void {
+  getAllTags(): void {
+    this.tagService.getAllTags().subscribe(data => {
+      // this.tags = data;
+      // this.tagsNames = data;
+      // this.selectedTagArr = data;
+      data.forEach(tag => {
+        this.selectedTagArr.push(tag);
+        this.tags.push(tag);
+        this.tagsNames.push(tag);
+      });
+    });
+    console.log(this.selectedTagArr);
     console.log(this.tags);
-  }
 
-   getAllTags(): void {
-
-   this.tags = [new Tag(3, 'tag1', 'description', true),
-     new Tag(4, 'tag2', 'i want my mommy', false)];
-   this.tagsNames = this.tags;
-
+    console.log(this.tagsNames);
   }
 
   private _filter(value: any): Tag[] {
-    // const filterValue = value;
     const a: Tag = new Tag(0, value, '', true);
+
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
-  // tagName.indexOf(filterValue) === 0
   add(event: MatChipInputEvent): void {
     console.log('add is called');
-    const input = event.input;
+    // seems like this variable isn't used so is it not needed?
+    const input = event.input ? event.input : '';
     const value = event.value;
-    console.log('value' + value);
 
     if ((value || '').trim()){
       this.tagsNames.forEach(names => {
-
-        if (names.name === event.value)
-        {
-          if (!this.selectedTagNames.includes(value.trim())){
-
-            this.selectedTagNames.push(value.trim());
-          }
+        if (names.name === event.value && !this.selectedTagNames.includes(value.trim())) {
+          this.selectedTagNames.push(value.trim());
         }
       });
-
-
-
-    }
-    if (input) {
-      input.value = '';
     }
     // may not be needed
     // this.tagCtrl.setValue(null);
@@ -139,27 +125,26 @@ message = '';
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
+
+    // TODO remove tag from db
+   // this.tagService
+
+    // this.data.updateTagArray(this.selectedTagArr);
+
+    // this.data.updateTagArray(this.data.universalTags);
   }
 
+  // TODO not used...
+  selected(event: MatAutocompleteSelectedEvent): void {
 
-selected(event: MatAutocompleteSelectedEvent): void {
-   // let index = this.selectedTagNames.indexOf(event.option.value);
-
-    if (!this.selectedTagArr.includes(event.option.value))
-    {
+    if (!this.selectedTagArr.includes(event.option.value)) {
       this.selectedTagNames.push(event.option.viewValue);
     }
   }
 
-  // filter out own selected method
-filterSelectedTag(tag: Tag): void {
-    if (!this.selectedTagArr.includes(tag)){
-    this.selectedTagArr.push(tag); }
-  }
-
  // takes the information from the create-new-tag-form in the html and makes a new tag
   // the check for tag already in use not working, unsure why
-public registerTagFromService(): void {
+  public registerTagFromService(): void {
     if (this.tag1.name === ''){
       this.message = 'Tag must have a name';
       return;
@@ -171,16 +156,21 @@ public registerTagFromService(): void {
       return ;
     }
   }
-  // adds tags to the list of tags in the box for tags
-    this.selectedTagArr.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+
+    // creates new tag object from form
+    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
+
+  // adds new tag to the list of tags in the box for tags, but then we remove the box so...
+    this.selectedTagArr.push(newTag);
 
   // adds tags to the mat-chip list of tags
   // available to access project data from anywhere
   // project is from project.service.ts
     if (this.project) {
-      this.project.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+      this.project.tags.push(newTag);
     }
-    this.data.universalTags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+    // adds new tag to the universalTags list but I don't know what that does
+    this.data.universalTags.push(newTag);
 
     if (this.project) {
       this.tags = this.project.tags;
@@ -195,10 +185,5 @@ public registerTagFromService(): void {
       this.tag1.description = '';
       this.getAllTags(); },
     3000);
-
   }
-
-
-
 }
-

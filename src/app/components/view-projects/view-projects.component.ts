@@ -26,7 +26,8 @@ export interface statusFilter { }
 export class ViewProjectsComponent implements OnInit {
 
 
-  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService, private iterationService: IterationService, private route: Router, private location: Location) {
+  constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
+              private iterationService: IterationService, private route: Router, private location: Location) {
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
       if (location.path() === '/project-detail' && numberOfTimesAround < 1) {
@@ -35,80 +36,7 @@ export class ViewProjectsComponent implements OnInit {
         numberOfTimesAround++;
       }
     });
-
   }
-  public projects: Project[] =
-  [
-      {
-          "id": 1,
-          "name": "rideforce",
-          "status": {
-              "id": 3,
-              "name": "ACTIVE"
-          },
-          "description": "rideforce project",
-          "owner": {
-              "id": 3,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": [new Tag(1, 'Revature', 'Made by Revature', false)]
-      },
-      {
-          "id": 2,
-          "name": "Make A Recruiting Application",
-          "status": {
-              "id": 2,
-              "name": "ACTIVE"
-          },
-          "description": "Finds potential condadites by scrapping facebook.",
-          "owner": {
-              "id": 1,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 3,
-              "kind": "HANDOFF_SCHEDULED",
-              "description": "Scheduled the Handoff meeting to introduce P3"
-          },
-          "tags": []
-      },
-      {
-          "id": 3,
-          "name": "Caliber Staging Module",
-          "status": {
-              "id": 3,
-              "name": "CODE_REVIEW"
-          },
-          "description": "Allows for staging to be remote",
-          "owner": {
-              "id": 4,
-              "username": "Bob",
-              "role": {
-                  "id": 2,
-                  "type": "user"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": []
-      }
-  ];
 
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -117,7 +45,10 @@ export class ViewProjectsComponent implements OnInit {
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
   public phase: Phase[] = [];
-  public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
+  /*  MatTableDataSource is the class that renders its "data" field to the HTML table
+  *   Note: dataSource.data is often used in this file to get the projects displayed on the page
+  */
+  public dataSource: MatTableDataSource<Project> = new MatTableDataSource();
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
@@ -162,7 +93,6 @@ export class ViewProjectsComponent implements OnInit {
     console.log('all iteration');
     this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
       this.allIterations = iteration;
-      console.log('all', this.allIterations);
     });
 
 
@@ -235,9 +165,9 @@ export class ViewProjectsComponent implements OnInit {
     if (this.allIterations && this.allIterations.length > 0) {
       const filtered: Project[] = [];
 
-      for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == event.value) {
-          filtered.push(this.allIterations[i].project as Project);
+      for (const iteration of this.allIterations) {
+        if (iteration.batchId === event.value) {
+          filtered.push(iteration.project as Project);
         }
       }
       this.dataSource = new MatTableDataSource(filtered);
@@ -246,29 +176,10 @@ export class ViewProjectsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getProjectsInit();
-    /*
-    * commented out other functions since they eventually call on filterResults which breaks table
-    */
-    // console.log("onInIt");
-    // console.log("ngOnInit selected Status: " + this.statusSelected);
-    // this.getProjectTags();
-    // this.getProjectPhase();
-    // // this.getProjectStatus();
-    // this.getAllStatuses();
-    // this.getIteration(); // group 5 getIteration, save them to allBatches (a seperate Iteration class without project object)
-    // this.getBatches();
-
-    // this.filterStatus();
-
-    // mattabledataasource determines what goes in table on page/ functions put project data into datasource
-    this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
-
-    // console.log("ngOnInit projects: " + this.projects);
-    // perhaps a different method?
+    this.getProjects();
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     // this.getProjects();
     // this.getProjectTags();
     // this.getProjectPhase();
@@ -276,14 +187,14 @@ export class ViewProjectsComponent implements OnInit {
     // this.dataSource = new MatTableDataSource(this.projects);
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-  }
+  }*/
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.filterProjectsByStatus();
 
   }
   // Filter the columns
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -292,28 +203,10 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  //returns all the projects in DB
-  public getProjectsInit(): void {
-    /*
-    * This code is to get the projects from localhost:8085
-    */
-    // this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-    //   // this.projects = report as Project[];
-    //   //changed this to make sure if any functions use report data it would get the project mock data
-    //   report as Project[];
-    //   report = this.projects;
-    //   this.dataSource.data = this.projects.filter;
-    // });
-  }
-
+  // gets data from localhost:8085/api/project and puts data in dataSource.data
   public getProjects(): void {
-    console.log("getProjects method: ");
-    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-
-      this.projects = report as Project[];
-
-      this.dataSource.data = this.projects.filter;
-    });
+    this.viewProjectService.GetAllProjects()
+      .subscribe((report: Project[]) => this.dataSource.data = report);
   }
 
   // return all tags from db
@@ -336,33 +229,30 @@ export class ViewProjectsComponent implements OnInit {
   getAllStatuses(): void {
     this.viewProjectService.getAllStatuses()
       .subscribe((data: any) => {
-        for (let d of data) {
+        for (const d of data) {
           this.status.push(d.name);
         }
-      })
+      });
 
   }
 
   getProjectStatus(): void {
-    this.viewProjectService.GetAllProjectStatus().subscribe((data: Project[]) => {
-      this.projects = data;
-      this.projects.forEach((project) => {
-        if (!this.status.includes(project.status.name)) {
-          this.status.push(project.status.name);
-        }
-      });
+    this.dataSource.data.forEach((project: Project) => {
+      if (!this.status.includes(project.status.name)) {
+        this.status.push(project.status.name);
+      }
     });
   }
 
   // this function filters by status correctly, if disabled filtering status doesn't work
-  filterProjectsByStatus() {
+  filterProjectsByStatus(): void {
     if (this.statusSelected === '') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredStatuses = [];
 
       // finds projects with status name the same as selected status
-      for (const project of this.projects) {
+      for (const project of this.dataSource.data) {
         if (project.status.name === this.statusSelected) {
           this.filteredStatuses.push(project);
         }
@@ -377,10 +267,10 @@ export class ViewProjectsComponent implements OnInit {
 
   filterTag(event: MatSelectChange): void {
     if (this.tagSelected === 'noTag') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredTags = [];
-      for (const i of this.projects) {
+      for (const i of this.dataSource.data) {
         for (const j of i.tags) {
           if (j.name === this.tagSelected) {
             this.filteredTags.push(i);
@@ -388,17 +278,14 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
-
-    //temp to make sure tag filtering works
-    this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }
 
   filterPhase(event: MatSelectChange): void {
     if (this.phaseSelected === 'noPhase') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredPhase = [];
-      for (const i of this.projects) {
+      for (const i of this.dataSource.data) {
         // finds projects with status name the same as selected status
         if (i.phase.kind === this.phaseSelected) {
           this.filteredPhase.push(i);
@@ -408,7 +295,7 @@ export class ViewProjectsComponent implements OnInit {
     this.filterResults();
   }
 
-  //function that causes issues with filtering, anything that hits this will fail atm
+  // function that causes issues with filtering, anything that hits this will fail atm
   filterResults(): void {
     let temp: Project[] = [];
     if (
@@ -418,7 +305,7 @@ export class ViewProjectsComponent implements OnInit {
       this.statusSelected !== 'noStatus'
     ) {
       temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
-    } else if (this.tagSelected != null && this.tagSelected != 'noTag') {
+    } else if (this.tagSelected != null && this.tagSelected !== 'noTag') {
       temp = this.filteredTags;
     } else if (
       this.statusSelected !== '' &&
@@ -426,10 +313,10 @@ export class ViewProjectsComponent implements OnInit {
     ) {
       temp = this.filteredStatuses;
     } else {
-      temp = this.projects;
+      temp = this.dataSource.data;
     }
 
-    if (this.phaseSelected != null && this.phaseSelected != 'noStatus') {
+    if (this.phaseSelected != null && this.phaseSelected !== 'noStatus') {
       this.dataSource = new MatTableDataSource(
         this.filteredPhase.filter((x) => temp.includes(x))
       );
@@ -439,8 +326,7 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  reset() {
-    this.dataSource = new MatTableDataSource(this.projects);
+  reset(): void {
     this.filteredProjects = [];
     this.filteredTags = [];
     this.filteredPhase = [];
@@ -453,10 +339,10 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   // TODO this method is current non-functional.
-  rowClicked(projectId: number) {
+  rowClicked(projectId: number): void {
     let currentProject: Project | undefined;
     if (projectId) {
-       currentProject = this.projects.find(p => p.id === projectId);
+      currentProject = this.dataSource.data.find(p => p.id === projectId);
     }
 
     if (currentProject !== undefined) {
