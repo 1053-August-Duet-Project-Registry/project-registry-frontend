@@ -28,8 +28,13 @@ export class TagService {
       .pipe(
         tap(_ => console.log('posting tag..')),
         catchError(this.handleError<any>('registerTag'))
-        );
+      );
   }
+
+  // public deleteTag(tag: Tag): Observable<string> {
+    // return this.http.delete
+  // }
+
   private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
       // TODO: send the error to a remote logging infrastructure

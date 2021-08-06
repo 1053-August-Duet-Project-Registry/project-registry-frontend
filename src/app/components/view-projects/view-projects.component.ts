@@ -39,75 +39,75 @@ export class ViewProjectsComponent implements OnInit {
   }
   public projects: Project[] =
   [
-      {
-          "id": 1,
-          "name": "rideforce",
-          "status": {
-              "id": 3,
-              "name": "ACTIVE"
-          },
-          "description": "rideforce project",
-          "owner": {
-              "id": 3,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": [new Tag(1, 'Revature', 'Made by Revature')]
-      },
-      {
-          "id": 2,
-          "name": "Make A Recruiting Application",
-          "status": {
-              "id": 2,
-              "name": "ACTIVE"
-          },
-          "description": "Finds potential condadites by scrapping facebook.",
-          "owner": {
-              "id": 1,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 3,
-              "kind": "HANDOFF_SCHEDULED",
-              "description": "Scheduled the Handoff meeting to introduce P3"
-          },
-          "tags": []
-      },
-      {
-          "id": 3,
-          "name": "Caliber Staging Module",
-          "status": {
-              "id": 3,
-              "name": "CODE_REVIEW"
-          },
-          "description": "Allows for staging to be remote",
-          "owner": {
-              "id": 4,
-              "username": "Bob",
-              "role": {
-                  "id": 2,
-                  "type": "user"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": []
-      }
+      // {
+      //     "id": 1,
+      //     "name": "rideforce",
+      //     "status": {
+      //         "id": 3,
+      //         "name": "ACTIVE"
+      //     },
+      //     "description": "rideforce project",
+      //     "owner": {
+      //         "id": 3,
+      //         "username": "william",
+      //         "role": {
+      //             "id": 1,
+      //             "type": "admin"
+      //         }
+      //     },
+      //     "phase": {
+      //         "id": 2,
+      //         "kind": "TRAINER_APPROVED",
+      //         "description": "Trainer has reviewed backlog and approves of scope and domain"
+      //     },
+      //     "tags": [new Tag(1, 'Revature', 'Made by Revature')]
+      // },
+      // {
+      //     "id": 2,
+      //     "name": "Make A Recruiting Application",
+      //     "status": {
+      //         "id": 2,
+      //         "name": "ACTIVE"
+      //     },
+      //     "description": "Finds potential condadites by scrapping facebook.",
+      //     "owner": {
+      //         "id": 1,
+      //         "username": "william",
+      //         "role": {
+      //             "id": 1,
+      //             "type": "admin"
+      //         }
+      //     },
+      //     "phase": {
+      //         "id": 3,
+      //         "kind": "HANDOFF_SCHEDULED",
+      //         "description": "Scheduled the Handoff meeting to introduce P3"
+      //     },
+      //     "tags": []
+      // },
+      // {
+      //     "id": 3,
+      //     "name": "Caliber Staging Module",
+      //     "status": {
+      //         "id": 3,
+      //         "name": "CODE_REVIEW"
+      //     },
+      //     "description": "Allows for staging to be remote",
+      //     "owner": {
+      //         "id": 4,
+      //         "username": "Bob",
+      //         "role": {
+      //             "id": 2,
+      //             "type": "user"
+      //         }
+      //     },
+      //     "phase": {
+      //         "id": 2,
+      //         "kind": "TRAINER_APPROVED",
+      //         "description": "Trainer has reviewed backlog and approves of scope and domain"
+      //     },
+      //     "tags": []
+      // }
   ];
 
   public filteredProjects: Project[] = [];
@@ -247,6 +247,8 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProjectsInit();
+    console.log(this.projects); // empty array because getProjectsInit() is async??
+    
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
     */
@@ -254,9 +256,9 @@ export class ViewProjectsComponent implements OnInit {
     // console.log("ngOnInit selected Status: " + this.statusSelected);
     // this.getProjectTags();
     // this.getProjectPhase();
-    // // this.getProjectStatus();
+    // this.getProjectStatus();
     // this.getAllStatuses();
-    // this.getIteration(); // group 5 getIteration, save them to allBatches (a seperate Iteration class without project object)
+    // this.getIteration();
     // this.getBatches();
 
     // this.filterStatus();
@@ -297,20 +299,18 @@ export class ViewProjectsComponent implements OnInit {
     /*
     * This code is to get the projects from localhost:8085
     */
-    // this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-    //   // this.projects = report as Project[];
-    //   //changed this to make sure if any functions use report data it would get the project mock data
-    //   report as Project[];
-    //   report = this.projects;
-    //   this.dataSource.data = this.projects.filter;
-    // });
+    this.viewProjectService.GetAllProjects().subscribe((report: Project[]) => {
+      this.projects = report;
+      console.log(this.projects);
+      this.dataSource.data = this.projects.filter;
+    });
   }
 
   public getProjects(): void {
     console.log("getProjects method: ");
-    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+    this.viewProjectService.GetAllProjects().subscribe((report: Project[]) => {
 
-      this.projects = report as Project[];
+      this.projects = report;
 
       this.dataSource.data = this.projects.filter;
     });
