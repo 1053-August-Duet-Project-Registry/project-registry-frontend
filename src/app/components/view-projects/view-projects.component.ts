@@ -65,7 +65,8 @@ export class ViewProjectsComponent implements OnInit {
           //     "kind": "TRAINER_APPROVED",
           //     "description": "Trainer has reviewed backlog and approves of scope and domain"
           // },
-          "tags": []
+          tags: [],
+          iterations: [],
       },
       {
           id: 2,
@@ -83,7 +84,8 @@ export class ViewProjectsComponent implements OnInit {
                   type: 'admin'
               }
           },
-          "tags": []
+          tags: [],
+          iterations: [],
       },
       {
           id: 3,
@@ -101,7 +103,8 @@ export class ViewProjectsComponent implements OnInit {
                   type: 'user'
               }
           },
-          tags: []
+          tags: [],
+          iterations: [],
       }
   ];
 

@@ -113,7 +113,7 @@ export class ProjectDetailComponent implements OnInit {
         this.project,
         this.sendBatch.id,
         this.sendBatch.startDate,
-        this.sendBatch.endDate);
+        this.sendBatch.endDate, null);
     }
 
     // Setting the status id
