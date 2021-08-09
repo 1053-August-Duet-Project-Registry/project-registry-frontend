@@ -30,9 +30,12 @@ export class TagService {
       );
   }
 
+  // TODO finish this
   // public deleteTag(tag: Tag): Observable<string> {
     // return this.http.delete
   // }
+
+  // TODO addTagToProject(){}
 
   private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
