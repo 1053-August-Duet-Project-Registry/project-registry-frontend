@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import moment from 'moment';
-import { Item, Period, Section } from 'ngx-time-scheduler';
+import { Item, Period, Section, Events, NgxTimeSchedulerService } from 'ngx-time-scheduler';
 import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { LoginServiceService } from 'src/app/service/login-service.service';
@@ -22,6 +22,7 @@ import { IterationService } from 'src/app/service/iteration.service';
   styleUrls: ['./timeline.component.css'],
 })
 export class TimelineComponent implements OnInit, AfterViewInit {
+  events: Events = new Events();
   periods: Period[] = [];
   sections: Section[] = [];
   items: Item[] = [];
@@ -113,7 +114,6 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       1,
       'day'
     );
-
     /**
      * Iterate over the batch data and populate the Timeline table by putting
      * together batch details into format the Library(ngx-time-scheduler) likes.
@@ -122,9 +122,9 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       this.sections.push({
         id: i + 1,
         name:
-          this.datePipe.transform(batch[i].startDate, 'mediumDate') +
-          ' - ' +
-          this.datePipe.transform(batch[i].endDate, 'mediumDate'),
+        this.datePipe.transform(batch[i].startDate, 'mediumDate') +
+        ' - ' +
+        this.datePipe.transform(batch[i].endDate, 'mediumDate'),
       });
       this.items.push({
         id: i + 1,
@@ -134,8 +134,22 @@ export class TimelineComponent implements OnInit, AfterViewInit {
         end: moment(new Date(batch[i].endDate)),
         classes: '',
       });
+      
     }
 
+    /**
+     * Creating a div to hold information from clicking items in chart and appending it to Batch Information div, also added events to HTML
+     */
+    let myDiv = document.createElement('div');
+    let parentDiv = document.querySelector('.displayInfo');
+    this.events.ItemClicked = (items) => {
+      myDiv.innerHTML = items.classes + " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
+      " <br />StartDate: " + items.start.toDate() + " <br />EndDate: " + items.end.toDate();
+      parentDiv?.appendChild(myDiv);
+      console.log(myDiv);
+      };
+    
+    
     /**
      * Find out how 'wide' the table should be by 'diffing' the upper and lower
      * limit.
