@@ -50,8 +50,10 @@ export class TagsComponent implements OnInit {
   // do we need this?
   // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // array of tags attached to current project
-  @Input() selectedTagArr: Tag[] = [];
+  // store tags of current project, this will be passed to other teams. IS NOT an @Input()
+  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
+    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
+  temp: Tag[] = [];
 
 
   @ViewChild('tagInput')
@@ -68,6 +70,8 @@ export class TagsComponent implements OnInit {
 
   // contains the text entered in the description and name input boxes
   public tag1: Tag = new Tag(0, '', '', true);
+
+  // public clientMessage: ClientMessage = new ClientMessage('');
 
   ngOnInit(): void {
     this.getAllTags();
@@ -101,6 +105,12 @@ export class TagsComponent implements OnInit {
   private _filter(value: any): Tag[] {
     const a: Tag = new Tag(0, value, '', true);
 
+    /*
+    this.tags = [new Tag(3, 'tag1', 'description', true),
+      new Tag(4, 'tag2', 'i want my mommy', false)];
+    this.tagsNames = this.tags;
+*/
+
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
@@ -126,16 +136,12 @@ export class TagsComponent implements OnInit {
 
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
-    // TODO remove tag from db
-   // this.tagService
 
-    // this.data.updateTagArray(this.selectedTagArr);
-
-    // this.data.updateTagArray(this.data.universalTags);
   }
 
   // TODO not used...
-  selected(event: MatAutocompleteSelectedEvent): void {
+selected(event: MatAutocompleteSelectedEvent): void {
+   // let index = this.selectedTagNames.indexOf(event.option.value);
 
     if (!this.selectedTagArr.includes(event.option.value)) {
       this.selectedTagNames.push(event.option.viewValue);
@@ -169,7 +175,6 @@ export class TagsComponent implements OnInit {
     if (this.project) {
       this.project.tags.push(newTag);
     }
-    // adds new tag to the universalTags list but I don't know what that does
     this.data.universalTags.push(newTag);
 
     if (this.project) {

@@ -67,12 +67,6 @@ export class AddTagsAddedTagsComponent implements OnInit {
   // To hold all tags? used in view-projects as part of the displayedColumns (maybe?)
  // public tags: Tag[] = [];
 
-<<<<<<< HEAD
-=======
-  // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
->>>>>>> Feature-Tags
-
   // store tags of current project, this will be passed to other teams
   selectedTagArr: Tag[] = []; // [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
 
@@ -92,8 +86,6 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnInit(): void {
     this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
-
-<<<<<<< HEAD
     // this adds a tag that can be removed from the screen from the current project
     if (this.project){
       this.selectedTagArr = this.project.tags;
@@ -101,18 +93,15 @@ export class AddTagsAddedTagsComponent implements OnInit {
     } else {
       this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
     }
+
+    // gets all tags and adds them to view
+    // this is from the Feature-Tags branch
+    // this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
+
     // do we need this?
     /*this.selectedTagArr.forEach(e => {
       this.selectedTagNames.push(e.name);
     });*/
-=======
-    // gets all tags and adds them to view
-    this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
-
-    this.selectedTagArr.forEach(e => {
-      this.selectedTagNames.push(e.name);
-    });
->>>>>>> Feature-Tags
 
     this.data.updateTagArray(this.selectedTagArr);
 
@@ -132,17 +121,13 @@ export class AddTagsAddedTagsComponent implements OnInit {
   remove(tagName: Tag): void {
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
-<<<<<<< HEAD
+
     // removes tags from project not from persistent storage
     if (this.project){
       this.project.tags = this.project.tags.filter(tag => tag.name !== tagName.name);
   }
 
     // changes the display of tags on screen
-    this.data.updateTagArray(this.selectedTagArr);
-=======
->>>>>>> Feature-Tags
-
     this.data.updateTagArray(this.selectedTagArr);
   }
 

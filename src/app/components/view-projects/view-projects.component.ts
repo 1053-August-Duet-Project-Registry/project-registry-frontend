@@ -38,6 +38,79 @@ export class ViewProjectsComponent implements OnInit {
     });
   }
 
+  public projects: Project[] =
+  [
+      {
+          "id": 1,
+          "name": "rideforce",
+          "status": {
+              "id": 3,
+              "name": "ACTIVE"
+          },
+          "description": "rideforce project",
+          "owner": {
+              "id": 3,
+              "username": "william",
+              "role": {
+                  "id": 1,
+                  "type": "admin"
+              }
+          },
+          "phase": {
+              "id": 2,
+              "kind": "TRAINER_APPROVED",
+              "description": "Trainer has reviewed backlog and approves of scope and domain"
+          },
+          "tags": [new Tag(1, 'Revature', 'Made by Revature', false)]
+      },
+      {
+          "id": 2,
+          "name": "Make A Recruiting Application",
+          "status": {
+              "id": 2,
+              "name": "ACTIVE"
+          },
+          "description": "Finds potential condadites by scrapping facebook.",
+          "owner": {
+              "id": 1,
+              "username": "william",
+              "role": {
+                  "id": 1,
+                  "type": "admin"
+              }
+          },
+          "phase": {
+              "id": 3,
+              "kind": "HANDOFF_SCHEDULED",
+              "description": "Scheduled the Handoff meeting to introduce P3"
+          },
+          "tags": []
+      },
+      {
+          "id": 3,
+          "name": "Caliber Staging Module",
+          "status": {
+              "id": 3,
+              "name": "CODE_REVIEW"
+          },
+          "description": "Allows for staging to be remote",
+          "owner": {
+              "id": 4,
+              "username": "Bob",
+              "role": {
+                  "id": 2,
+                  "type": "user"
+              }
+          },
+          "phase": {
+              "id": 2,
+              "kind": "TRAINER_APPROVED",
+              "description": "Trainer has reviewed backlog and approves of scope and domain"
+          },
+          "tags": []
+      }
+  ];
+
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
