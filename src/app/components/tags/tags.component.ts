@@ -1,10 +1,10 @@
-import { ClientMessage } from './../../models/clientMessage.model';
+// import { ClientMessage } from './../../models/clientMessage.model';
 import { Tag } from './../../models/tag.model';
-import { Location } from '@angular/common';
+// import { Location } from '@angular/common';
 import { TagService } from './../../service/tag.service';
 import { ProjectService } from './../../service/project.service';
 import { Router } from '@angular/router';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+// import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ViewChild, OnInit, AfterViewInit, OnChanges, DoCheck, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
@@ -47,23 +47,19 @@ export class TagsComponent implements OnInit {
 
 
   tagCtrl = new FormControl();
-  // do we need this?
-  // filteredTags: Observable<Tag[]>;
-  selectedTagNames: string[] = [];
-  // array of tags attached to current project
-  @Input() selectedTagArr: Tag[] = [];
-
-
+  
+  
   @ViewChild('tagInput')
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
   message = '';
   closeResult = '';
-
-  public tagsNames: Tag[] = [];
+  
   // contains all tags found in the db
   public tags: Tag[] = [];
+  // array of tags attached to current project
+  @Input() selectedTagArr: Tag[] = [];
   public errorDetected = false;
 
   // contains the text entered in the description and name input boxes
@@ -72,9 +68,6 @@ export class TagsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
-    this.selectedTagArr.forEach(e => {
-      this.selectedTagNames.push(e.name);
-    });
   }
 
   open(content: any): void {
@@ -82,103 +75,67 @@ export class TagsComponent implements OnInit {
   }
 
   getAllTags(): void {
-    this.tagService.getAllTags().subscribe(data => {
-      // this.tags = data;
-      // this.tagsNames = data;
-      // this.selectedTagArr = data;
-      data.forEach(tag => {
-        this.selectedTagArr.push(tag);
-        this.tags.push(tag);
-        this.tagsNames.push(tag);
-      });
-    });
-    console.log(this.selectedTagArr);
+    this.tagService.getAllTags().forEach(tags => this.tags = tags);
+    this.data.universalTags = this.tags;
     console.log(this.tags);
-
-    console.log(this.tagsNames);
   }
 
-  private _filter(value: any): Tag[] {
-    const a: Tag = new Tag(0, value, '', true);
-
-    return this.tagsNames.filter(tagName => tagName.name === a.name);
-  }
+  // private _filter(value: any): Tag[] {
+  //   const a: Tag = new Tag(0, value, '', true);
+  //   return this.tagsNames.filter(tagName => tagName.name === a.name);
+  // }
 
   add(event: MatChipInputEvent): void {
-    console.log('add is called');
-    // seems like this variable isn't used so is it not needed?
-    const input = event.input ? event.input : '';
-    const value = event.value;
-
-    if ((value || '').trim()){
-      this.tagsNames.forEach(names => {
-        if (names.name === event.value && !this.selectedTagNames.includes(value.trim())) {
-          this.selectedTagNames.push(value.trim());
-        }
-      });
-    }
-    // may not be needed
-    // this.tagCtrl.setValue(null);
+    // TODO finish this
+    // if (this.project) {
+    //   this.project.tags.push(newTag);
+    // }
   }
 
-  remove(tagName: Tag): void {
-    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
+  /*
+  * I don't think this is needed
+  */
+  // remove(tagName: Tag): void {
+  //   this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
+    
+  //   this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
-    this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
+  //   // TODO remove tag from db (use tag.service.ts)
+  //   // this.tagService
 
-    // TODO remove tag from db
-   // this.tagService
+  //   // this.data.updateTagArray(this.selectedTagArr);
 
-    // this.data.updateTagArray(this.selectedTagArr);
-
-    // this.data.updateTagArray(this.data.universalTags);
-  }
+  //   // this.data.updateTagArray(this.data.universalTags);
+  // }
 
   // TODO not used...
   selected(event: MatAutocompleteSelectedEvent): void {
-
-    if (!this.selectedTagArr.includes(event.option.value)) {
-      this.selectedTagNames.push(event.option.viewValue);
-    }
+    
   }
 
- // takes the information from the create-new-tag-form in the html and makes a new tag
-  // the check for tag already in use not working, unsure why
-  public registerTagFromService(): void {
+  // takes the information from the create-new-tag-form in the html and makes a new tag
+  public registerTag(): void {
+    // if input is empty, return
     if (this.tag1.name === ''){
       this.message = 'Tag must have a name';
       return;
     }
-    // make sure the new tag name does not exist already
-    for (const loopTag of this.tags){
-    if (loopTag.name === this.tag1.name){
+    // if tag already exists, return
+    if (this.tags.map(tag => tag.name).includes(this.tag1.name)) {
       this.message = `The ${this.tag1.name} tag already exists`;
-      return ;
+      return;
     }
-  }
 
-    // creates new tag object from form
     const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
 
-  // adds new tag to the list of tags in the box for tags, but then we remove the box so...
-    this.selectedTagArr.push(newTag);
-
-  // adds tags to the mat-chip list of tags
-  // available to access project data from anywhere
-  // project is from project.service.ts
-    if (this.project) {
-      this.project.tags.push(newTag);
-    }
-    // adds new tag to the universalTags list but I don't know what that does
-    this.data.universalTags.push(newTag);
-
-    if (this.project) {
-      this.tags = this.project.tags;
-    }
-
-  // lets the user know the tag was created successfully
+    this.tags.push(newTag);
+    // TODO add a check if this post request is successful; if it is, change this.message
+    this.tagService.registerTag(newTag);
+    
+    // lets the user know the tag was created successfully
     this.message = `The ${this.tag1.name} tag was created`;
 
+    // TODO maybe exit out of "add tag" window in this function? And lower the delay amount
     setTimeout(() => {
       this.message = '';
       this.tag1.name = '';

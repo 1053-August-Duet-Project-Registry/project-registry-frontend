@@ -33,25 +33,23 @@ export class CreateProjectComponent implements OnInit {
   public registerProject(): void {
     this.newProject.name = this.projectName;
     this.newProject.description = this.projectDescription;
-    // this.newProject.tags =
     console.log(this.newProject);
     this.projectService.registerProject(this.newProject)
-      .subscribe(project =>
-        {
-          if (project.name === this.projectName){
-            this.projectService.setCurrentProject(project);
-            console.log('It someone problem!');
-            this.route.navigate(['/project-detail']);
-            this.errorDetected = false;
+      .subscribe(project =>{
+        if (project.name === this.projectName){
+          this.projectService.setCurrentProject(project);
+          console.log('It someone problem!');
+          this.route.navigate(['/project-detail']);
+          this.errorDetected = false;
+        }
+        else {
+          this.errorDetected = true;
+          const errorElement = document.getElementById('errorText');
+          if (errorElement){
+            errorElement.innerHTML = 'An error Occurred';
           }
-          else {
-            this.errorDetected = true;
-            const errorElement = document.getElementById('errorText');
-            if (errorElement){
-              errorElement.innerHTML = 'An error Occurred';
-            }
-          }
-        });
+        }
+      });
   }
 
 }
