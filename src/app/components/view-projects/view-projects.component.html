@@ -107,6 +107,10 @@
             [(ngModel)]="tagSelected"
           >
             <mat-option value="noTag">Select a tag...</mat-option>
+            <mat-option value="Test">Test</mat-option>
+            <mat-option value="Result">Result</mat-option>
+            <mat-option value="Review">Review</mat-option>
+
             <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
               {{ tags.name }}
             </mat-option>

@@ -60,7 +60,18 @@ export class ViewProjectsComponent implements OnInit {
               "kind": "TRAINER_APPROVED",
               "description": "Trainer has reviewed backlog and approves of scope and domain"
           },
-          "tags": []
+          "tags": [ 
+            // {
+            // "id": 1,
+            // "name": "testTag",
+            // "description": "tag for testing"
+            // },
+            // {
+            //   "id": 2,
+            //   "name": "resultTag",
+            //   "description": "tag for testing"
+            //   }
+          ]
       },
       {
           "id": 2,
