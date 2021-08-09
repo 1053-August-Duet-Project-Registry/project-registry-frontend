@@ -60,7 +60,7 @@ export class TagsComponent implements OnInit {
   public tagsNames: Tag[] = [];
   public tags: Tag[] = [];
   public errorDetected = false;
-  public tag1: Tag = new Tag(0, '', '');
+  public tag1: Tag = new Tag(0, '', '', true);
   // public clientMessage: ClientMessage = new ClientMessage('');
 
 message = '';
@@ -92,7 +92,7 @@ message = '';
     });
   }  private _filter(value: any): Tag[] {
     // const filterValue = value;
-    const a: Tag = new Tag(0, value, '');
+    const a: Tag = new Tag(0, value, '', true);
     return this.tagsNames.filter(tagName => tagName.name == a.name);
   }
 
