@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { batchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { Tag } from 'src/app/models/tag.model';
 import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';

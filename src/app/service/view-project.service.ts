@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { Project } from '../models/project.model';
 import { Observable } from 'rxjs';
 import { Tag } from '../models/tag.model';
-import { Phase } from '../models/phase';
+import { Phase } from '../models/phase.models';
 import { Status } from '../models/status.model';
 
 @Injectable({

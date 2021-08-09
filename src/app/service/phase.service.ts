@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { REGISTRY_URL } from 'src/environments/environment';
-import { Phase } from '../models/phase';
+import { Phase } from '../models/phase.models';
 import { Project } from '../models/project.model';
 
 @Injectable({

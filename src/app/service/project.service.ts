@@ -9,7 +9,7 @@ import { Status } from '../models/status.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { Tag } from '../models/tag.model';
-import { Phase } from '../models/phase';
+import { Phase } from '../models/phase.models';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { Project } from 'src/app/models/project.model';
 import { Role } from 'src/app/models/role.model';
 import { Status } from 'src/app/models/status.model';

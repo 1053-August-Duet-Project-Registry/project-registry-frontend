@@ -12,7 +12,7 @@ import { Role } from 'src/app/models/role.model';
 import { batchTemplate } from 'src/app/models/batch.model';
 
 import { IterationService } from 'src/app/service/iteration.service';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { PhaseService } from 'src/app/service/phase.service';
 import { ViewProjectsComponent } from '../view-projects/view-projects.component';
 import { Location } from '@angular/common';
