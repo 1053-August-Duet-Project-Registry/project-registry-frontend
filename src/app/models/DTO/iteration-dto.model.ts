@@ -12,7 +12,6 @@ export class IterationDTO {
     phase?: Phase
     
 
-
 constructor(batchId:string, project:Project, id: number, startDate: string, endDate: string, phase: Phase) {
     this.batchId = batchId;
     this.project = project;

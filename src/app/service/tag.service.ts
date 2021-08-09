@@ -20,9 +20,12 @@ export class TagService {
   }
 
   getAllTags():Observable<Tag[]> {
-    return this.http.get<Tag[]>(`${REGISTRY_URL}tag`)
+    return this.http.get<Tag[]>(`${REGISTRY_URL}tag`);
   }
- 
+  
+  getTagById(id:number): Observable<Tag>{
+    return this.http.get<Tag>(`${ REGISTRY_URL }tag/${id}`);
+  }
   
   public registerTag(newTag:Tag):Observable<String> {
     return this.http.post<Tag>(`${REGISTRY_URL}tag`,newTag)
@@ -31,6 +34,7 @@ export class TagService {
         catchError(this.handleError<any>('registerTag'))
         );
   }
+  
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // TODO: send the error to a remote logging infrastructure
