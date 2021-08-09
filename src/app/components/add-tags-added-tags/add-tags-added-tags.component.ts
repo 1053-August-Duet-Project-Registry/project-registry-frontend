@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { Project } from 'src/app/models/project.model';
 import { Role } from 'src/app/models/role.model';
 import { Status } from 'src/app/models/status.model';
@@ -88,7 +88,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   private _filter(value: any): Tag[] {
     // const filterValue = value;
-    const a: Tag = new Tag(0, value, '');
+    const a: Tag = new Tag(0, value, '', true);
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 

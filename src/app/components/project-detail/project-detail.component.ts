@@ -12,7 +12,7 @@ import { Role } from 'src/app/models/role.model';
 import { BatchTemplate } from 'src/app/models/batch.model';
 
 import { IterationService } from 'src/app/service/iteration.service';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { PhaseService } from 'src/app/service/phase.service';
 import { ViewProjectsComponent } from '../view-projects/view-projects.component';
 import { Location } from '@angular/common';
@@ -69,7 +69,7 @@ export class ProjectDetailComponent implements OnInit {
 
   // Temporary model
 
-  model = new Project(1, 'name', new Status(1, 'name'), 'sample desc', new User(1, 'username', new Role(1, 'string')), [], new Phase(1, 'BACKLOG_GENERATED', 'CoE has completed the iterations backlog, awaiting trainer approval'));
+  model = new Project(1, "name", new Status(1, "name"), "sample desc", new User(1, "username", new Role(1, "string")), [], []);
 
   submitted = false;
 
@@ -109,28 +109,23 @@ export class ProjectDetailComponent implements OnInit {
     if (!this.project){ return; }
 
     if (this.sendBatch){
-      this.iteration = new Iteration(this.sendBatch.batchId,
-        this.project,
-        this.sendBatch.id,
-        this.sendBatch.startDate,
-        this.sendBatch.endDate);
+      this.iteration = new Iteration(this.sendBatch.batchId, this.project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate, null);
     }
 
     // Setting the status id
     this.project.status.id = this.statusMap[this.project.status.name];
 
-    if (this.project != undefined){
-      const phaseFound = this.phaseService.phases.find(p => {
-        if (this.project){
-          return p.kind == this.project.phase.kind;
+    if(this.project != undefined){
+      let phaseFound = this.phaseService.phases.find(p=>{
+        if(this.project){
+          // return p.kind==this.project.phase.kind
         }
         else {
           return false;
         }
       });
-      if (phaseFound != undefined) {
-        this.project.phase = phaseFound;
-      }
+      // if(phaseFound!=undefined)
+      //   this.project.phase = phaseFound;
     }
     this.project.tags = this.arr;
 
