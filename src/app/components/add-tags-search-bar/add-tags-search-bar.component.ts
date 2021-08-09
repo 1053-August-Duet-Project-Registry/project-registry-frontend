@@ -30,12 +30,20 @@ tags: Tag[] = [];
 filteredOptions!: Observable<string[]>;
 
 searchTags: string[] = [];
-  constructor(private TagsService: TagService, private data: ProjectTagManagementService) {}
-  
-  ngOnInit(): void{
+
+  constructor(private TagsService: TagService, private data: ProjectTagManagementService) {
+
+  }
+
+  /* ******************
+   Continue from here!
+   ****************** */
+
+
+ngOnInit(): void{
     this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
-    for(let i = 0; i < this.data.universalTags.length; i++){
-      this.searchTags.push(this.data.universalTags[i].name);
+    for (const loopTag of this.data.universalTags) {
+      this.searchTags.push(loopTag.name);
     }
     this.getTags();
     this.filteredOptions = this.myControl.valueChanges

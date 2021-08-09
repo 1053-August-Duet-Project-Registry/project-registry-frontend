@@ -1,9 +1,9 @@
 import { ClientMessage } from './../../models/clientMessage.model';
 import { Tag } from './../../models/tag.model';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { TagService } from './../../service/tag.service';
 import { ProjectService } from './../../service/project.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, ViewChild, OnInit, AfterViewInit, OnChanges, DoCheck, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -14,7 +14,7 @@ import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Project } from 'src/app/models/project.model';
-import {ProjectTagManagementService} from '../../service/project-tag-management.service';
+import { ProjectTagManagementService } from '../../service/project-tag-management.service';
 
 
 @Component({
@@ -25,15 +25,19 @@ import {ProjectTagManagementService} from '../../service/project-tag-management.
 })
 export class TagsComponent implements OnInit {
 
-  constructor(public router: Router, public projectService: ProjectService, public tagService: TagService,
-              config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
+  constructor(public router: Router, public projectService: ProjectService,
+              public tagService: TagService, config: NgbModalConfig, private modalService: NgbModal,
+              public data: ProjectTagManagementService) {
     config.backdrop = 'static';
+
+    // prevents the closing of the create-new-tag pop-up window by pressing the Esc key
     config.keyboard = false;
 
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice())
-    );
+    // may not be needed
+   /*this.filteredTags = this.tagCtrl.valueChanges
+      .pipe(startWith(null),
+      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));*/
+
   }
 
   // The current project being viewed/edited
@@ -41,11 +45,15 @@ export class TagsComponent implements OnInit {
 
   faEdit = faEdit;
 
+
   tagCtrl = new FormControl();
-  filteredTags: Observable<Tag[]>;
+  // do we need this?
+  // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // array of tags attached to current project
-  @Input() selectedTagArr: Tag[] = [];
+  // store tags of current project, this will be passed to other teams. IS NOT an @Input()
+  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
+    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
+  temp: Tag[] = [];
 
 
   @ViewChild('tagInput')
@@ -59,8 +67,11 @@ export class TagsComponent implements OnInit {
   // contains all tags found in the db
   public tags: Tag[] = [];
   public errorDetected = false;
+
   // contains the text entered in the description and name input boxes
-  public tag1: Tag = new Tag(0, '', '');
+  public tag1: Tag = new Tag(0, '', '', true);
+
+  // public clientMessage: ClientMessage = new ClientMessage('');
 
   ngOnInit(): void {
     this.getAllTags();
@@ -70,11 +81,11 @@ export class TagsComponent implements OnInit {
     });
   }
 
-  open(content: any) {
+  open(content: any): void {
     this.modalService.open(content);
   }
 
-  getAllTags() {
+  getAllTags(): void {
     this.tagService.getAllTags().subscribe(data => {
       // this.tags = data;
       // this.tagsNames = data;
@@ -87,12 +98,19 @@ export class TagsComponent implements OnInit {
     });
     console.log(this.selectedTagArr);
     console.log(this.tags);
+
     console.log(this.tagsNames);
-    
   }
 
   private _filter(value: any): Tag[] {
-    const a: Tag = new Tag(0, value, '');
+    const a: Tag = new Tag(0, value, '', true);
+
+    /*
+    this.tags = [new Tag(3, 'tag1', 'description', true),
+      new Tag(4, 'tag2', 'i want my mommy', false)];
+    this.tagsNames = this.tags;
+*/
+
     return this.tagsNames.filter(tagName => tagName.name === a.name);
   }
 
@@ -104,11 +122,13 @@ export class TagsComponent implements OnInit {
 
     if ((value || '').trim()){
       this.tagsNames.forEach(names => {
-        if (names.name === event.value && !this.selectedTagNames.includes(value.trim()))
+        if (names.name === event.value && !this.selectedTagNames.includes(value.trim())) {
           this.selectedTagNames.push(value.trim());
+        }
       });
     }
-    this.tagCtrl.setValue(null);
+    // may not be needed
+    // this.tagCtrl.setValue(null);
   }
 
   remove(tagName: Tag): void {
@@ -116,51 +136,59 @@ export class TagsComponent implements OnInit {
 
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
-    // TODO remove tag from db
-    this.tagService
 
-    // this.data.updateTagArray(this.selectedTagArr);
-
-    // this.data.updateTagArray(this.data.universalTags);
   }
-  
+
   // TODO not used...
-  selected(event: MatAutocompleteSelectedEvent): void {
-    if (!this.selectedTagArr.includes(event.option.value))
+selected(event: MatAutocompleteSelectedEvent): void {
+   // let index = this.selectedTagNames.indexOf(event.option.value);
+
+    if (!this.selectedTagArr.includes(event.option.value)) {
       this.selectedTagNames.push(event.option.viewValue);
+    }
   }
 
-  // takes the information from the create-new-tag-form in the html and makes a new tag
+ // takes the information from the create-new-tag-form in the html and makes a new tag
+  // the check for tag already in use not working, unsure why
   public registerTagFromService(): void {
-    const newTag = new Tag(0, this.tag1.name, this.tag1.description);
-
-    for (let i = 0; i < this.tags.length; i++){
-      if (this.tags[i].name.toLowerCase() === newTag.name.toLowerCase()) {
-        this.message = 'Tag already exists';
-        return;
-      }
+    if (this.tag1.name === ''){
+      this.message = 'Tag must have a name';
+      return;
     }
+    // make sure the new tag name does not exist already
+    for (const loopTag of this.tags){
+    if (loopTag.name === this.tag1.name){
+      this.message = `The ${this.tag1.name} tag already exists`;
+      return ;
+    }
+  }
 
-    this.tags.push(newTag);
+    // creates new tag object from form
+    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
 
-    // adds tag to the list of tags in the box for tags
+  // adds new tag to the list of tags in the box for tags, but then we remove the box so...
     this.selectedTagArr.push(newTag);
 
-    // adds the tag to the current project
-    this.project?.tags.push(newTag);
-    /*this.tagService.registerTag(this.tag1).subscribe(data => this.message,
-            error => this.message = 'INVALID FIELD');
-    this.message = 'Tag is successfully created';
-          // this.router.navigate(['tag']);
+  // adds tags to the mat-chip list of tags
+  // available to access project data from anywhere
+  // project is from project.service.ts
+    if (this.project) {
+      this.project.tags.push(newTag);
+    }
+    this.data.universalTags.push(newTag);
+
+    if (this.project) {
+      this.tags = this.project.tags;
+    }
+
+  // lets the user know the tag was created successfully
+    this.message = `The ${this.tag1.name} tag was created`;
 
     setTimeout(() => {
-            this.tag1.name = '';
-            this.tag1.description = '';
-            this.getAllTags(); },
-      2000);*/
-
-    // this resets the message in case it was set if a user entered a duplicate tag name 
-    this.message = ''; 
+      this.message = '';
+      this.tag1.name = '';
+      this.tag1.description = '';
+      this.getAllTags(); },
+    3000);
   }
 }
-

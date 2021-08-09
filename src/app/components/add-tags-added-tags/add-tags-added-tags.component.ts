@@ -8,7 +8,7 @@ import { Tag } from 'src/app/models/tag.model';
 import { User } from 'src/app/models/user.model';
 import { ProjectService } from 'src/app/service/project.service';
 import { ClientMessage } from './../../models/clientMessage.model';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 import { TagService } from './../../service/tag.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ViewChild, AfterViewInit, OnChanges, DoCheck, Input } from '@angular/core';
@@ -30,60 +30,78 @@ import { TagsComponent } from '../tags/tags.component';
 export class AddTagsAddedTagsComponent implements OnInit {
 
   // Constructor for add-tags-added-tags
-  constructor(/*public universalTags: TagsComponent,*/ public router: Router, public projectService: ProjectService, public tagService: TagService,
-              config: NgbModalConfig, private modalService: NgbModal, public data: ProjectTagManagementService) {
+  constructor(public router: Router, /*public universalTags: TagsComponent,*/ public projectService: ProjectService,
+              public tagService: TagService, config: NgbModalConfig, /* private modalService: NgbModal,*/
+              public data: ProjectTagManagementService) {
     config.backdrop = 'static';
+
+    // unknown use
     config.keyboard = false;
 
-
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));
+    /*this.filteredTags = this.tagCtrl.valueChanges
+      .pipe(startWith(null),
+      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));*/
   }
- public project?: Project;
+  public project?: Project;
 
-  //arr!: Tag[];
-  //separatorKeysCodes: number[] = [ENTER, COMMA];
+  // arr!: Tag[];
+  // separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  /***********
+  /* **********
    Chip events
-   ***********/
+   ********** */
   visible = true;
   multiple = true;
   selectable = true;
   removable = true;
 
   tagCtrl = new FormControl();
-  filteredTags: Observable<Tag[]>;
-  selectedTagNames: string[] = [];
 
-  // To hold all tags?
-  public tags: Tag[] = [];
+  // do we need this?
+  // filteredTags: Observable<Tag[]>;
 
+  // do we need this?
+  /*selectedTagNames: string[] = [];*/
+
+  // do we need this?
+  // To hold all tags? used in view-projects as part of the displayedColumns (maybe?)
+ // public tags: Tag[] = [];
 
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
+  selectedTagArr: Tag[] = []; // [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
 
-
-  @ViewChild('tagInput')
+  // testing to see if the @ViewChild does anything here. So far, no it does not
+ // @ViewChild('tagInput')
   tagInput!: any;
-  @ViewChild('auto')
+
+ // @ViewChild('auto')
+  // looks like matAutocomplete is not used yet
   matAutocomplete!: MatAutocomplete;
 
 
   public tagsNames: Tag[] = [];
-  public errorDetected = false;
+ // not in use anywhere yet, might not need
+  // public errorDetected = false;
 
   ngOnInit(): void {
     this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
+    // this adds a tag that can be removed from the screen from the current project
+    if (this.project){
+      this.selectedTagArr = this.project.tags;
+      // in case the current project cannot be found the universal tags will show
+    } else {
+      this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
+    }
 
     // gets all tags and adds them to view
-    this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
+    // this is from the Feature-Tags branch
+    // this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
 
-    this.selectedTagArr.forEach(e => {
+    // do we need this?
+    /*this.selectedTagArr.forEach(e => {
       this.selectedTagNames.push(e.name);
-    });
+    });*/
 
     this.data.updateTagArray(this.selectedTagArr);
 
@@ -94,10 +112,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
 
 
-  private _filter(value: any): Tag[] {
-    // const filterValue = value;
-    const a: Tag = new Tag(0, value, '');
-    return this.tagsNames.filter(tagName => tagName.name === a.name);
+  private _filter(value: Tag): Tag[] {
+    return this.tagsNames.filter(tagName => tagName.name === '');
   }
 
 
@@ -106,6 +122,12 @@ export class AddTagsAddedTagsComponent implements OnInit {
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
 
+    // removes tags from project not from persistent storage
+    if (this.project){
+      this.project.tags = this.project.tags.filter(tag => tag.name !== tagName.name);
+  }
+
+    // changes the display of tags on screen
     this.data.updateTagArray(this.selectedTagArr);
   }
 
