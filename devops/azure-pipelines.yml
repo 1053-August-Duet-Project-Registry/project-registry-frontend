@@ -84,7 +84,7 @@ stages:
 - stage: deploy
   # skip deployment on pull requests.  When the pull request is approved, the
   # resulting commit will trigger the pull request
-  condition: ne(variables['Build.Reason'],'PullRequest')
+  condition: and(succeeded(),ne(variables['Build.Reason'],'PullRequest'))
   dependsOn:
   - analyze
   - dockerize
@@ -92,7 +92,7 @@ stages:
   jobs:
 
   - deployment: deployDev
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev')
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/branch-dev'))
     environment: dev
     strategy:
      runOnce:
@@ -112,7 +112,7 @@ stages:
     displayName: Dev Cluster --> Deployment
 
   - deployment: deployStaging
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    condition: and(succeeded(),eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     environment: staging
     strategy:
      runOnce:
