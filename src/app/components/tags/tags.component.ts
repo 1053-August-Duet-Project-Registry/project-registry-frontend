@@ -115,32 +115,33 @@ export class TagsComponent implements OnInit {
 
   // takes the information from the create-new-tag-form in the html and makes a new tag
   public registerTag(): void {
+    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
+
     // if input is empty, return
-    if (this.tag1.name === ''){
+    if (newTag.name === ''){
       this.message = 'Tag must have a name';
       return;
     }
     // if tag already exists, return
-    if (this.tags.map(tag => tag.name).includes(this.tag1.name)) {
-      this.message = `The ${this.tag1.name} tag already exists`;
+    if (this.tags.map(tag => tag.name).includes(newTag.name)) {
+      this.message = `The ${newTag.name} tag already exists`;
       return;
     }
 
-    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
 
     this.tags.push(newTag);
     // TODO add a check if this post request is successful; if it is, change this.message
     this.tagService.registerTag(newTag);
     
     // lets the user know the tag was created successfully
-    this.message = `The ${this.tag1.name} tag was created`;
+    this.message = `The ${newTag.name} tag was created`;
 
-    // TODO maybe exit out of "add tag" window in this function? And lower the delay amount
+    // TODO maybe exit out of "add tag" window in this function?
     setTimeout(() => {
       this.message = '';
       this.tag1.name = '';
       this.tag1.description = '';
       this.getAllTags(); },
-    3000);
+    1000);
   }
 }
