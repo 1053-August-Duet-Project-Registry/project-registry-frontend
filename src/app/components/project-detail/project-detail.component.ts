@@ -75,7 +75,7 @@ export class ProjectDetailComponent implements OnInit {
   sendBatch ?: BatchTemplate;
   iteration?: Iteration ;
   tempIteration?: Iteration ;
-  
+
   public desiredId = 1;
   public project?: Project;
   public projects?: Project[] = [];
@@ -120,17 +120,14 @@ export class ProjectDetailComponent implements OnInit {
     this.project.status.id = this.statusMap[this.project.status.name];
 
     if(this.project != undefined){
-      let phaseFound = this.phaseService.phases.find(p=>{
-        if(this.project){
-          // TODO test and fix this line that was changed during model updates.
-          // return p.kind==this.project.phase.kind
-        }
-        else {
-          return false;
-        }
-      });
-
-      // TODO test and fix this line that was changed during model updates.
+      // let phaseFound = this.phaseService.phases.find(p=>{
+      //   if(this.project){
+      //     // return p.kind==this.project.phase.kind
+      //   }
+      //   else {
+      //     return false
+      //   }
+      // });
       // if(phaseFound!=undefined)
       //   this.project.phase = phaseFound;
     }
