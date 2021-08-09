@@ -7,7 +7,7 @@ import { REGISTRY_URL } from 'src/environments/environment';
 //import { Phase } from '../models/phase';
 import { Status } from '../models/status.model';
 import { Project } from '../models/project.model';
-import { Phase } from '../models/phase';
+import { Phase } from '../models/phase.models';
 
 @Injectable({
   providedIn: 'root'
