@@ -5,8 +5,9 @@ import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { REGISTRY_URL } from 'src/environments/environment';
 //import { Phase } from '../models/phase';
-import { Status } from '../models/status';
+import { Status } from '../models/status.model';
 import { Project } from '../models/project.model';
+import { Phase } from '../models/phase';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +28,8 @@ export class StatusService implements OnInit {
 
   public getStatus() {
     return this.http.get<Status[]>(`${REGISTRY_URL}status`, this.httpOptions)
-      .pipe(
-        catchError(this.handleError<Phase[]>('getStatus', []))
+      .pipe(  
+        catchError(this.handleError<Status[]>('getStatus', []))
       ).subscribe(data => {
         this.status = data;
         console.log(this.status);
