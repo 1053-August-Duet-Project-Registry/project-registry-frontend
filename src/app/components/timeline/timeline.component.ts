@@ -7,10 +7,13 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import moment from 'moment';
 import { Item, Period, Section, Events, NgxTimeSchedulerService } from 'ngx-time-scheduler';
 import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
+import { LoginServiceService } from 'src/app/service/login-service.service';
+import { mockData } from './timelineMockData';
 import { IterationService } from 'src/app/service/iteration.service';
 
 @Component({
@@ -37,7 +40,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   topLeftHeaderName = 'Batch';
   @ViewChildren('ngxTs', { read: ElementRef }) ngxTs!: QueryList<ElementRef>;
 
-  constructor(public iter: IterationService, private datePipe: DatePipe) {}
+  constructor(public iter: IterationService, private datePipe: DatePipe, private loginService: LoginServiceService, private route: Router) {}
 
   ngAfterViewInit() {
     /**
@@ -83,6 +86,11 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+  // Check if user is logged in, otherwise redirect.
+    if (! this.loginService.checkSessionLogin()) {
+      this.route.navigate(['/homepage-login']);
+    }
+
     let batch: BatchTemplate[] = await this.iter
       .getBatchServiceMock()
       .pipe(

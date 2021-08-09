@@ -1,71 +1,58 @@
-<div >
-    <h1 id="anime" class="welcome text-center" >
-     <span class="d-block"> Welcome to The Project Registry Application </span>
+<div>
+  <h1 id="anime" class="welcome text-center">
+    <span class="d-block"> Welcome to The Project Registry Application </span>
 
-     <span class="welcome text-center">Please Login</span>
-    </h1>
-  </div>
-  
-  <div class="row login-card">
-    <div class="col-12 login-box text-center" >
-      <div
-        class="alert alert-dismissible row"
-        style="max-width: 100%"
-      >
-        <form class="col-sm-12 login-wrapper container" #loginForm="ngForm" name="loginForm" (ngSubmit)="authenticate()">
-      
-          
-              <!--  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-             
-              <section class="text-right hidden-validate-height">
-                <p class="ml-auto text-right" *ngIf="loginForm.controls.username?.invalid && (loginForm.controls.username?.touched || mouseoverLogin)" class="text-danger">Must be more than 3 characters</p>
-              </section>
+    <span class="welcome text-center">Please Login</span>
+  </h1>
+</div>
 
-              <div class="form-group row mb-4" >
-                <label for="username" class="col-2 col-form-label text-right text-secondary pr-3" >Username</label>
-                <input
-                  class="form-control col-10"
-                  [(ngModel)]="userLogin.username"
-                  aria-describedby="userHelp"
-                  placeholder="Enter username"
-                  name="username"
-                  required minlength="3"
-                />      
-              </div>
-              
-              <section class="text-right hidden-validate-height">
-                <p class="ml-auto text-right" *ngIf="loginForm.controls.password?.invalid && (loginForm.controls.username?.touched || mouseoverLogin)" class="text-danger">Must be more than 3 characters</p>
-              </section>
- 
-              <div class="form-group row mb-4">
-                <label for="password" class="col-2 col-form-label text-right text-secondary pr-3">Password</label>
-                <input               
-                  type="password"   
-                  [(ngModel)]="userLogin.password"         
-                  class="form-control col-10 "
-                  name="password"
-                  required minlength="3"
-                />
-                
-              </div>
-              
-  
-              <section class="row text-right " >
-                <span class="float-right ml-auto"(mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
-                <input
-                  type="submit"
-                  class="btn btn-orange signin-btn d-inline-block"
-                  value ="Submit"  [disabled] = "!loginForm.form.valid"
-                  />
-                </span>
-              </section>
+<div class="row login-card">
+  <div class="col-12 login-box text-center">
+    <div class="alert alert-dismissible row" style="max-width: 100%">
+      <form class="col-sm-12 login-wrapper container" #loginForm="ngForm" name="loginForm" (ngSubmit)="authenticate()">
 
-              <div *ngIf="errMessage" class="text-danger">{{errMessage}}</div>
-        </form>
-  
-        <div class="col-sm-6">
-          <!-- <app-register></app-register> -->
+
+        <!--  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+
+        <section class="text-right hidden-validate-height">
+          <p class="ml-auto text-right"
+            *ngIf="loginForm.controls.username?.invalid && (loginForm.controls.username?.touched || mouseoverLogin)"
+            class="text-danger">Must be more than 3 characters</p>
+        </section>
+
+        <div class="form-group row mb-4">
+          <label for="username" class="col-2 col-form-label text-right text-secondary pr-3">Username</label>
+          <input class="form-control col-10" [(ngModel)]="userLogin.username" aria-describedby="userHelp"
+            placeholder="Enter username" name="username" required minlength="3" />
         </div>
+
+        <section class="text-right hidden-validate-height">
+          <p class="ml-auto text-right"
+            *ngIf="loginForm.controls.password?.invalid && (loginForm.controls.username?.touched || mouseoverLogin)"
+            class="text-danger">Must be more than 3 characters</p>
+        </section>
+
+        <div class="form-group row mb-4">
+          <label for="password" class="col-2 col-form-label text-right text-secondary pr-3">Password</label>
+          <input type="password" [(ngModel)]="userLogin.password" class="form-control col-10 " name="password" required
+            minlength="3" />
+
+        </div>
+
+
+        <section class="row text-right ">
+          <span class="float-right ml-auto" (mouseenter)="mouseoverLogin=true" (mouseleave)="mouseoverLogin=false">
+            <input type="submit" class="btn btn-orange signin-btn d-inline-block" value="Submit"
+              [disabled]="!loginForm.form.valid" />
+          </span>
+        </section>
+
+        <div *ngIf="errMessage" class="text-danger">{{errMessage}}</div>
+      </form>
+
+      <div class="col-sm-6">
+        <!-- <app-register></app-register> -->
       </div>
     </div>
   </div>
+</div>
