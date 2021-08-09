@@ -1,17 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-black main-nav">
-  <section class="container" >
+  <section class="container">
     <a class="navbar-brand" [routerLink]="['viewProject']">
-      <img src="assets/img/logo.png" class="logo-img"/>
+      <img src="assets/img/logo.png" class="logo-img" />
     </a>
-    
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -19,24 +13,28 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item pointer">
-          <a class="text-light text-right no-decorator" [routerLink]="['viewProject']">Home 
+          <a class="text-light text-right no-decorator" *ngIf="loginService.checkSessionLogin()" [routerLink]="['viewProject']">Home
             <span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item ml-4 pointer">
-          <a class="text-light text-right no-decorator" [routerLink]="['timeline']">Timeline</a>
+          <a class="text-light text-right no-decorator" *ngIf="loginService.checkSessionLogin()" [routerLink]="['timeline']">Timeline</a>
         </li>
         <li class="nav-item ml-4 pointer">
-          <a class="text-light text-right no-decorator" [routerLink]="['create-project']">Create Project</a>
+          <a class="text-light text-right no-decorator" *ngIf="loginService.checkSessionLogin()" [routerLink]="['create-project']">Create Project</a>
         </li>
+
+        <!-- Login button -->
+        <!-- The text on this button changes from "Login"
+           to "Logout" when a user is able to sign in -->
         <li class="nav-item ml-4 pointer" *ngIf="!loginService.checkSessionLogin()">
           <a class="text-light text-right no-decorator" [routerLink]="['homepage-login']">Login</a>
         </li>
-        <li class="nav-item ml-4 pointer" *ngIf="loginService.checkSessionLogin()" (click)="logout()">
-          <a class="text-light text-right no-decorator" >Logout</a>
+        <li class="nav-item ml-4 pointer" *ngIf="loginService.checkSessionLogin()" (click)="logout()" >
+          <a class="text-light text-right no-decorator" [routerLink]="['homepage-login']" >Logout</a>
         </li>
       </ul>
     </div>
 
-</section>
+  </section>
 </nav>
