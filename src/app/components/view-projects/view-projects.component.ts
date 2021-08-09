@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { Tag } from 'src/app/models/tag.model';
 import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
@@ -59,12 +59,14 @@ export class ViewProjectsComponent implements OnInit {
                   type: 'admin'
               }
           },
-          phase: {
-              id: 2,
-              kind: 'TRAINER_APPROVED',
-              description: 'Trainer has reviewed backlog and approves of scope and domain'
-          },
-          tags: []
+
+          // "phase": {
+          //     "id": 2,
+          //     "kind": "TRAINER_APPROVED",
+          //     "description": "Trainer has reviewed backlog and approves of scope and domain"
+          // },
+          tags: [],
+          iterations: [],
       },
       {
           id: 2,
@@ -82,12 +84,8 @@ export class ViewProjectsComponent implements OnInit {
                   type: 'admin'
               }
           },
-          phase: {
-              id: 3,
-              kind: 'HANDOFF_SCHEDULED',
-              description: 'Scheduled the Handoff meeting to introduce P3'
-          },
-          tags: []
+          tags: [],
+          iterations: [],
       },
       {
           id: 3,
@@ -105,12 +103,8 @@ export class ViewProjectsComponent implements OnInit {
                   type: 'user'
               }
           },
-          phase: {
-              id: 2,
-              kind: 'TRAINER_APPROVED',
-              description: 'Trainer has reviewed backlog and approves of scope and domain'
-          },
-          tags: []
+          tags: [],
+          iterations: [],
       }
   ];
 
@@ -173,7 +167,7 @@ export class ViewProjectsComponent implements OnInit {
 
   sendIteration(row: Project) {
     if (this.sendBatch) {
-      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate);
+      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate, null);
 
       let haventIterate: Boolean = true;
       for (let i = 0; i < this.allIterations.length; i++) {
@@ -396,9 +390,9 @@ export class ViewProjectsComponent implements OnInit {
       this.filteredPhase = [];
       for (const i of this.projects) {
         // finds projects with status name the same as selected status
-        if (i.phase.kind === this.phaseSelected) {
-          this.filteredPhase.push(i);
-        }
+        // if (i.phase.kind === this.phaseSelected) {
+        //   this.filteredPhase.push(i);
+        // }
       }
     }
     this.filterResults();
