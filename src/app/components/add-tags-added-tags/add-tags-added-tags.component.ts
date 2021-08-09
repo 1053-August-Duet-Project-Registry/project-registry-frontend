@@ -68,9 +68,6 @@ export class AddTagsAddedTagsComponent implements OnInit {
  // public tags: Tag[] = [];
 
   // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
-
-  // store tags of current project, this will be passed to other teams
   selectedTagArr: Tag[] = []; // [new Tag(3, 'tag1', 'description'), new Tag(4, 'tag2', 'i want my mommy')];
 
   // testing to see if the @ViewChild does anything here. So far, no it does not
@@ -89,13 +86,22 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnInit(): void {
     this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
+    // this adds a tag that can be removed from the screen from the current project
+    if (this.project){
+      this.selectedTagArr = this.project.tags;
+      // in case the current project cannot be found the universal tags will show
+    } else {
+      this.selectedTagArr = this.data.universalTags; // this.project.tags; // this.global.globalTags;
+    }
 
     // gets all tags and adds them to view
-    this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
+    // this is from the Feature-Tags branch
+    // this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
 
-    this.selectedTagArr.forEach(e => {
+    // do we need this?
+    /*this.selectedTagArr.forEach(e => {
       this.selectedTagNames.push(e.name);
-    });
+    });*/
 
     this.data.updateTagArray(this.selectedTagArr);
 
@@ -118,6 +124,12 @@ export class AddTagsAddedTagsComponent implements OnInit {
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
 
 
+    // removes tags from project not from persistent storage
+    if (this.project){
+      this.project.tags = this.project.tags.filter(tag => tag.name !== tagName.name);
+  }
+
+    // changes the display of tags on screen
     this.data.updateTagArray(this.selectedTagArr);
   }
 

@@ -55,8 +55,10 @@ export class TagsComponent implements OnInit {
   // may not be needed
   // filteredTags: Observable<Tag[]>;
   selectedTagNames: string[] = [];
-  // array of tags attached to current project
-  @Input() selectedTagArr: Tag[] = [];
+  // store tags of current project, this will be passed to other teams. IS NOT an @Input()
+  /*@Input()*/ selectedTagArr: Tag[] = [new Tag(3, 'tag1', 'description', true),
+    new Tag(4, 'tag2', 'i want my mommy', false)]; // [];
+  temp: Tag[] = [];
 
 
   @ViewChild('tagInput')
@@ -70,6 +72,8 @@ export class TagsComponent implements OnInit {
   public tags: Tag[] = [];
   public errorDetected = false;
   public tag1: Tag = new Tag(0, '', '', true);
+  // public clientMessage: ClientMessage = new ClientMessage('');
+
   // public clientMessage: ClientMessage = new ClientMessage('');
 
   ngOnInit(): void {
@@ -128,17 +132,14 @@ export class TagsComponent implements OnInit {
 
     this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
-    // TODO remove tag from db
-    this.tagService
 
-    // this.data.updateTagArray(this.selectedTagArr);
-
-    // this.data.updateTagArray(this.data.universalTags);
   }
 
   // TODO not used...
-  selected(event: MatAutocompleteSelectedEvent): void {
-    if (!this.selectedTagArr.includes(event.option.value))
+selected(event: MatAutocompleteSelectedEvent): void {
+   // let index = this.selectedTagNames.indexOf(event.option.value);
+
+    if (!this.selectedTagArr.includes(event.option.value)) {
       this.selectedTagNames.push(event.option.viewValue);
   }
 
@@ -171,7 +172,7 @@ public registerTagFromService(): void {
     if (this.project) {
       this.project.tags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
     }
-    this.data.universalTags.push(new Tag(0, this.tag1.name, this.tag1.description, true));
+    this.data.universalTags.push(newTag);
 
     if (this.project) {
       this.tags = this.project.tags;
