@@ -1,5 +1,4 @@
 <h1 id="anime" class="welcome">Project Registry</h1>
-
 <button class="reset-btn" mat-flat-button matTooltip="Reset Filters" type="reset" (click)="reset()"
   value="Reset Filters">
   <mat-icon>
@@ -42,6 +41,8 @@
               <mat-option value="ACTIVE">Active</mat-option>
               <mat-option value="CODE_REVIEW">Code-Review</mat-option>
               <mat-option value="FINISH">Finished</mat-option>
+              <mat-option value="PLANNED">Planned</mat-option>
+              <mat-option value="AVAILABLE">Available</mat-option>
 
               <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
                 {{ statuses }}
@@ -240,7 +241,8 @@
           </tr>
         </table>
 
-        <mat-paginator [pageSize]="5" [length]="dataSource.data.length" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        <mat-paginator [pageSize]="5" [length]="dataSource.data.length" [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
       </div>
     </mat-card>
   </div>

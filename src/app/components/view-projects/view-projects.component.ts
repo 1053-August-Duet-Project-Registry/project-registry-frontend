@@ -9,12 +9,13 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
-import { Phase } from 'src/app/models/phase';
+import { Phase } from 'src/app/models/phase.models';
 import { Tag } from 'src/app/models/tag.model';
 import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
 import { ViewProjectService } from 'src/app/service/view-project.service';
 import { Project } from '../../models/project.model';
+import { LoginServiceService } from '../../service/login-service.service';
 
 export interface statusFilter { }
 
@@ -27,7 +28,9 @@ export class ViewProjectsComponent implements OnInit {
 
 
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
-              private iterationService: IterationService, private route: Router, private location: Location) {
+              private iterationService: IterationService, private route: Router, private location: Location,
+              private loginService: LoginServiceService) {
+
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
       if (location.path() === '/project-detail' && numberOfTimesAround < 1) {
@@ -37,80 +40,6 @@ export class ViewProjectsComponent implements OnInit {
       }
     });
   }
-
-  public projects: Project[] =
-  [
-      {
-          "id": 1,
-          "name": "rideforce",
-          "status": {
-              "id": 3,
-              "name": "ACTIVE"
-          },
-          "description": "rideforce project",
-          "owner": {
-              "id": 3,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": [new Tag(1, 'Revature', 'Made by Revature', false)]
-      },
-      {
-          "id": 2,
-          "name": "Make A Recruiting Application",
-          "status": {
-              "id": 2,
-              "name": "ACTIVE"
-          },
-          "description": "Finds potential condadites by scrapping facebook.",
-          "owner": {
-              "id": 1,
-              "username": "william",
-              "role": {
-                  "id": 1,
-                  "type": "admin"
-              }
-          },
-          "phase": {
-              "id": 3,
-              "kind": "HANDOFF_SCHEDULED",
-              "description": "Scheduled the Handoff meeting to introduce P3"
-          },
-          "tags": []
-      },
-      {
-          "id": 3,
-          "name": "Caliber Staging Module",
-          "status": {
-              "id": 3,
-              "name": "CODE_REVIEW"
-          },
-          "description": "Allows for staging to be remote",
-          "owner": {
-              "id": 4,
-              "username": "Bob",
-              "role": {
-                  "id": 2,
-                  "type": "user"
-              }
-          },
-          "phase": {
-              "id": 2,
-              "kind": "TRAINER_APPROVED",
-              "description": "Trainer has reviewed backlog and approves of scope and domain"
-          },
-          "tags": []
-      }
-  ];
-
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
@@ -173,8 +102,9 @@ export class ViewProjectsComponent implements OnInit {
 
   sendIteration(row: Project): void {
     if (this.sendBatch) {
+      // TODO add phase to last param instead of null
       this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id,
-        this.sendBatch.startDate, this.sendBatch.endDate);
+        this.sendBatch.startDate, this.sendBatch.endDate, null);
 
       let haventIterate = true;
       for (const anIteration of this.allIterations) {
@@ -360,9 +290,9 @@ export class ViewProjectsComponent implements OnInit {
       this.filteredPhase = [];
       for (const i of this.dataSource.data) {
         // finds projects with status name the same as selected status
-        if (i.phase.kind === this.phaseSelected) {
-          this.filteredPhase.push(i);
-        }
+        // if (i.phase.kind === this.phaseSelected) {
+        //   this.filteredPhase.push(i);
+        // }
       }
     }
     this.filterResults();

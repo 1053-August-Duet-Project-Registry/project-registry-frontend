@@ -17,7 +17,7 @@ const routes: Routes = [
   {path: 'project-detail/:id', component: ProjectDetailComponent},
   {path: 'homepage-login' , component: ProjectLoginComponent},
   {path: 'timeline' , component: TimelineComponent},
-  {path: 'editTags', component: TagsComponent}
+  {path: 'add-tags', component: AddTagsComponent}
 ];
 
 @NgModule({

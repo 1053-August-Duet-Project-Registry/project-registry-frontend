@@ -32,12 +32,6 @@ export class TagsComponent implements OnInit {
 
     // prevents the closing of the create-new-tag pop-up window by pressing the Esc key
     config.keyboard = false;
-
-    // may not be needed
-   /*this.filteredTags = this.tagCtrl.valueChanges
-      .pipe(startWith(null),
-      map((tagName: Tag | null) => tagName ? this._filter(tagName) : this.tagsNames.slice()));*/
-
   }
 
   // The current project being viewed/edited
@@ -45,17 +39,12 @@ export class TagsComponent implements OnInit {
 
   faEdit = faEdit;
 
-
   tagCtrl = new FormControl();
-  
-  
   @ViewChild('tagInput')
   tagInput!: any;
   @ViewChild('auto')
   matAutocomplete!: MatAutocomplete;
   message = '';
-  closeResult = '';
-  
   // contains all tags found in the db
   public tags: Tag[] = [];
   // array of tags attached to current project
@@ -64,7 +53,6 @@ export class TagsComponent implements OnInit {
 
   // contains the text entered in the description and name input boxes
   public tag1: Tag = new Tag(0, '', '', true);
-
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();

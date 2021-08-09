@@ -54,9 +54,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   tagCtrl = new FormControl();
 
-  // store tags of current project, this will be passed to other teams
-  @Input() selectedTagArr: Tag[] = [];
-
+  // store tags of current project
+  selectedTagArr: Tag[] = [];
 
   // testing to see if the @ViewChild does anything here. So far, no it does not
  // @ViewChild('tagInput')
@@ -65,9 +64,6 @@ export class AddTagsAddedTagsComponent implements OnInit {
  // @ViewChild('auto')
   // looks like matAutocomplete is not used yet
   matAutocomplete!: MatAutocomplete;
-
-
-  public tagsNames: Tag[] = [];
 
   ngOnInit(): void {
     // this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
@@ -86,12 +82,6 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnChange(): void {
 
   }
-
-
-  private _filter(value: Tag): Tag[] {
-    return this.tagsNames.filter(tagName => tagName.name === '');
-  }
-
 
   // removes tags from view not from persistent storage
   remove(tagName: Tag): void {

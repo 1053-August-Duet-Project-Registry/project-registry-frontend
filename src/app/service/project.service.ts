@@ -9,7 +9,8 @@ import { Status } from '../models/status.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { Tag } from '../models/tag.model';
-import { Phase } from '../models/phase';
+import { Phase } from '../models/phase.models';
+import { Iteration } from '../models/iteration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,8 @@ export class ProjectService {
 
   public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
     '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag(1, 'Revature', 'Made by Revature', false),
-      new Tag(2, 'Java', 'server language', true)], new Phase(1, 'BACKLOG_GENERATED',
-      'CoE has completed the iterations backlog, awaiting trainer approval'));
+    [new Tag(1, 'Revature', 'Made by Revature', true),
+      new Tag(2, 'Java', 'server language', true)], []);
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
