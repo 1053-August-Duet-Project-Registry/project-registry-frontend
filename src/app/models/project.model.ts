@@ -1,5 +1,4 @@
 import { Iteration } from './iteration.model';
-import { Phase } from './phase';
 import { Status } from './status.model';
 import { Tag } from './tag.model';
 import { User } from './user.model';
