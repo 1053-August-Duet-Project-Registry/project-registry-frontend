@@ -21,7 +21,7 @@ export class PhaseService implements OnInit {
 
   public phases: Phase[] = [];
   ngOnInit(): void {
-    this.getAllPhases();
+    // this.getAllPhases();
   }
 
   getAllPhases(){
