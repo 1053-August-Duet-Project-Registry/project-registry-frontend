@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {Tag} from '../../models/tag.model';
+import { Tag } from '../../models/tag.model';
 import { TagService } from 'src/app/service/tag.service';
 import { Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { MatOption } from '@angular/material/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 import { element } from 'protractor';
+import { ProjectDetailComponent } from '../project-detail/project-detail.component';
+
 // import 'rxjs/add/operator/debounceTime'
 // import 'rxjs/add/operator/map'
 // import 'rxjs/add/operator/distinctUntilChanged'
@@ -19,7 +21,7 @@ import { element } from 'protractor';
 })
 
 export class AddTagsSearchBarComponent implements OnInit {
-  currentTags!: Tag[];
+ // currentTags!: Tag[];
 
   selectedTag!: Tag;
   allSelectedTags: string[] = [];
@@ -31,10 +33,12 @@ export class AddTagsSearchBarComponent implements OnInit {
 
   searchTags: string[] = [];
 
-  constructor(private TagsService: TagService, private data: ProjectTagManagementService) { }
+  constructor(private TagsService: TagService, private data: ProjectTagManagementService,
+              private projectDetails: ProjectDetailComponent) { }
 
   ngOnInit(): void{
-    // this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
+   // this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
+
     this.TagsService.getAllTags().subscribe(tags => this.searchTags = tags.map(tag => tag.name));
 
 
@@ -70,12 +74,16 @@ export class AddTagsSearchBarComponent implements OnInit {
  /* this gets the value of the selected tag, option.value only fires when a valid tag is selected,
  this will get array index of the object we will push for further processing */
  onTagSelected(option: MatOption): void {
-  const tagName: string = option.value;
 
-  const selectTag: Tag = this.tags.filter(x => x.name === tagName)[0];
+   console.log('value of option: ' + option.value);
 
-  this.currentTags.push(selectTag);
-  console.log(`Tag: ${selectTag.name} description: ${selectTag.description} and isEnabled: ${selectTag.isEnabled}`);
+   const tagName: string = option.value;
+
+   const selectTag: Tag = this.tags.filter(x => x.name === tagName)[0];
+
+   console.log(`Tag: ${selectTag.name} description: ${selectTag.description} and isEnabled: ${selectTag.isEnabled}`);
+
+   this.projectDetails.project?.tags.push(selectTag);
 
   /*const index = this.tags.findIndex(tagName);
   if (!this.currentTags.find(tagName)){
