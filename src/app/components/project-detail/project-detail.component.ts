@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ProjectService } from 'src/app/service/project.service';
 import { Project } from 'src/app/models/project.model';
-import { ViewProjectService } from './../../service/view-project.service';
+import { ViewProjectService } from '../../service/view-project.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Iteration } from '../../models/iteration.model';
@@ -18,7 +18,7 @@ import { ViewProjectsComponent } from '../view-projects/view-projects.component'
 import { Location } from '@angular/common';
 import { Tag } from '../../models/tag.model';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-import {LoginServiceService} from "../../service/login-service.service";
+import {LoginServiceService} from '../../service/login-service.service';
 
 @Component({
   selector: 'app-project-detail',

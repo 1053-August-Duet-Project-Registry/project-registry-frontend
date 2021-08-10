@@ -1,5 +1,5 @@
-import { Phase } from "./phase.models";
-import { Project } from "./project.model";
+import { Phase } from './phase.models';
+import { Project } from './project.model';
 
 export class Iteration {
   id: number;

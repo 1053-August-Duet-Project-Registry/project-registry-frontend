@@ -17,7 +17,7 @@ existing array tag if an existing project otherwise if new, this array is just e
   public universalTags = [new Tag('No Tags Available', 'description', true)];
 
   constructor() { }
-  
+
   // simply overwrites previous tag to new one
   updateTagArray(arr: Tag[]): void{
     this.tagArray.next(arr);
