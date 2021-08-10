@@ -10,6 +10,7 @@ import { ProjectService } from 'src/app/service/project.service';
 // import { ClientMessage } from './../../models/clientMessage.model';
 // import { Location } from '@angular/common';
 import { TagService } from './../../service/tag.service';
+import { AddTagsSearchBarComponent } from '../add-tags-search-bar/add-tags-search-bar.component'
 // import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ViewChild, AfterViewInit, OnChanges, DoCheck, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -32,7 +33,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   // Constructor for add-tags-added-tags
   constructor(public router: Router, /*public universalTags: TagsComponent,*/ public projectService: ProjectService,
               public tagService: TagService, config: NgbModalConfig, /* private modalService: NgbModal,*/
-              public data: ProjectTagManagementService) {
+              public data: ProjectTagManagementService, /*private SearchBarComponent: AddTagsSearchBarComponent*/) {
     config.backdrop = 'static';
 
     // unknown use
@@ -76,11 +77,10 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   }
 
-  // removes tags from view not from persistent storage
+  // removes tags
   remove(tagNoMore: Tag): void {
+    // removes tag from arrays so it will not be on webpage
     this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagNoMore.name);
-
-    // removes tags from project not from persistent storage
     if (this.project) {
       this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
     }
@@ -89,5 +89,8 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
     // changes the display of tags on screen
     this.data.updateTagArray(this.selectedTagArr);
+
+    // const index: number = this.SearchBarComponent.searchTags.indexOf(tagNoMore.name);
+    // this.SearchBarComponent.searchTags.splice(index, 1);
   }
 }

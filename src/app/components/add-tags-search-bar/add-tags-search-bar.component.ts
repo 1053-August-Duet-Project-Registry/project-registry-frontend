@@ -37,7 +37,8 @@ export class AddTagsSearchBarComponent implements OnInit {
 
   ngOnInit(): void{
     // searchTags are used in the _filter function
-    this.TagsService.getAllTags().subscribe(tags => this.searchTags = tags.filter(tag => tag.isEnabled).map(tag => tag.name));
+    this.TagsService.getAllTags().subscribe(
+      tags => this.searchTags = tags.filter(tag => tag.isEnabled).map(tag => tag.name));
 
     this.getTags();
 
