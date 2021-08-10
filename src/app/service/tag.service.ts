@@ -30,6 +30,7 @@ export class TagService {
       );
   }
 
+  // TODO finish this
   // public deleteTag(tag: Tag): Observable<string> {
     // return this.http.delete
   // }

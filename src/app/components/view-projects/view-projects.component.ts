@@ -168,9 +168,9 @@ export class ViewProjectsComponent implements OnInit {
     if (this.allIterations && this.allIterations.length > 0) {
       const filtered: Project[] = [];
 
-      for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == event.value) {
-          filtered.push(this.allIterations[i].project as Project);
+      for (const iteration of this.allIterations) {
+        if (iteration.batchId === event.value) {
+          filtered.push(iteration.project as Project);
         }
       }
       this.dataSource = new MatTableDataSource(filtered);
@@ -182,7 +182,7 @@ export class ViewProjectsComponent implements OnInit {
     this.getProjects();
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     // this.getProjects();
     // this.getProjectTags();
     // this.getProjectPhase();
@@ -190,14 +190,14 @@ export class ViewProjectsComponent implements OnInit {
     // this.dataSource = new MatTableDataSource(this.projects);
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-  }
+  }*/
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.filterProjectsByStatus();
 
   }
   // Filter the columns
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -248,7 +248,7 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   // this function filters by status correctly, if disabled filtering status doesn't work
-  filterProjectsByStatus() {
+  filterProjectsByStatus(): void {
     if (this.statusSelected === '') {
       this.filteredProjects = this.dataSource.data;
     } else {
@@ -308,7 +308,7 @@ export class ViewProjectsComponent implements OnInit {
       this.statusSelected !== 'noStatus'
     ) {
       temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
-    } else if (this.tagSelected != null && this.tagSelected != 'noTag') {
+    } else if (this.tagSelected != null && this.tagSelected !== 'noTag') {
       temp = this.filteredTags;
     } else if (
       this.statusSelected !== '' &&
@@ -319,7 +319,7 @@ export class ViewProjectsComponent implements OnInit {
       temp = this.dataSource.data;
     }
 
-    if (this.phaseSelected != null && this.phaseSelected != 'noStatus') {
+    if (this.phaseSelected != null && this.phaseSelected !== 'noStatus') {
       this.dataSource = new MatTableDataSource(
         this.filteredPhase.filter((x) => temp.includes(x))
       );
@@ -329,7 +329,7 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  reset() {
+  reset(): void {
     this.filteredProjects = [];
     this.filteredTags = [];
     this.filteredPhase = [];
@@ -342,7 +342,7 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   // TODO this method is current non-functional.
-  rowClicked(projectId: number) {
+  rowClicked(projectId: number): void {
     let currentProject: Project | undefined;
     if (projectId) {
       currentProject = this.dataSource.data.find(p => p.id === projectId);

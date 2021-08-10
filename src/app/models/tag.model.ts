@@ -1,13 +1,11 @@
 export class Tag {
-  id: number;
   name: string;
   description: string;
-  enabled: boolean;
+  isEnabled: boolean;
 
-  constructor(id: number, name: string, description: string, enabled: boolean) {
-    this.id = id;
+  constructor(name: string, description: string, isEnabled: boolean) {
     this.name = name;
     this.description = description;
-    this.enabled = enabled;
+    this.isEnabled = isEnabled;
   }
 }

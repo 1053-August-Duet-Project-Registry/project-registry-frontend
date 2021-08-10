@@ -113,19 +113,17 @@ export class ProjectDetailComponent implements OnInit {
     // Setting the status id
     this.project.status.id = this.statusMap[this.project.status.name];
 
-    if (this.project !== undefined){
-      const phaseFound = this.phaseService.phases.find(p => {
-        if (this.project){
-          return p.kind === this.project.phase.kind;
-        }
-        else {
-          return false;
-        }
-      });
-      if (phaseFound !== undefined) {
-        this.project.phase = phaseFound;
-      }
-    }
+    // umm idek
+    // if (this.project !== undefined){
+    //   const phaseFound = this.phaseService.phases.find(p => {
+    //     if (!this.project){
+    //       return false;
+    //     }
+    //   });
+    //   if (phaseFound !== undefined) {
+    //     this.project.iterations[this.project.iterations.length - 1].phase = phaseFound;
+    //   }
+    // }
     this.project.tags = this.arr;
 
     this.projectService.updateProject(this.project).subscribe((data) => {

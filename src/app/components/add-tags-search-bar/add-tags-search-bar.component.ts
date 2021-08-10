@@ -19,27 +19,21 @@ import { element } from 'protractor';
 })
 
 export class AddTagsSearchBarComponent implements OnInit {
-currentTags!: Tag[];
+  currentTags!: Tag[];
 
-selectedTag!: Tag;
-allSelectedTags: string[] = [];
-allSelectedTagsObject: Tag[] = [];
-myControl = new FormControl();
-options: string[] = [];
-tags: Tag[] = [];
-filteredOptions!: Observable<string[]>;
-  constructor(private TagsService: TagService, private tagManage: ProjectTagManagementService) {
-  }
+  selectedTag!: Tag;
+  allSelectedTags: string[] = [];
+  allSelectedTagsObject: Tag[] = [];
+  myControl = new FormControl();
+  options: string[] = [];
+  tags: Tag[] = [];
+  filteredOptions!: Observable<string[]>;
 
-ngOnInit(): void{
-    this.tagManage.currentTagArray.subscribe(arr => this.currentTags = arr);
+  searchTags: string[] = [];
 
-  /* ******************
-   Continue from here!
-   ****************** */
+  constructor(private TagsService: TagService, private data: ProjectTagManagementService) { }
 
-
-ngOnInit(): void{
+  ngOnInit(): void{
     this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
     for (const loopTag of this.data.universalTags) {
       this.searchTags.push(loopTag.name);
@@ -55,9 +49,9 @@ ngOnInit(): void{
       this.tags = tag;
 
       this.getTagNames(this.tags);
-
     });
   }
+
   // extracts the name property from tags object and pushes into array of strings
   getTagNames(arr: any): void {
     for (const tag of arr){

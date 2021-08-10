@@ -1,6 +1,8 @@
-<label id="tags">Tags</label>
+<!-- start of create new tag button -->
+<label id="tags"></label>
+<br />
 <!--<fa-icon [icon]="faEdit" transform="grow-5" style="margin-left: 20px; cursor: pointer; color: #72a4c2" (click)="open(content)"></fa-icon>-->
-
+<!--
 <div class="input-group">
   <mat-chip-list #chipList aria-label="Tag selection" [multiple]="multiple">
     <mat-chip style="background-color: rgb(242, 105, 38); color: #fff;"
@@ -13,12 +15,6 @@
     </mat-chip>
   </mat-chip-list>
 </div>
-
-
-
-
-
-
 <ng-container *ngTemplateOutlet="content1"></ng-container>
 
 <!--adding a custom tag upon modal-->
@@ -44,7 +40,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-orange" (click)="registerTagFromService()">
+    <button type="button" class="btn btn-orange" (click)="registerTag()">
       Add
     </button>
     <button type="button" class="btn btn-orange" (click)="d('Cross click')">
