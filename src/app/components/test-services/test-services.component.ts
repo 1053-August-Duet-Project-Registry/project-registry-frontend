@@ -34,10 +34,11 @@ export class TestServicesComponent implements OnInit {
   //////////// Connecting IterationServices
   getIterationById(e:any){
     console.log(this.id);
+    this.id? this.iServ.getIterationById(this.id).subscribe( i => console.log(i) ) : console.log("non id provided");
   }
-  getIteration(e:any){
+  getIterations(e:any){
     console.log(e);
-    this.iServ.getIteration().subscribe( i => console.log(i) )
+    this.iServ.getIterations().subscribe( i => console.log(i) )
   }
   
   createIteration (e:any){
@@ -79,5 +80,22 @@ export class TestServicesComponent implements OnInit {
 
   /////////// Connecting View Project Services
 
+  getProjectById(e:any){
+    console.log(this.id);
+    this.id? this.VPServ.getProjectById(this.id).subscribe( i => console.log(i) ) : console.log("non id provided");
+  }
+  getProjects(e:any){
+    console.log(e);
+    this.VPServ.getAllProjects().subscribe( i => console.log(i) )
+  }
   
+  createProject (e:any){
+    console.log("create")
+  }
+  updateProject (e:any){
+    console.log("update")
+  }
+  deleteProject (e:any){
+    console.log("delete")
+  }
 }

@@ -1,21 +1,35 @@
-<p>test-services works!</p>
-<input type="number" [(ngModel)]="id" >
-<h3>Iteration Services</h3>
-<div class="row">
-    <button class="btn btn-primary m-2" (click) = "getIteration($event)"> get all </button>
-    <button class="btn btn-primary m-2" (click) = "getIterationById($event)"> get by id </button>
-    <button class="btn btn-primary m-2" (click) = "createIteration($event)"> create a mock Iteration</button>
-    <button class="btn btn-primary m-2" (click) = "updateIteration($event)"> update Iteration into mock Iteration</button>
-    <button class="btn btn-primary m-2" (click) = "deleteIteration($event)"> delete Iteration</button>
-</div>
-<h3>Phase Services</h3>
-<div class="row">
-    <button class="btn btn-secondary m-2" (click) = "getAllPhases($event)"> get all </button>
-    <button class="btn btn-secondary m-2" (click) = "getPhaseById($event)"> get by id </button>
-</div>
-<h3>Tag Services</h3>
-<div class="row">
-    <button class="btn btn-success m-2" (click) = "getAllTags($event)"> get all </button>
-    <button class="btn btn-success m-2" (click) = "getTagById($event)"> get by id </button>
-    <button class="btn btn-success m-2" (click) = "createIteration($event)"> create a mock Tag</button>
+<h1>Test services </h1>
+<p><b>Description: </b>this component is created to help developers understand the mechanism of the services</p>
+<div class="col">
+    <div class="row">    
+        <p>ID: </p>
+        <input type="number" [(ngModel)]="id" >
+    </div>
+    <h3><b>Iteration Services</b></h3>
+    <div class="row">
+        <button class="btn btn-primary m-2" (click) = "getIterations($event)"> get all </button>
+        <button class="btn btn-primary m-2" (click) = "getIterationById($event)"> get by id </button>
+        <button class="btn btn-primary m-2" (click) = "createIteration($event)"> create a mock Iteration</button>
+        <button class="btn btn-primary m-2" (click) = "updateIteration($event)"> update Iteration into mock Iteration</button>
+        <button class="btn btn-primary m-2" (click) = "deleteIteration($event)"> delete Iteration</button>
+    </div>
+    <h3> <b>Phase Services</b> </h3>
+    <div class="row">
+        <button class="btn btn-secondary m-2" (click) = "getAllPhases($event)"> get all </button>
+        <button class="btn btn-secondary m-2" (click) = "getPhaseById($event)"> get by id </button>
+    </div>
+    <h3><b>Tag Services</b></h3>
+    <div class="row">
+        <button class="btn btn-success m-2" (click) = "getAllTags($event)"> get all </button>
+        <button class="btn btn-success m-2" (click) = "getTagById($event)"> get by id </button>
+        <button class="btn btn-success m-2" (click) = "createIteration($event)"> create a mock Tag</button>
+    </div>
+    <h3><b>View Project Services</b></h3>
+    <div class="row">
+        <button class="btn btn-warning m-2" (click) = "getProjects($event)"> get all </button>
+        <button class="btn btn-warning m-2" (click) = "getProjectById($event)"> get by id </button>
+        <button class="btn btn-warning m-2" (click) = "createProject($event)"> create a mock Project</button>
+        <button class="btn btn-warning m-2" (click) = "updateProject($event)"> update Project into mock Project</button>
+        <button class="btn btn-warning m-2" (click) = "deleteProject($event)"> delete Project</button>
+    </div>
 </div>

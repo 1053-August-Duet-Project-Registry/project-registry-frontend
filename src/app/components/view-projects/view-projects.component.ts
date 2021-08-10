@@ -156,11 +156,11 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   getIteration() {
-    console.log('all iteration');
-    this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
-      this.allIterations = iteration;
-      console.log('all', this.allIterations);
-    });
+    // console.log('all iteration');
+    // this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
+    //   this.allIterations = iteration;
+    //   console.log('all', this.allIterations);
+    // });
 
 
   }
@@ -297,51 +297,51 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   public getProjects(): void {
-    console.log('getProjects method: ');
-    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+    // console.log('getProjects method: ');
+    // this.viewProjectService.GetAllProjects().subscribe((report: any) => {
 
-      this.projects = report as Project[];
+    //   this.projects = report as Project[];
 
-      this.dataSource.data = this.projects.filter;
-    });
+    //   this.dataSource.data = this.projects.filter;
+    // });
   }
 
   // return all tags from db
   getProjectTags(): void {
-    this.viewProjectService
-      .GetAllProjectTags()
-      .subscribe((data: Tag[]) => (this.tag = data));
+    // this.viewProjectService
+    //   .GetAllProjectTags()
+    //   .subscribe((data: Tag[]) => (this.tag = data));
   }
 
   // return all phase from db
   getProjectPhase(): void {
-    this.viewProjectService
-      .GetAllProjectPhase()
-      .subscribe((data: Phase[]) => {
-        (this.phase = data);
-      });
+    // this.viewProjectService
+    //   .GetAllProjectPhase()
+    //   .subscribe((data: Phase[]) => {
+    //     (this.phase = data);
+    //   });
   }
 
   // grabs all of the statuses
   getAllStatuses(): void {
-    this.viewProjectService.getAllStatuses()
-      .subscribe((data: any) => {
-        for (const d of data) {
-          this.status.push(d.name);
-        }
-      });
+    // this.viewProjectService.getAllStatuses()
+    //   .subscribe((data: any) => {
+    //     for (const d of data) {
+    //       this.status.push(d.name);
+    //     }
+    //   });
 
   }
 
   getProjectStatus(): void {
-    this.viewProjectService.GetAllProjectStatus().subscribe((data: Project[]) => {
-      this.projects = data;
-      this.projects.forEach((project) => {
-        if (!this.status.includes(project.status.name)) {
-          this.status.push(project.status.name);
-        }
-      });
-    });
+    // this.viewProjectService.GetAllProjectStatus().subscribe((data: Project[]) => {
+    //   this.projects = data;
+    //   this.projects.forEach((project) => {
+    //     if (!this.status.includes(project.status.name)) {
+    //       this.status.push(project.status.name);
+    //     }
+    //   });
+    // });
   }
 
   // this function filters by status correctly, if disabled filtering status doesn't work

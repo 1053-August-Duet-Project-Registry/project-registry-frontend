@@ -23,7 +23,7 @@ export class IterationService {
   // apiUrl = "https://caliber2-mock.revaturelabs.com/mock/training/batch";
 
   constructor(private http: HttpClient) { }
-  getIteration(): Observable<Iteration[]>{
+  getIterations(): Observable<Iteration[]>{
     return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`);
   }
 
@@ -35,7 +35,7 @@ export class IterationService {
     return this.http.post<any>(`${ REGISTRY_URL }iteration`,newInteration);
   }
 
-  updateIteration(updateIteration: IterationDTO) : Observable<any>{
+  updateIteration(updateIteration: IterationDTO, id:number) : Observable<any>{
     return this.http.put<any>(`${ REGISTRY_URL }iteration`, updateIteration)
   }
 
