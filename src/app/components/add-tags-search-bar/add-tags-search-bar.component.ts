@@ -34,10 +34,13 @@ export class AddTagsSearchBarComponent implements OnInit {
   constructor(private TagsService: TagService, private data: ProjectTagManagementService) { }
 
   ngOnInit(): void{
-    this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
-    for (const loopTag of this.data.universalTags) {
+    // this.data.currentTagArray.subscribe(arr => this.currentTags = arr);
+    this.TagsService.getAllTags().subscribe(tags => this.searchTags = tags.map(tag => tag.name));
+
+
+    /*for (const loopTag of this.data.universalTags) {
       this.searchTags.push(loopTag.name);
-    }
+    }*/
     this.getTags();
     this.filteredOptions = this.myControl.valueChanges
       .pipe(startWith(''), map(value => this._filter(value)));
@@ -67,16 +70,18 @@ export class AddTagsSearchBarComponent implements OnInit {
  /* this gets the value of the selected tag, option.value only fires when a valid tag is selected,
  this will get array index of the object we will push for further processing */
  onTagSelected(option: MatOption): void {
-  const tagName = (ele: any) => ele.name === option.value;
+  const tagName: string = option.value;
 
-  const index = this.tags.findIndex(tagName);
+  const selectTag: Tag = this.tags.filter(x => x.name === tagName)[0];
+
+  this.currentTags.push(selectTag);
+  console.log(`Tag: ${selectTag.name} description: ${selectTag.description} and isEnabled: ${selectTag.isEnabled}`);
+
+  /*const index = this.tags.findIndex(tagName);
   if (!this.currentTags.find(tagName)){
       this.currentTags.push(this.tags[index]);
-  }
+  }*/
 
   // this.tagManage.updateTagArray(this.currentTags.concat(this.allSelectedTagsObject));
-
-
  }
-
 }
