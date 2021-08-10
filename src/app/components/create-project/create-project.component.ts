@@ -19,7 +19,7 @@ export class CreateProjectComponent implements OnInit {
  public newProject: Project = new Project(0, '',
     new Status(1, 'IN_ITERATION'), '',
     new User(1, 'william', new Role(1, 'admin')),
-    [new Tag('GIT', 'This project used GIT', true)],
+    [new Tag(-4, 'GIT', 'This project used GIT', true)],
     []);
   public projectName = '';
   public projectDescription = '';
@@ -41,7 +41,7 @@ export class CreateProjectComponent implements OnInit {
     this.newProject.description = this.projectDescription;
     console.log(this.newProject);
     this.projectService.registerProject(this.newProject)
-      .subscribe(project =>{
+      .subscribe(project => {
         if (project.name === this.projectName){
           this.projectService.setCurrentProject(project);
           console.log('It someone problem!');

@@ -21,8 +21,8 @@ export class ProjectService {
 
   public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
     '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag('Revature', 'Made by Revature', true),
-      new Tag('Java', 'server language', true)], []);
+    [new Tag(-1, 'Revature', 'Made by Revature', true),
+      new Tag(-2, 'Java', 'server language', true)], []);
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})

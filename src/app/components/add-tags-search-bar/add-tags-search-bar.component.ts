@@ -48,10 +48,9 @@ export class AddTagsSearchBarComponent implements OnInit {
   // gets all tags from service and calls getTagNames function
   getTags(): void {
     this.TagsService.getAllTags().subscribe(tags => {
-      console.log(tags.length);
-      console.log(tags.filter(t => t.isEnabled))
+
+      // used in the onTagSelect function to add tags to the current project in project-details
       this.tags = tags.filter(t => t.isEnabled);
-      console.log(this.tags.length)
 
       this.getTagNames(this.tags);
     });
@@ -81,6 +80,7 @@ export class AddTagsSearchBarComponent implements OnInit {
    const selectTag: Tag = this.tags.filter(x => x.name === tagName)[0];
 
    // put the selected tag into the project found in project-details component
+   // TODO make sure tag is not already in project
    this.projectDetails.project?.tags.push(selectTag);
 
  }

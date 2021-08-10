@@ -34,7 +34,8 @@ export class TagService {
   // can make it into the function from the remove function from the add-tags-added-tags
    public disableTag(tag: Tag): Observable<Tag> {
     console.log('inside the disableTag function');
-    return this.http.put<Tag>(`${REGISTRY_URL}tag/id/{id}/disable`, tag);
+    console.log(`${REGISTRY_URL}tag/id/${tag.id}/disable`);
+    return this.http.put<Tag>(`${REGISTRY_URL}tag/id/${tag.id}/disable`, {});
   }
 
   private handleError<T>(operation = 'operation', result?: T): any {
