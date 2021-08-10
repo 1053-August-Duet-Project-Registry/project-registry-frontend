@@ -132,7 +132,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
         name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
         start: moment(new Date(batch[i].startDate)).startOf('day'),
         end: moment(new Date(batch[i].endDate)),
-        classes: '',
+        classes: `class${i}`,
       });
       
     }
