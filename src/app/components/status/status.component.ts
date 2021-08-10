@@ -17,7 +17,7 @@ public statuses: Status[] = [];
   ngOnInit(): void {
     // disappears without this console.log? don't remove for now
     console.log(this.getProjectStatus());
-    this.getProjectStatus
+    this.getProjectStatus();
   }
 
   public getProjectStatus() {
