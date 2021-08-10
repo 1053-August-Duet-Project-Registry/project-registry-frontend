@@ -1,13 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { REGISTRY_URL } from 'src/environments/environment';
-//import { Phase } from '../models/phase';
 import { Status } from '../models/status.model';
-import { Project } from '../models/project.model';
-import { Phase } from '../models/phase.models';
+
 
 @Injectable({
   providedIn: 'root'
