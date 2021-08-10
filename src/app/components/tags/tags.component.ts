@@ -52,7 +52,7 @@ export class TagsComponent implements OnInit {
   public errorDetected = false;
 
   // contains the text entered in the description and name input boxes
-  public tag1: Tag = new Tag('', '', true);
+  public tag1: Tag = new Tag(0, '', '', true);
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -86,7 +86,7 @@ export class TagsComponent implements OnInit {
   */
   // remove(tagName: Tag): void {
   //   this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
-    
+
   //   this.data.universalTags = this.data.universalTags.filter(tag => tag.name !== tagName.name);
 
   //   // TODO remove tag from db (use tag.service.ts)
@@ -99,12 +99,12 @@ export class TagsComponent implements OnInit {
 
   // TODO not used...
   selected(event: MatAutocompleteSelectedEvent): void {
-    
+
   }
 
   // takes the information from the create-new-tag-form in the html and makes a new tag
   public registerTag(): void {
-    const newTag = new Tag(this.tag1.name, this.tag1.description, true);
+    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
 
     // if input is empty, return
     if (newTag.name === ''){
@@ -125,14 +125,14 @@ export class TagsComponent implements OnInit {
       // this.project?.tags.push(newTag);
       this.selectedTagArr.push(newTag);
     });
-    
+
     // TODO maybe exit out of "add tag" window in this function?
     setTimeout(() => {
       this.message = '';
       this.tag1.name = '';
       this.tag1.description = '';
       // this.getAllTags();
-      window.location.reload() },
+      window.location.reload(); },
     2000);
   }
 }

@@ -54,7 +54,7 @@
           <!--showing what tags are attached to the current project-->
           <div id="TCP1" class="tags-of-current-project">
             <label for="TCP1">Tags for {{project.name}}</label>
-            <h4 *ngFor="let tag of project.tags">{{tag.name}}</h4>
+            <h4 *ngFor="let tag of project.tags">{{tag.name}}, {{tag.isEnabled}}</h4>
           </div>
 
           <div class="form-group col-md-6">

@@ -1,26 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-// import { Phase } from 'src/app/models/phase';
 import { Project } from 'src/app/models/project.model';
-// import { Role } from 'src/app/models/role.model';
-// import { Status } from 'src/app/models/status.model';
 import { Tag } from 'src/app/models/tag.model';
-// import { User } from 'src/app/models/user.model';
 import { ProjectService } from 'src/app/service/project.service';
-// import { ClientMessage } from './../../models/clientMessage.model';
-// import { Location } from '@angular/common';
 import { TagService } from './../../service/tag.service';
-// import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { ViewChild, AfterViewInit, OnChanges, DoCheck, Input } from '@angular/core';
+import { AddTagsSearchBarComponent } from '../add-tags-search-bar/add-tags-search-bar.component'
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-// import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
-// import { map, startWith } from 'rxjs/operators';
 import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-// import { Output, EventEmitter } from '@angular/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-// import { TagsComponent } from '../tags/tags.component';
 
 @Component({
   selector: 'app-add-tags-added-tags',
@@ -32,7 +21,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   // Constructor for add-tags-added-tags
   constructor(public router: Router, /*public universalTags: TagsComponent,*/ public projectService: ProjectService,
               public tagService: TagService, config: NgbModalConfig, /* private modalService: NgbModal,*/
-              public data: ProjectTagManagementService) {
+              public data: ProjectTagManagementService, /*private SearchBarComponent: AddTagsSearchBarComponent*/) {
     config.backdrop = 'static';
 
     // unknown use
@@ -68,7 +57,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
   ngOnInit(): void {
     this.project = this.projectService.getCurrentProject();
     // gets all tags and adds them to view
-    this.tagService.getAllTags().subscribe(tags => this.selectedTagArr = tags);
+    this.tagService.getAllTags().subscribe(tags => this.selectedTagArr = tags.filter(t => t.isEnabled));
     this.data.updateTagArray(this.selectedTagArr);
   }
 
@@ -76,17 +65,21 @@ export class AddTagsAddedTagsComponent implements OnInit {
 
   }
 
-  // removes tags from view not from persistent storage
-  remove(tagName: Tag): void {
-    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
-    // removes tags from project not from persistent storage
-    if (this.project){
-      this.project.tags = this.project.tags.filter(tag => tag.name !== tagName.name);
-    }
+  // removes tags
+  remove(tagNoMore: Tag): void {
+    this.tagService.disableTag(tagNoMore).subscribe(() => {
+      // changes the display of tags on screen
+      this.data.updateTagArray(this.selectedTagArr);
+      this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagNoMore.name);
+      if (this.project) {
+        this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
+      }
+    });
 
-    // TODO call deleteTag() from Tag.service
-
-    // changes the display of tags on screen
-    this.data.updateTagArray(this.selectedTagArr);
+    /* 
+    * this dependency causes an error in the constructor
+    */
+    // const index: number = this.SearchBarComponent.searchTags.indexOf(tagNoMore.name);
+    // this.SearchBarComponent.searchTags.splice(index, 1);
   }
 }

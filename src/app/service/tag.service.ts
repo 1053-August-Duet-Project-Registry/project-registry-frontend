@@ -30,10 +30,10 @@ export class TagService {
       );
   }
 
-  // TODO finish this
-  // public deleteTag(tag: Tag): Observable<string> {
-    // return this.http.delete
-  // }
+  // can make it into the function from the remove function from the add-tags-added-tags
+   public disableTag(tag: Tag): Observable<Tag> {
+    return this.http.put<Tag>(`${REGISTRY_URL}tag/id/${tag.id}/disable`, {});
+  }
 
   private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
