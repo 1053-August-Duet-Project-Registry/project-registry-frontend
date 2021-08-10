@@ -77,14 +77,15 @@ export class AddTagsAddedTagsComponent implements OnInit {
   }
 
   // removes tags from view not from persistent storage
-  remove(tagName: Tag): void {
-    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagName.name);
-    // removes tags from project not from persistent storage
-    if (this.project){
-      this.project.tags = this.project.tags.filter(tag => tag.name !== tagName.name);
-    }
+  remove(tagNoMore: Tag): void {
+    this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagNoMore.name);
 
-    // TODO call deleteTag() from Tag.service
+    // removes tags from project not from persistent storage
+    if (this.project) {
+      this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
+    }
+    console.log('calling to \'disable\' a tag in the database');
+    this.tagService.disableTag(tagNoMore);
 
     // changes the display of tags on screen
     this.data.updateTagArray(this.selectedTagArr);
