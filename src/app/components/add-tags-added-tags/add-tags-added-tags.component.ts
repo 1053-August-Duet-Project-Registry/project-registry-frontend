@@ -85,10 +85,10 @@ export class AddTagsAddedTagsComponent implements OnInit {
       this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
     }
     console.log('calling to \'disable\' a tag in the database');
-    this.tagService.disableTag(tagNoMore);
-
-    // changes the display of tags on screen
-    this.data.updateTagArray(this.selectedTagArr);
+    this.tagService.disableTag(tagNoMore).subscribe(() => {
+      // changes the display of tags on screen
+      this.data.updateTagArray(this.selectedTagArr);
+    });
 
     // const index: number = this.SearchBarComponent.searchTags.indexOf(tagNoMore.name);
     // this.SearchBarComponent.searchTags.splice(index, 1);
