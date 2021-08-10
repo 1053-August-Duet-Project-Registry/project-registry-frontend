@@ -1,6 +1,10 @@
 <p>test-services works!</p>
-
+<input type="number" [(ngModel)]="id" >
+<h3>Iteration Services</h3>
 <div class="row">
-    <p>Iteration Services</p>
-    <button class="btn" (click) = "">  </button>
+    <button class="btn btn-primary m-2" (click) = "getIteration($event)"> get all </button>
+    <button class="btn btn-primary m-2" (click) = "getIterationById($event)"> get by id </button>
+    <!-- <button class="btn btn-primary" (click) = ""> create </button>
+    <button class="btn btn-primary" (click) = ""> update </button>
+    <button class="btn btn-primary" (click) = ""> delete </button> -->
 </div>

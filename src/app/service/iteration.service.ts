@@ -28,7 +28,7 @@ export class IterationService {
   }
 
   getIterationById(id:number): Observable<Iteration> {
-    return this.http.get<Iteration>(`${ REGISTRY_URL }iteration/${id}`);
+    return this.http.get<Iteration>(`${ REGISTRY_URL }iteration/id/${id}`);
   }
 
   createIteration(newInteration:IterationDTO) : Observable<any> {
@@ -40,7 +40,7 @@ export class IterationService {
   }
 
   deleteIteration(id:number): Observable<any>{
-    return this.http.delete<any>(`${ REGISTRY_URL }iteration/${id}`)
+    return this.http.delete<any>(`${ REGISTRY_URL }iteration/id/${id}`)
   } 
 
 

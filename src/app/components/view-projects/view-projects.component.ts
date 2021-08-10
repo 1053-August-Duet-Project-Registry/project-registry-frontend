@@ -152,7 +152,7 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   getBatches() {
-    this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
+    // this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
   }
 
   getIteration() {

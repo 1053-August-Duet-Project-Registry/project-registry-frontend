@@ -29,8 +29,9 @@ export class TagService {
   }
   
   createTag( newTag:TagDTO ){
-    return this.http.get
+    return this.http.post<any>(`${REGISTRY_URL}tag`,newTag);
   }
+  
 
 
 

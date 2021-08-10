@@ -91,51 +91,51 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       this.route.navigate(['/homepage-login']);
     }
 
-    let batch: BatchTemplate[] = await this.iter
-      .getBatchServiceMock()
-      .pipe(
-        map((batch) =>
-          [...batch]
-            .sort(
-              (a, b) =>
-                new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
-            )
-            .filter(
-              (batch) =>
-                new Date(batch['endDate']).getTime() -
-                  this.timelineLowerBound.toDate().getTime() >
-                0
-            )
-        )
-      )
-      .toPromise();
+    // let batch: BatchTemplate[] = await this.iter
+    //   .getBatchServiceMock()
+    //   .pipe(
+    //     map((batch) =>
+    //       [...batch]
+    //         .sort(
+    //           (a, b) =>
+    //             new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+    //         )
+    //         .filter(
+    //           (batch) =>
+    //             new Date(batch['endDate']).getTime() -
+    //               this.timelineLowerBound.toDate().getTime() >
+    //             0
+    //         )
+    //     )
+    //   )
+    //   .toPromise();
 
-    this.timelineUpperBound = moment(batch[batch.length - 1].endDate).add(
-      1,
-      'day'
-    );
+    // this.timelineUpperBound = moment(batch[batch.length - 1].endDate).add(
+    //   1,
+    //   'day'
+    // );
     /**
      * Iterate over the batch data and populate the Timeline table by putting
      * together batch details into format the Library(ngx-time-scheduler) likes.
      */
-    for (let i = 0; i < batch.length; i++) {
-      this.sections.push({
-        id: i + 1,
-        name:
-        this.datePipe.transform(batch[i].startDate, 'mediumDate') +
-        ' - ' +
-        this.datePipe.transform(batch[i].endDate, 'mediumDate'),
-      });
-      this.items.push({
-        id: i + 1,
-        sectionID: i + 1,
-        name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
-        start: moment(new Date(batch[i].startDate)).startOf('day'),
-        end: moment(new Date(batch[i].endDate)),
-        classes: '',
-      });
+    // for (let i = 0; i < batch.length; i++) {
+    //   this.sections.push({
+    //     id: i + 1,
+    //     name:
+    //     this.datePipe.transform(batch[i].startDate, 'mediumDate') +
+    //     ' - ' +
+    //     this.datePipe.transform(batch[i].endDate, 'mediumDate'),
+    //   });
+    //   this.items.push({
+    //     id: i + 1,
+    //     sectionID: i + 1,
+    //     name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
+    //     start: moment(new Date(batch[i].startDate)).startOf('day'),
+    //     end: moment(new Date(batch[i].endDate)),
+    //     classes: '',
+    //   });
       
-    }
+    // }
 
     /**
      * Creating a div to hold information from clicking items in chart and appending it to Batch Information div, also added events to HTML

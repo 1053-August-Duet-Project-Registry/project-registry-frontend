@@ -48,7 +48,7 @@ selectBatch(){
   // make a call to the API to retrieve all batches
   httpGet(){
     // this.http.get(environment.gameDealApi+ "?id=" + i)
-      this.sub = this.iterationService.getBatchServiceMock().subscribe(batches => this.theBatches = batches);
+      // this.sub = this.iterationService.getBatchServiceMock().subscribe(batches => this.theBatches = batches);
     /*let a;
       forkJoin([this.iterationService.getBatchServiceMock(), this.iterationService.getBatchService()]).subscribe(data => {
         //this.theBatches = data as batchTemplate[] // cast t

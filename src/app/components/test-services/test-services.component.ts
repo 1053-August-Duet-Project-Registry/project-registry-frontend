@@ -27,12 +27,13 @@ export class TestServicesComponent implements OnInit {
   ngOnInit(): void {
     
   }
-
-  getIterationById(){
-
+  id?:number
+  getIterationById(e:any){
+    console.log(this.id);
   }
-  getIteration(){
-
+  getIteration(e:any){
+    console.log(e);
+    this.iServ.getIteration().subscribe( i => console.log(i) )
   }
 
 

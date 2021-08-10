@@ -97,11 +97,11 @@ export class ProjectDetailComponent implements OnInit {
 
     this.data.currentTagArray.subscribe(arr => this.arr = arr);
 
-    this.phaseService.getPhases();
-    this.project = this.projectService.getCurrentProject();
-    if (this.project.id === 0){
-      this.route.navigate(['']);
-    }
+    // this.phaseService.getPhases();
+    // this.project = this.projectService.getCurrentProject();
+    // if (this.project.id === 0){
+    //   this.route.navigate(['']);
+    // }
   }
 
   // Update Project in the backend

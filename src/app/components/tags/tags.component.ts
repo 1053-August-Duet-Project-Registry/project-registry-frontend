@@ -171,8 +171,8 @@ public registerTagFromService(): void {
     }
   }
 
-  this.tagService.registerTag(this.tag1).subscribe(data => this.message,
-          error => this.message = 'INVALID FIELD');
+  // this.tagService.registerTag(this.tag1).subscribe(data => this.message,
+  //         error => this.message = 'INVALID FIELD');
   this.message = 'Tag is successfully created';
          // this.router.navigate(['tag']);
 
