@@ -75,7 +75,7 @@ export class ProjectDetailComponent implements OnInit {
   sendBatch ?: BatchTemplate;
   iteration?: Iteration ;
   tempIteration?: Iteration ;
-  
+
   public desiredId = 1;
   public project?: Project;
   public projects?: Project[] = [];
@@ -105,43 +105,39 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   // Update Project in the backend
-   public submit(): void{
-  //   if (!this.project){ return; }
+  public submit(): void{
+    if (!this.project){ return; }
 
-  //   if (this.sendBatch){
-  //     this.iteration = new Iteration(this.sendBatch.batchId,
-  //       this.project,
-  //       this.sendBatch.id,
-  //       this.sendBatch.startDate,
-  //       this.sendBatch.endDate);
-  //   }
-    
+    if (this.sendBatch){
+      this.iteration = new Iteration(this.sendBatch.batchId,
+        this.project,
+        this.sendBatch.id,
+        this.sendBatch.startDate,
+        this.sendBatch.endDate, null);
+    }
 
-  //   // Setting the status id
-  //   this.project.status.id = this.statusMap[this.project.status.name];
+    // Setting the status id
+    this.project.status.id = this.statusMap[this.project.status.name];
 
-  //   if(this.project != undefined){
-  //     let phaseFound = this.phaseService.phases.find(p=>{
-  //       if(this.project){
-  //         // TODO test and fix this line that was changed during model updates.
-  //         // return p.kind==this.project.phase.kind
-  //       }
-  //       else {
-  //         return false;
-  //       }
-  //     });
+    if(this.project != undefined){
+      // let phaseFound = this.phaseService.phases.find(p=>{
+      //   if(this.project){
+      //     // return p.kind==this.project.phase.kind
+      //   }
+      //   else {
+      //     return false
+      //   }
+      // });
+      // if(phaseFound!=undefined)
+      //   this.project.phase = phaseFound;
+    }
+    this.project.tags = this.arr;
 
-  //     // TODO test and fix this line that was changed during model updates.
-  //     // if(phaseFound!=undefined)
-  //     //   this.project.phase = phaseFound;
-  //   }
-  //   this.project.tags = this.arr;
-
-  //   this.projectService.updateProject(this.project).subscribe((data) => {
-  //     this.project = data;
-  //     this.route.navigate(['viewProject']);
-  //   });
-   }
+    this.projectService.updateProject(this.project).subscribe((data) => {
+      this.project = data;
+      this.route.navigate(['viewProject']);
+    });
+  }
 
   goBack(): void {
     this.location.back();
