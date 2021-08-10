@@ -30,7 +30,6 @@ export class TagService {
       );
   }
 
-  // TODO finish this
   // can make it into the function from the remove function from the add-tags-added-tags
    public disableTag(tag: Tag): Observable<Tag> {
     return this.http.put<Tag>(`${REGISTRY_URL}tag/id/${tag.id}/disable`, {});

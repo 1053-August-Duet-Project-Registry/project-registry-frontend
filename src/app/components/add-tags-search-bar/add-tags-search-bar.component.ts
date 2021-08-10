@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Tag } from '../../models/tag.model';
 import { TagService } from 'src/app/service/tag.service';
-import { Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { MatOption } from '@angular/material/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-import { element } from 'protractor';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 
 // import 'rxjs/add/operator/debounceTime'
@@ -83,6 +81,7 @@ export class AddTagsSearchBarComponent implements OnInit {
    // put the selected tag into the project found in project-details component
    // TODO make sure tag is not already in project
    this.projectDetails.project?.tags.push(selectTag);
-
+   
+   // TODO from here you need to update the database with the new tag. Probably the best way to do it is call updateProject() in project-tag-management.service
  }
 }
