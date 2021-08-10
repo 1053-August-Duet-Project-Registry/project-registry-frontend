@@ -28,6 +28,10 @@ export class TestServicesComponent implements OnInit {
     
   }
   id?:number
+
+
+
+  //////////// Connecting IterationServices
   getIterationById(e:any){
     console.log(this.id);
   }
@@ -35,6 +39,45 @@ export class TestServicesComponent implements OnInit {
     console.log(e);
     this.iServ.getIteration().subscribe( i => console.log(i) )
   }
+  
+  createIteration (e:any){
+    console.log("create")
+  }
+  updateIteration (e:any){
+    console.log("update")
+  }
+  deleteIteration (e:any){
+    console.log("delete")
+  }
 
 
+  //////////// Connecting PhaseServices
+
+  getAllPhases(e:any){
+    this.PhaseServ.getAllPhases().subscribe(p => console.log(p) );
+  }
+
+  getPhaseById(e:any){
+    console.log(this.id);
+    this.id? this.PhaseServ.getPhaseById(this.id).subscribe(p => console.log(p) ) : console.log("non id provided");
+  }
+
+  /////////// Connecting TagServices
+
+  getAllTags(e:any){
+    this.TServ.getAllTags().subscribe(p => console.log(p) );
+  }
+
+  getTagById(e:any){
+    console.log(this.id);
+    this.id? this.TServ.getTagById(this.id).subscribe(p => console.log(p) ) : console.log("non id provided");
+  }
+
+  createTag (e:any){
+    console.log("create")
+  }
+
+  /////////// Connecting View Project Services
+
+  
 }
