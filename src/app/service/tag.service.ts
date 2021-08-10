@@ -35,8 +35,6 @@ export class TagService {
     // return this.http.delete
   // }
 
-  // TODO addTagToProject(){}
-
   private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
       // TODO: send the error to a remote logging infrastructure

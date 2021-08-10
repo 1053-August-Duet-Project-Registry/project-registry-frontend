@@ -52,7 +52,7 @@ export class TagsComponent implements OnInit {
   public errorDetected = false;
 
   // contains the text entered in the description and name input boxes
-  public tag1: Tag = new Tag(0, '', '', true);
+  public tag1: Tag = new Tag('', '', true);
   ngOnInit(): void {
     this.getAllTags();
     this.project = this.projectService.getCurrentProject();
@@ -63,9 +63,10 @@ export class TagsComponent implements OnInit {
   }
 
   getAllTags(): void {
-    this.tagService.getAllTags().forEach(tags => this.tags = tags);
-    this.data.universalTags = this.tags;
-    console.log(this.tags);
+    this.tagService.getAllTags().subscribe(tags => {
+      this.tags = tags;
+      this.data.universalTags = tags;
+    });
   }
 
   // private _filter(value: any): Tag[] {
@@ -103,33 +104,35 @@ export class TagsComponent implements OnInit {
 
   // takes the information from the create-new-tag-form in the html and makes a new tag
   public registerTag(): void {
-    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
+    const newTag = new Tag(this.tag1.name, this.tag1.description, true);
 
     // if input is empty, return
     if (newTag.name === ''){
       this.message = 'Tag must have a name';
       return;
     }
-    // if tag already exists, return
+    // if tag name already exists, return
     if (this.tags.map(tag => tag.name).includes(newTag.name)) {
       this.message = `The ${newTag.name} tag already exists`;
       return;
     }
 
-
-    this.tags.push(newTag);
-    // TODO add a check if this post request is successful; if it is, change this.message
-    this.tagService.registerTag(newTag);
+    this.tagService.registerTag(newTag).subscribe(_ => {
+      // lets the user know the tag was created successfully
+      this.message = `The ${newTag.name} tag was created`;
+      this.tags.push(newTag);
+      this.data.universalTags.push(newTag);
+      // this.project?.tags.push(newTag);
+      this.selectedTagArr.push(newTag);
+    });
     
-    // lets the user know the tag was created successfully
-    this.message = `The ${newTag.name} tag was created`;
-
     // TODO maybe exit out of "add tag" window in this function?
     setTimeout(() => {
       this.message = '';
       this.tag1.name = '';
       this.tag1.description = '';
-      this.getAllTags(); },
-    1000);
+      // this.getAllTags();
+      window.location.reload() },
+    2000);
   }
 }

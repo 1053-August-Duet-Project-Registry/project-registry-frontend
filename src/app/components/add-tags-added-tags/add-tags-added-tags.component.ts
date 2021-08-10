@@ -66,17 +66,10 @@ export class AddTagsAddedTagsComponent implements OnInit {
   matAutocomplete!: MatAutocomplete;
 
   ngOnInit(): void {
-    // this.data.currentTagArray.subscribe(selectedTagArr => this.selectedTagArr = selectedTagArr);
     this.project = this.projectService.getCurrentProject();
     // gets all tags and adds them to view
-    this.tagService.getAllTags().forEach(tags => this.selectedTagArr = tags);
-
-    // this.selectedTagArr.forEach(e => {
-    //   this.selectedTagNames.push(e.name);
-    // });
-
+    this.tagService.getAllTags().subscribe(tags => this.selectedTagArr = tags);
     this.data.updateTagArray(this.selectedTagArr);
-
   }
 
   ngOnChange(): void {

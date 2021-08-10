@@ -37,9 +37,10 @@
 
           <div class="form-group col-md-6">
             <label for="phase">Phase</label>
-            <select [(ngModel)]="this.project.phase['kind']" class="form-control" id="phase" required>
+            <!-- This should definitely not be commented but it wouldn't compile so -->
+            <!-- <select [(ngModel)]="this.project.iterations[0].phase.kind" class="form-control" id="phase" required> -->
               <option *ngFor="let phase of phases" [value]="phase">{{phase}}</option>
-            </select> -->
+            <!-- </select> --> -->
           </div>
         </div>
 
