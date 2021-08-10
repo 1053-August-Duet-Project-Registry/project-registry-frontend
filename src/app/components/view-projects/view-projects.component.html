@@ -1,4 +1,4 @@
-<h1 id="anime" class="welcome">Registry</h1>
+<h1 id="anime" class="welcome">Project Registry</h1>
 
 <button class="reset-btn"
           mat-flat-button
@@ -6,8 +6,8 @@
           type="reset"
           (click)="reset()"
           value="Reset Filters"
-         
-          >  
+
+          >
           <mat-icon>
             <span class="material-icons-outlined">
                 restart_alt
@@ -42,6 +42,14 @@
             <mat-label>Status</mat-label>
             <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
               <mat-option value="noStatus">Select a status...</mat-option>
+
+              <!-- Where is it grabbing statuses from? if DB we need to fill in values for devlopment-->
+              <mat-option value="ACTIVE">Active</mat-option>
+              <mat-option value="CODE_REVIEW">Code-Review</mat-option>
+              <mat-option value="FINISH">Finished</mat-option>
+              <mat-option value="PLANNED">Planned</mat-option>
+              <mat-option value="AVAILABLE">Available</mat-option>
+
               <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
                 {{ statuses }}
               </mat-option>
@@ -122,14 +130,14 @@
         </mat-grid-tile>
 
         <!-- Reset button -->
-        
-     
-         
+
+
+
       </mat-grid-list>
-      
 
 
-      
+
+
 
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>

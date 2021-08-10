@@ -9,7 +9,7 @@ describe('ProjectService', () => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(ProjectService);
   });
-  
+
   xit('should be created', () => {
 
     expect(service).toBeTruthy();

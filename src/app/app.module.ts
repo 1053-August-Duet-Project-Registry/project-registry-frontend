@@ -1,4 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
+import { NgxTimeSchedulerModule } from 'ngx-time-scheduler';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -59,6 +60,7 @@ import { TestServicesComponent } from './components/test-services/test-services.
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    NgxTimeSchedulerModule,
     FormsModule,
     ReactiveFormsModule,
     MatToolbarModule,

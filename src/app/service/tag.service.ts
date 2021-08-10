@@ -1,6 +1,7 @@
 import { ClientMessage } from './../models/clientMessage.model';
 import { catchError, tap } from 'rxjs/operators';
 import { Tag } from './../models/tag.model';
+import { TagDTO } from './../models/DTO/tag-dto.model'
 
 import { Observable, of } from 'rxjs';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -24,26 +25,32 @@ export class TagService {
   }
   
   getTagById(id:number): Observable<Tag>{
-    return this.http.get<Tag>(`${ REGISTRY_URL }tag/${id}`);
+    return this.http.get<Tag>(`${ REGISTRY_URL }tag/id/${id}`);
   }
   
-  public registerTag(newTag:Tag):Observable<String> {
-    return this.http.post<Tag>(`${REGISTRY_URL}tag`,newTag)
-      .pipe(
-        tap(_ => console.log('posting tag..')),
-        catchError(this.handleError<any>('registerTag'))
-        );
+  createTag( newTag:TagDTO ){
+    return this.http.get
   }
+
+
+
+  // public registerTag(newTag:Tag):Observable<String> {
+  //   return this.http.post<Tag>(`${REGISTRY_URL}tag`,newTag)
+  //     .pipe(
+  //       tap(_ => console.log('posting tag..')),
+  //       catchError(this.handleError<any>('registerTag'))
+  //       );
+  // }
   
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      // TODO: send the error to a remote logging infrastructure
-      // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);
-      console.error(error) // we'll just log it to the console
-      // TODO: better job transforming error for user consumption
-      console.log(`${operation} failed: ${error.message}`);
-      // we want to ensure that the app keeps running by returning an empty result
-      return of(result as T);
-    }
-  }
+  // private handleError<T>(operation = 'operation', result?: T) {
+  //   return (error: any): Observable<T> => {
+  //     // TODO: send the error to a remote logging infrastructure
+  //     // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);
+  //     console.error(error) // we'll just log it to the console
+  //     // TODO: better job transforming error for user consumption
+  //     console.log(`${operation} failed: ${error.message}`);
+  //     // we want to ensure that the app keeps running by returning an empty result
+  //     return of(result as T);
+  //   }
+  // }
 }

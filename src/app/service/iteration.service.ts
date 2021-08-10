@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { batchTemplate } from 'src/app/models/batch.model';
+import { BatchTemplate } from 'src/app/models/batch.model';
 import { REGISTRY_URL } from 'src/environments/environment';
 import { Iteration } from '../models/iteration.model';
 import { IterationDTO } from '../models/DTO/iteration-dto.model';
@@ -13,18 +13,18 @@ export class IterationService {
 
   httpOptions = {
     headers: new HttpHeaders({
-      "Content-Type": 'application/json',
-      "Access-Control-Allow-Origin" : "http://localhost:4200/",
-      "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin' : 'http://localhost:4200/',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
         })
-  }
+  };
 
   //url for the API containing batches
   // apiUrl = "https://caliber2-mock.revaturelabs.com/mock/training/batch";
 
   constructor(private http: HttpClient) { }
   getIteration(): Observable<Iteration[]>{
-    return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`)
+    return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`);
   }
 
   getIterationById(id:number): Observable<Iteration> {
