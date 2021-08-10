@@ -12,28 +12,27 @@ import { Phase } from '../models/phase.models';
 @Injectable({
   providedIn: 'root'
 })
-export class StatusService implements OnInit {
+export class StatusService {
 
   constructor(private http: HttpClient) { }
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin' : 'http://localhost:4200/',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT' })
   };
 
-
   public status: Status[] = [];
-  ngOnInit(): void {
-    this.getStatus();
-  }
 
-  public getStatus() {
+  public getStatus(): Observable<Status[]> {
     return this.http.get<Status[]>(`${REGISTRY_URL}status`, this.httpOptions)
       .pipe(  
         catchError(this.handleError<Status[]>('getStatus', []))
-      ).subscribe(data => {
-        this.status = data;
-        console.log(this.status);
-      });
+      );
+  }
+
+  getAllStatus(): Observable<Status[]> {
+    return this.http.get<Status[]>(`${REGISTRY_URL}status`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
