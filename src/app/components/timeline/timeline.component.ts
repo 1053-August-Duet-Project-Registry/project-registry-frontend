@@ -13,7 +13,6 @@ import { Item, Period, Section, Events, NgxTimeSchedulerService } from 'ngx-time
 import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { LoginServiceService } from 'src/app/service/login-service.service';
-import { mockData } from './timelineMockData';
 import { IterationService } from 'src/app/service/iteration.service';
 
 @Component({
@@ -28,14 +27,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   items: Item[] = [];
   numOfDays = 0;
 
-  /**
-   * I use 2020-03-01 here because it is the earliest start date from the
-   * mocking api https://caliber2-mock.revaturelabs.com/mock/training/batch
-   * should be using following in production:
-   */
-  // timelineLowerBound = moment().subtract(7, 'days');
-  timelineLowerBound = moment('2020-03-01');
-
+  timelineLowerBound = moment().subtract(7, 'days').startOf('day');
   timelineUpperBound = moment();
   topLeftHeaderName = 'Batch';
   @ViewChildren('ngxTs', { read: ElementRef }) ngxTs!: QueryList<ElementRef>;
@@ -91,8 +83,8 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       this.route.navigate(['/homepage-login']);
     }
 
-    let batch: BatchTemplate[] = await this.iter
-      .getBatchServiceMock()
+    const batch: BatchTemplate[] = await this.iter
+      .getBatchService()
       .pipe(
         map((batch) =>
           [...batch]
@@ -130,26 +122,34 @@ export class TimelineComponent implements OnInit, AfterViewInit {
         id: i + 1,
         sectionID: i + 1,
         name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
-        start: moment(new Date(batch[i].startDate)).startOf('day'),
-        end: moment(new Date(batch[i].endDate)),
-        classes: '',
+        // Please be aware of the timezone differences. All dates in yyyy-MM-dd
+        // coming from the server are assumed to be `UTC`
+        start: moment.utc(batch[i].startDate),
+        end: moment.utc(batch[i].endDate),
+        classes: `class${i}`,
       });
-      
+
     }
 
     /**
      * Creating a div to hold information from clicking items in chart and appending it to Batch Information div, also added events to HTML
      */
-    let myDiv = document.createElement('div');
-    let parentDiv = document.querySelector('.displayInfo');
+    const myDiv = document.createElement('div');
+    const parentDiv = document.querySelector('.displayInfo');
     this.events.ItemClicked = (items) => {
-      myDiv.innerHTML = items.classes + " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
-      " <br />StartDate: " + items.start.toDate() + " <br />EndDate: " + items.end.toDate();
+      myDiv.innerHTML =
+        items.classes +
+        ' <br />SectionId: ' +
+        items.sectionID +
+        ' <br />Name: ' +
+        items.name +
+        ' <br />StartDate: ' +
+        items.start.toDate().toUTCString() +
+        ' <br />EndDate: ' +
+        items.end.toDate().toUTCString();
       parentDiv?.appendChild(myDiv);
-      console.log(myDiv);
-      };
-    
-    
+    };
+
     /**
      * Find out how 'wide' the table should be by 'diffing' the upper and lower
      * limit.

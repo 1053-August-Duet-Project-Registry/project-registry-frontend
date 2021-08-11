@@ -24,17 +24,25 @@ export class PhaseService implements OnInit {
     this.getPhases();
   }
 
-  public getPhases() {
+  public getPhases(): any {
     return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
       .pipe(
         catchError(this.handleError<Phase[]>('getPhase', []))
       ).subscribe(data => {
         this.phases = data;
-        console.log(this.phases);
       });
   }
 
+  public getAllPhases() {
+    return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
+    .pipe(
+      catchError(this.handleError<Phase[]>('getPhase', []))
+    )
+
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
+
     return (error: any): Observable<T> => {
 
       // TODO: send the error to a remote logging infrastructure

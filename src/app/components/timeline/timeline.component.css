@@ -13,12 +13,13 @@ h1 {
 
 /* Each timeline */
 ::ng-deep .time-sch-wrapper .time-sch-item {
-  background-color: rgb(231, 76, 60) !important;
+  /* background-color: rgb(231, 76, 60) !important; */
   height: 40px;
   line-height: 40px;
 }
 ::ng-deep .time-sch-wrapper .time-sch-item .time-sch-item-content {
   padding: 0 0 0 16px;
+  /* background-color:blue; */
 }
 
 /* Month styling */
@@ -45,4 +46,40 @@ h1 {
 ::ng-deep .time-sch-wrapper {
   color: #404244;
   background-color: rgb(249, 250, 251);
+}
+
+::ng-deep .time-sch-wrapper .class0 {
+  
+  background-color:#F26925 !important;
+
+}
+
+::ng-deep .time-sch-wrapper .class1 {
+
+  background-color:#72A4C2 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class2 {
+
+  background-color: #FCB414 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class3 {
+
+  background-color: #F26925 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class4 {
+
+  background-color:#72A4C2  !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class5 {
+
+  background-color:#FCB414 !important;
+  
 }
