@@ -15,7 +15,7 @@ import { NgbModalConfig, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { Project } from 'src/app/models/project.model';
 import { ProjectTagManagementService } from '../../service/project-tag-management.service';
-
+import { TagDTO } from 'src/app/models/DTO/tag-dto.model';
 
 @Component({
   selector: 'app-tags',
@@ -104,7 +104,7 @@ export class TagsComponent implements OnInit {
 
   // takes the information from the create-new-tag-form in the html and makes a new tag
   public registerTag(): void {
-    const newTag = new Tag(0, this.tag1.name, this.tag1.description, true);
+    const newTag = new TagDTO(this.tag1.name, this.tag1.description, true);
 
     // if input is empty, return
     if (newTag.name === ''){
@@ -117,13 +117,13 @@ export class TagsComponent implements OnInit {
       return;
     }
 
-    this.tagService.registerTag(newTag).subscribe(_ => {
+    this.tagService.createTag(newTag).subscribe(t => {
       // lets the user know the tag was created successfully
       this.message = `The ${newTag.name} tag was created`;
-      this.tags.push(newTag);
-      this.data.universalTags.push(newTag);
+      this.tags.push(t);
+      this.data.universalTags.push(t);
       // this.project?.tags.push(newTag);
-      this.selectedTagArr.push(newTag);
+      this.selectedTagArr.push(t);
     });
 
     // TODO maybe exit out of "add tag" window in this function?

@@ -28,8 +28,9 @@ export class TagService {
     return this.http.get<Tag>(`${ REGISTRY_URL }tag/id/${id}`);
   }
   
-  createTag( newTag:TagDTO ){
-    return this.http.post<any>(`${REGISTRY_URL}tag`,newTag).pipe(
+  createTag( newTag:TagDTO ): Observable<Tag>{
+    return this.http.post<any>(`${REGISTRY_URL}tag`,newTag)
+    .pipe(
       tap(_ => console.log('posting tag..')),
       catchError(this.handleError<any>('registerTag'))
       );

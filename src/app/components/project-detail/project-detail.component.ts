@@ -93,7 +93,7 @@ export class ProjectDetailComponent implements OnInit {
 
     this.data.currentTagArray.subscribe(arr => this.arr = arr);
 
-    this.phaseService.getPhases();
+    this.phaseService.getAllPhases();
     this.project = this.projectService.getCurrentProject();
     if (this.project.id === 0){
       this.route.navigate(['']);

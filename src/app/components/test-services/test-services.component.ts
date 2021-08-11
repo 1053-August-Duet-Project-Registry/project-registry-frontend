@@ -38,7 +38,7 @@ export class TestServicesComponent implements OnInit {
   }
   getIterations(e:any){
     console.log(e);
-    this.iServ.getIterations().subscribe( i => console.log(i) )
+    this.iServ.getAllIterations().subscribe( i => console.log(i) )
   }
   
   createIteration (e:any){

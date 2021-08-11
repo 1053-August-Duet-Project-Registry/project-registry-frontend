@@ -24,17 +24,18 @@ export class PhaseService implements OnInit {
     // this.getAllPhases();
   }
 
-  getAllPhases(){
+  getAllPhases():Observable<Phase[]>{
     return this.http.get<Phase[]>(`${ REGISTRY_URL }phase`)
-    .pipe(
-      catchError(this.handleError<Phase[]>('getPhase', []))
-    ).subscribe(data => {
-      this.phases = data;
-      console.log(this.phases);
-    });
+    // .pipe(
+    //   catchError(this.handleError<Phase[]>('getPhase', []))
+    // ).subscribe(data => {
+    //   this.phases = data;
+    //   console.log(this.phases);
+    // })
+    ;
   }
 
-  getPhaseById(id:number){
+  getPhaseById(id:number): Observable<Phase>{
     return this.http.get<Phase>(`${ REGISTRY_URL }phase/id/${id}`);
   }
 
