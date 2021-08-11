@@ -1,4 +1,6 @@
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ConditionalExpr } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
@@ -45,28 +47,122 @@ export class ViewProjectsComponent implements OnInit {
     });
   }
 
+  //// filter list for the view project
+  public owners: string[] = [];
   public projects: Project[] = [];
+  ////////////////// 
+
+  
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
+  
+  
+  
+  
+  public filteredOwners: Project[] = [];
   public statuses: Status[] = [] //added statuses to pull all statuses from backend
   public filteredTags: Project[] = [];
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
   public phase: Phase[] = [];
-  // public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
-  public dataSource: MatTableDataSource<Project> = new MatTableDataSource();
 
-
+  public dataSource: MatTableDataSource<Project> = new MatTableDataSource; // source of data for the material based component: table
+  public hardcodeStatuses: string[] = [];
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
-
-  // use this to apply initial status, and possibly add filtering based off initial
+  public ownerSelected: string | undefined | null;
+  
   public statusSelected = 'noStatus';
 
+  ngOnInit(): void {
 
 
-  // based on project.model.ts
+    // Check if user is logged in, otherwise redirect.
+    if (! this.loginService.checkSessionLogin()) {
+      this.route.navigate(['/homepage-login']);
+    }
+    this.getProjects();
+    this.getProjectTags();
+    this.getProjectOwners();
+    this.getAllStatuses();
+    this.getPhases();
+    this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
+  
+  }
+
+  //// initiate variable
+
+  // return all projects from db
+
+  public getProjects(): void {
+    console.log('getProjects method: ');
+    this.viewProjectService.getAllProjects().subscribe((report: any) => {
+
+      this.projects = report;
+
+      this.dataSource.data = this.projects;
+    });
+  }
+
+
+  // return all tags from db
+  getProjectTags(): void {
+    this.tagService.getAllTags().subscribe((data: Tag[]) => {
+      this.tag = data;
+      console.log(this.tag);
+    })
+  }
+
+
+  getProjectOwners(): void 
+  {
+    this.viewProjectService.GetAllProjects().subscribe( (data : any ) => {
+      data.forEach((element: any) => {
+        if(!this.owners.includes(element.owner.username))
+            this.owners.push(element.owner.username);
+      });
+    }) 
+  }
+  // grabs all of the statuses
+  getAllStatuses(): void {
+    this.viewProjectService.getAllStatuses()
+      .subscribe((data: any) => {
+        for (const d of data) {
+          this.status.push(d.name);
+        }
+      });
+
+      console.log(this.status);
+
+  }
+  // get all phases from backend
+  getPhases(): void {
+    this.phaseService.getAllPhases().subscribe((data: Phase[]) => {
+      this.phase = data;
+      console.log(this.phase)
+    })
+  }
+
+ //////////////////////////////////////////////////////////////
+
+  ///////// 2nd level of filtering
+
+  /// get status that currently exist on the table NOT from the database. This may be helpful for 2nd level filter 
+  getProjectStatus(): void {
+    this.dataSource.data.forEach((project: Project) => {
+      if (!this.status.includes(project.status.name)) {
+        this.status.push(project.status.name);
+      }
+    });
+  }
+
+  ////////////////////////////////////
+
+
+
+  //////////////// Table configuation unused functions
+  
   displayedColumns: string[] = [
     'id',
     'name',
@@ -90,8 +186,8 @@ export class ViewProjectsComponent implements OnInit {
   filteredByIteration?: Project[];
   iterationSuccess?: string;
   iterationError?: string;
-
-  changeBatch(value: BatchTemplate): void {
+  
+   changeBatch(value: BatchTemplate): void {
     this.sendBatch = value as BatchTemplate;
   }
 
@@ -173,44 +269,6 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  filterIteration(event: MatSelectChange): void {
-    if (this.allIterations && this.allIterations.length > 0) {
-      const filtered: Project[] = [];
-
-      for (const iteration of this.allIterations) {
-        if (iteration.batchId === event.value) {
-          filtered.push(iteration.project as Project);
-        }
-      }
-      this.dataSource = new MatTableDataSource(filtered);
-    }
-  }
-
-
-  ngOnInit(): void {
-
-
-    // Check if user is logged in, otherwise redirect.
-    if (! this.loginService.checkSessionLogin()) {
-      this.route.navigate(['/homepage-login']);
-    }
-
-    this.getProjectsInit();
-    this.getAllProjectStatuses();
-    this.getTags();
-    this.getPhases();
-    /*
-    * commented out other functions since they eventually call on filterResults which breaks table
-    */
-    
-    // mattabledataasource determines what goes in table on page/ functions put project data into datasource
-    this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
-
-    // console.log("ngOnInit projects: " + this.projects);
-    // perhaps a different method?
-
-  }
-
   /*ngAfterViewInit() {
     // this.getProjects();
     // this.getProjectTags();
@@ -223,10 +281,10 @@ export class ViewProjectsComponent implements OnInit {
 
   ngOnChanges(): void {
     this.filterProjectsByStatus();
-
   }
-  // Filter the columns
-  applyFilter(event: Event): void {
+
+   // Filter the columns
+   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -235,108 +293,51 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
+   ///////////////////////////////////////
 
-  // returns all the projects in DB
-  public getProjectsInit(): void {
-    /*
-    * This code is to get the projects from localhost:8085
-    */
-    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-      // this.projects = report as Project[];
-      //changed this to make sure if any functions use report data it would get the project mock data
-      report as Project[];
-      this.projects = report;
-      console.log(this.projects);
 
-      // removed .filter as it causes projects to not appear
-      this.dataSource.data = this.projects;
-    });
-  }
+  filterIteration(event: MatSelectChange): void {
+    if (this.allIterations && this.allIterations.length > 0) {
+      const filtered: Project[] = [];
 
-  public getProjects(): void {
-    console.log('getProjects method: ');
-    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-
-      this.projects = report as Project[];
-
-      this.dataSource.data = this.projects;
-    });
-  }
-
-  // return all tags from db
-  getProjectTags(): void {
-    this.viewProjectService
-      .GetAllProjectTags()
-      .subscribe((data: Tag[]) => (this.tag = data));
-  }
-
-  //get all tags from backend
-  getTags(): void {
-    this.tagService.getAllTags().subscribe((data: Tag[]) => {
-      this.tag = data;
-      console.log(this.tag);
-    })
-    // his.statusService.getAllStatus().subscribe((data: Status[]) => {
-    //   this.statuses = data;
-    //   console.log(this.statuses)
-  }
-
-  // return all phase from db
-  getProjectPhase(): void {
-    this.viewProjectService
-      .GetAllProjectPhase()
-      .subscribe((data: Phase[]) => {
-        (this.phase = data);
-      });
-  }
-
-  // get all phases from backend
-  getPhases(): void {
-    this.phaseService.getAllPhases().subscribe((data: Phase[]) => {
-      this.phase = data;
-      console.log(this.phase)
-    })
-  }
-
-  // grabs all of the statuses
-  getAllStatuses(): void {
-    this.viewProjectService.getAllStatuses()
-      .subscribe((data: any) => {
-        for (const d of data) {
-          this.status.push(d.name);
+      for (const iteration of this.allIterations) {
+        if (iteration.batchId === event.value) {
+          filtered.push(iteration.project as Project);
         }
-      });
-
-  }
-
-  //gets all statuses from backend
-  getAllProjectStatuses(): void {
-    this.statusService.getAllStatus().subscribe((data: Status[]) => {
-      this.statuses = data;
-      console.log(this.statuses)
-    })
-  }
-
-  getProjectStatus(): void {
-    this.dataSource.data.forEach((project: Project) => {
-      if (!this.status.includes(project.status.name)) {
-        this.status.push(project.status.name);
       }
-    });
+      this.dataSource = new MatTableDataSource(filtered);
+    }
+  } 
+
+
+  filterProjectsByOwners(event: MatSelectChange) 
+  {
+    console.log(this.ownerSelected);
+    if (this.ownerSelected === 'noOwner') {
+      this.getProjects();
+    }
+    else  {
+        this.filteredOwners = [];
+      for (const i of this.projects) {
+          if (i.owner.username === this.ownerSelected) {
+            this.filteredOwners.push(i);
+        }
+      }
+    }
+    this.filterResults();
+    console.log(this.filteredOwners);
   }
-
-
-  
-
   // this function filters by status correctly, if disabled filtering status doesn't work
+  
+  
   filterProjectsByStatus(): void {
-    if (this.statusSelected === '') {
-      this.filteredProjects = this.dataSource.data;
+    if (this.statusSelected === 'noStatus') {
+      this.getProjects();
     } else {
       this.filteredStatuses = [];
 
       // finds projects with status name the same as selected status
-      for (const project of this.dataSource.data) {
+      for (const project of this.projects) {
         if (project.status.name === this.statusSelected) {
           this.filteredStatuses.push(project);
         }
@@ -351,10 +352,10 @@ export class ViewProjectsComponent implements OnInit {
 
   filterTag(event: MatSelectChange): void {
     if (this.tagSelected === 'noTag') {
-      this.filteredProjects = this.dataSource.data;
+      this.getProjects();
     } else {
       this.filteredTags = [];
-      for (const i of this.dataSource.data) {
+      for (const i of this.projects) {
         for (const j of i.tags) {
           if (j.name === this.tagSelected) {
             this.filteredTags.push(i);
@@ -362,11 +363,15 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
+    this.filterResults();
+
+    // temp to make sure tag filtering works
+    //this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }
 
   filterPhase(event: MatSelectChange): void {
     if (this.phaseSelected === 'noPhase') {
-      this.filteredProjects = this.dataSource.data;
+      this.getProjects();
     } else {
       this.filteredPhase = [];
       for (const i of this.dataSource.data) {
@@ -391,7 +396,9 @@ export class ViewProjectsComponent implements OnInit {
       temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
     } else if (this.tagSelected != null && this.tagSelected !== 'noTag') {
       temp = this.filteredTags;
-    } else if (
+    } else if (this.ownerSelected != null && this.ownerSelected != 'noOwner') {
+      temp = this.filteredOwners;
+    }else if (
       this.statusSelected !== '' &&
       this.statusSelected !== 'noStatus'
     ) {
@@ -435,4 +442,6 @@ export class ViewProjectsComponent implements OnInit {
     // TODO do something with this promise, most likely navigate to the appropriate project page.
     this.route.navigateByUrl('project-detail');
   }
+
+  
 }

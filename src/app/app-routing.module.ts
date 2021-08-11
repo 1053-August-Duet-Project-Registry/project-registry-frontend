@@ -20,8 +20,8 @@ const routes: Routes = [
   {path: 'homepage-login' , component: ProjectLoginComponent},
   {path: 'timeline' , component: TimelineComponent},
   {path: 'test-services', component: TestServicesComponent},
-  {path: 'status', component: StatusComponent}, // do we need this?
-  {path: 'add-tags', component: AddTagsComponent}//do we need this?
+  {path: 'status', component: StatusComponent} // do we need this?
+  // {path: 'add-tags', component: AddTagsComponent}//do we need this?
 ];
 
 @NgModule({

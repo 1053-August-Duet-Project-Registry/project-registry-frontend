@@ -9,7 +9,7 @@ import { Status } from 'src/app/models/status.model'
 })
 export class StatusComponent implements OnInit {
 
-  constructor(private viewStatusService: StatusService) { 
+  constructor(private statusService: StatusService) { 
 
   }
 public statuses: Status[] = [];
@@ -21,7 +21,7 @@ public statuses: Status[] = [];
   }
 
   public getProjectStatus() {
-    this.viewStatusService.getStatus().subscribe(statuses => this.statuses = statuses);
+    this.statusService.getAllStatus().subscribe(statuses => this.statuses = statuses);
   }
 
 }

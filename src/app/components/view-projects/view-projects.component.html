@@ -37,8 +37,8 @@
             <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
               <mat-option value="noStatus">Select a status...</mat-option>
 
-              <mat-option *ngFor="let status of statuses" value='{{ status.name }}'>
-                {{ status.name }}
+              <mat-option *ngFor="let st of status" value='{{ st }}'>
+                {{ st }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -62,11 +62,11 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Owner</mat-label>
-            <mat-select name="allBatches" (selectionChange)="filterIteration($event)">
-              <mat-option value="">Select an Iterator...</mat-option>
-              <mat-option *ngFor="let i of allBatches" value="{{i.batchId}}">
-                {{i.startDate}} {{i.location}} {{i.skill}}
-
+            <mat-select name="allBatches" (selectionChange)="filterProjectsByOwners($event)"
+            [(ngModel)]="ownerSelected">
+              <mat-option value="noOwner">Select an Owner...</mat-option>
+              <mat-option *ngFor="let owner of owners" value="{{owner}}">
+                {{owner}} 
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -146,7 +146,7 @@
           <!-- phase Column -->
           <ng-container matColumnDef="phase">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Phase</th>
-            <td mat-cell *matCellDef="let row">{{ row.phase?.kind }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.iteration[0] }}</td>
           </ng-container>
 
           <!-- description Column -->
