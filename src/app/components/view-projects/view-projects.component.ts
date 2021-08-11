@@ -93,7 +93,7 @@ export class ViewProjectsComponent implements OnInit {
 
   getIteration(): void {
     console.log('all iteration');
-    this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
+    this.iterationService.getAllIterations().subscribe((iteration: Iteration[]) => {
       this.allIterations = iteration;
     });
 

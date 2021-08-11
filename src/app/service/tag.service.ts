@@ -29,29 +29,26 @@ export class TagService {
   }
   
   createTag( newTag:TagDTO ){
-    return this.http.post<any>(`${REGISTRY_URL}tag`,newTag);
+    return this.http.post<any>(`${REGISTRY_URL}tag`,newTag).pipe(
+      tap(_ => console.log('posting tag..')),
+      catchError(this.handleError<any>('registerTag'))
+      );
   }
   
+  public disableTag(tag: Tag): Observable<Tag> {
+    return this.http.put<Tag>(`${REGISTRY_URL}tag/id/${tag.id}/disable`, {});
+  }
 
-
-
-  // public registerTag(newTag:Tag):Observable<String> {
-  //   return this.http.post<Tag>(`${REGISTRY_URL}tag`,newTag)
-  //     .pipe(
-  //       tap(_ => console.log('posting tag..')),
-  //       catchError(this.handleError<any>('registerTag'))
-  //       );
-  // }
   
-  // private handleError<T>(operation = 'operation', result?: T) {
-  //   return (error: any): Observable<T> => {
-  //     // TODO: send the error to a remote logging infrastructure
-  //     // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);
-  //     console.error(error) // we'll just log it to the console
-  //     // TODO: better job transforming error for user consumption
-  //     console.log(`${operation} failed: ${error.message}`);
-  //     // we want to ensure that the app keeps running by returning an empty result
-  //     return of(result as T);
-  //   }
-  // }
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      // TODO: send the error to a remote logging infrastructure
+      // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);
+      console.error(error) // we'll just log it to the console
+      // TODO: better job transforming error for user consumption
+      console.log(`${operation} failed: ${error.message}`);
+      // we want to ensure that the app keeps running by returning an empty result
+      return of(result as T);
+    }
+  }
 }

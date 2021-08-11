@@ -11,6 +11,7 @@ import { Role } from '../models/role.model';
 import { Tag } from '../models/tag.model';
 import { Phase } from '../models/phase.models';
 import { Iteration } from '../models/iteration.model';
+import { ProjectDTO } from '../models/DTO/project-dto.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,33 +20,11 @@ export class ProjectService {
 
   constructor(private http: HttpClient) { }
 
-  public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
-    '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag(-1, 'Revature', 'Made by Revature', true),
-      new Tag(-2, 'Java', 'server language', true)], []);
-
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  public setCurrentProject(project: Project): void {
-    window.localStorage.setItem('currentProject', JSON.stringify(project));
-    this.currentProject = project;
-  }
-
-  public getCurrentProject(): Project {
-    if (this.currentProject.id === 0)
-    {
-      const currentProjectString = window.localStorage.getItem('currentProject');
-      if (currentProjectString != null) {
-        return JSON.parse(currentProjectString);
-      }
-    }
-    return this.currentProject;
-  }
-
-
-  public registerProject(newProject: Project): Observable<Project> {
+  public createProject(newProject: ProjectDTO): Observable<Project> {
     return this.http.post<Project>(`${REGISTRY_URL}project`, newProject, this.httpOptions)
       .pipe(
         tap(_ => console.log('posting project..')),
@@ -58,6 +37,14 @@ export class ProjectService {
       .pipe(
         tap(_ => console.log('updating project..')),
         catchError(this.handleError<any>('updateProject'))
+        );
+  }
+
+  public deleteProject( id:number ) : Observable<Project> {
+    return this.http.delete<any>(`${REGISTRY_URL}project/id/${id}`)
+      .pipe(
+        tap(_ => console.log('deleting project..')),
+        catchError(this.handleError<any>('deleteProject'))
         );
   }
 
@@ -74,5 +61,28 @@ export class ProjectService {
       // we want to ensure that the app keeps running by returning an empty result
       return of(result as T);
     };
+  }
+
+  ///// This is left by the previous teams. It's might be for testing purpose before connecting with backend 
+
+  public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
+    '', new User(1, 'william', new Role(1, 'admin')),
+    [new Tag(-1, 'Revature', 'Made by Revature', true),
+      new Tag(-2, 'Java', 'server language', true)], []);
+
+  public setCurrentProject(project: Project): void {
+    window.localStorage.setItem('currentProject', JSON.stringify(project));
+    this.currentProject = project;
+  }
+
+  public getCurrentProject(): Project {
+    if (this.currentProject.id === 0)
+    {
+      const currentProjectString = window.localStorage.getItem('currentProject');
+      if (currentProjectString != null) {
+        return JSON.parse(currentProjectString);
+      }
+    }
+    return this.currentProject;
   }
 }

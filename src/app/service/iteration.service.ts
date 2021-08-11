@@ -22,7 +22,7 @@ export class IterationService {
   
 
   constructor(private http: HttpClient) { }
-  getIterations(): Observable<Iteration[]>{
+  getAllIterations(): Observable<Iteration[]>{
     return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`);
   }
 

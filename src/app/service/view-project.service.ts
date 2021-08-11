@@ -42,6 +42,9 @@ export class ViewProjectService {
     return this.http.delete<any>(`${ REGISTRY_URL }project/id/${id}`);
   }
 
+  
+  // the following functions are created by previous team. Because of the restr
+
   /* Return all the projects from DB**/
   // public GetAllProjects(): Observable<Project[]> {
   //   return this.http.get<Project[]>(`${REGISTRY_URL}project`, this.httpOptions)
@@ -75,12 +78,7 @@ export class ViewProjectService {
   // }
 
 
-  // private handleError<T>(operation = 'operation', result?: T) {
-  //   return (error: any): Observable<T> => {
-  //     console.error(error); // log it to the console if something goes wrong
-  //     return of(result as T);
-  //   };
-  // }
+  
 
   // public getAllStatuses(): Observable<Status[]> {
   //   return this.http.get<Status[]>(`${REGISTRY_URL}status`, this.httpOptions)
@@ -88,4 +86,11 @@ export class ViewProjectService {
   //       catchError(this.handleError<Status[]>('GetPhase', []))
   //     );
   // }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(error); // log it to the console if something goes wrong
+      return of(result as T);
+    };
+  }
 }
