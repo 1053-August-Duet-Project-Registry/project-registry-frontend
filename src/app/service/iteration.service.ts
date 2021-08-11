@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { REGISTRY_URL } from 'src/environments/environment';
 import { Iteration } from '../models/iteration.model';
@@ -20,7 +21,6 @@ export class IterationService {
   };
 
   
-
   constructor(private http: HttpClient) { }
   getAllIterations(): Observable<Iteration[]>{
     return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`);
