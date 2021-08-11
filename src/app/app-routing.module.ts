@@ -19,7 +19,6 @@ const routes: Routes = [
   {path: 'project-detail/:id', component: ProjectDetailComponent},
   {path: 'homepage-login' , component: ProjectLoginComponent},
   {path: 'timeline' , component: TimelineComponent},
-  {path: 'test-services', component: TestServicesComponent},
   {path: 'status', component: StatusComponent} // do we need this?
   // {path: 'add-tags', component: AddTagsComponent}//do we need this?
 ];
