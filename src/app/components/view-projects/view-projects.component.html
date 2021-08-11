@@ -42,14 +42,6 @@
             <mat-label>Status</mat-label>
             <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
               <mat-option value="noStatus">Select a status...</mat-option>
-
-              <!-- Where is it grabbing statuses from? if DB we need to fill in values for devlopment-->
-              <mat-option value="ACTIVE">Active</mat-option>
-              <mat-option value="CODE_REVIEW">Code-Review</mat-option>
-              <mat-option value="FINISH">Finished</mat-option>
-              <mat-option value="PLANNED">Planned</mat-option>
-              <mat-option value="AVAILABLE">Available</mat-option>
-
               <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
                 {{ statuses }}
               </mat-option>
@@ -89,11 +81,11 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Owner</mat-label>
-            <mat-select name="allBatches" (selectionChange)="filterIteration($event)">
-              <mat-option value="">Select an Iterator...</mat-option>
-              <mat-option *ngFor="let i of allBatches" value="{{i.batchId}}">
-                {{i.startDate}} {{i.location}} {{i.skill}}
-
+            <mat-select name="allBatches" (selectionChange)="filterProjectsByOwners($event)"
+            [(ngModel)]="ownerSelected">
+              <mat-option value="noOwner">Select an Owner...</mat-option>
+              <mat-option *ngFor="let owner of owners" value="{{owner}}">
+                {{owner}} 
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -109,10 +101,6 @@
             [(ngModel)]="tagSelected"
           >
             <mat-option value="noTag">Select a tag...</mat-option>
-            <mat-option value="Test">Test</mat-option>
-            <mat-option value="Result">Result</mat-option>
-            <mat-option value="Review">Review</mat-option>
-
             <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
               {{ tags.name }}
             </mat-option>

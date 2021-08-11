@@ -1,4 +1,6 @@
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ConditionalExpr } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
@@ -41,76 +43,12 @@ export class ViewProjectsComponent implements OnInit {
     });
 
   }
-  public projects: Project[] =
-  [
-      {
-          id: 1,
-          name: 'rideforce',
-          status: {
-              id: 3,
-              name: 'ACTIVE'
-          },
-          description: 'rideforce project',
-          owner: {
-              id: 3,
-              username: 'william',
-              role: {
-                  id: 1,
-                  type: 'admin'
-              }
-          },
-
-          // "phase": {
-          //     "id": 2,
-          //     "kind": "TRAINER_APPROVED",
-          //     "description": "Trainer has reviewed backlog and approves of scope and domain"
-          // },
-          tags: [],
-          iterations: [],
-      },
-      {
-          id: 2,
-          name: 'Make A Recruiting Application',
-          status: {
-              id: 2,
-              name: 'ACTIVE'
-          },
-          description: 'Finds potential condadites by scrapping facebook.',
-          owner: {
-              id: 1,
-              username: 'william',
-              role: {
-                  id: 1,
-                  type: 'admin'
-              }
-          },
-          tags: [],
-          iterations: [],
-      },
-      {
-          id: 3,
-          name: 'Caliber Staging Module',
-          status: {
-              id: 3,
-              name: 'CODE_REVIEW'
-          },
-          description: 'Allows for staging to be remote',
-          owner: {
-              id: 4,
-              username: 'Bob',
-              role: {
-                  id: 2,
-                  type: 'user'
-              }
-          },
-          tags: [],
-          iterations: [],
-      }
-  ];
-
+  public projects: Project[] = [];
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
+  public owners: string[] = [];
+  public filteredOwners: Project[] = [];
   public filteredTags: Project[] = [];
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
@@ -119,6 +57,7 @@ export class ViewProjectsComponent implements OnInit {
   public hardcodeStatuses: string[] = [];
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
+  public ownerSelected: string | undefined | null;
   public statusSelected = 'ACTIVE';
 
 
@@ -238,6 +177,9 @@ export class ViewProjectsComponent implements OnInit {
     }
 
     this.getProjectsInit();
+    this.getProjectTags();
+    this.getProjectOwners();
+    this.getAllStatuses();
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
     */
@@ -288,13 +230,13 @@ export class ViewProjectsComponent implements OnInit {
     /*
     * This code is to get the projects from localhost:8085
     */
-    // this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-    //   // this.projects = report as Project[];
-    //   //changed this to make sure if any functions use report data it would get the project mock data
-    //   report as Project[];
-    //   report = this.projects;
-    //   this.dataSource.data = this.projects.filter;
-    // });
+    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+       this.projects = report as Project[];
+      //changed this to make sure if any functions use report data it would get the project mock data
+      report as Project[];
+      report = this.projects;
+      this.dataSource.data = this.projects.filter;
+    });
   }
 
   public getProjects(): void {
@@ -312,6 +254,15 @@ export class ViewProjectsComponent implements OnInit {
     this.viewProjectService
       .GetAllProjectTags()
       .subscribe((data: Tag[]) => (this.tag = data));
+  }
+  getProjectOwners(): void 
+  {
+    this.viewProjectService.GetAllProjects().subscribe( (data : any ) => {
+      data.forEach((element: any) => {
+        if(!this.owners.includes(element.owner.username))
+            this.owners.push(element.owner.username);
+      });
+    }) 
   }
 
   // return all phase from db
@@ -332,6 +283,8 @@ export class ViewProjectsComponent implements OnInit {
         }
       });
 
+      console.log(this.status);
+
   }
 
   getProjectStatus(): void {
@@ -345,6 +298,24 @@ export class ViewProjectsComponent implements OnInit {
     });
   }
 
+
+  filterProjectsByOwners(event: MatSelectChange) 
+  {
+    console.log(this.ownerSelected);
+    if (this.ownerSelected=== '') {
+      this.filteredProjects = this.projects;
+    }
+    else  {
+        this.filteredOwners = [];
+      for (const i of this.projects) {
+          if (i.owner.username === this.ownerSelected) {
+            this.filteredOwners.push(i);
+        }
+      }
+    }
+    this.filterResults();
+    console.log(this.filteredOwners);
+  }
   // this function filters by status correctly, if disabled filtering status doesn't work
   filterProjectsByStatus() {
     if (this.statusSelected === '') {
@@ -379,9 +350,10 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
+    this.filterResults();
 
     // temp to make sure tag filtering works
-    this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
+    //this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }
 
   filterPhase(event: MatSelectChange): void {
@@ -411,7 +383,9 @@ export class ViewProjectsComponent implements OnInit {
       temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
     } else if (this.tagSelected != null && this.tagSelected != 'noTag') {
       temp = this.filteredTags;
-    } else if (
+    } else if (this.ownerSelected != null && this.ownerSelected != 'noOwner') {
+      temp = this.filteredOwners;
+    }else if (
       this.statusSelected !== '' &&
       this.statusSelected !== 'noStatus'
     ) {
