@@ -112,9 +112,11 @@ export class TagsComponent implements OnInit {
       return;
     }
     // if tag name already exists, return
-    if (this.tags.map(tag => tag.name).includes(newTag.name)) {
-      this.message = `The ${newTag.name} tag already exists`;
-      return;
+    for (const tag of this.tags) {
+      if (tag.isEnabled && tag.name === newTag.name) {
+        this.message = `The ${newTag.name} tag already exists`;
+        return;
+      }
     }
 
     this.tagService.createTag(newTag).subscribe(t => {
