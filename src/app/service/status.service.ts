@@ -23,7 +23,7 @@ export class StatusService {
 
   public getStatus(): Observable<Status[]> {
     return this.http.get<Status[]>(`${REGISTRY_URL}status`, this.httpOptions)
-      .pipe(  
+      .pipe(
         catchError(this.handleError<Status[]>('getStatus', []))
       );
   }
@@ -32,7 +32,8 @@ export class StatusService {
     return this.http.get<Status[]>(`${REGISTRY_URL}status`);
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  // find the correct typedef
+  private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
 
       // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);

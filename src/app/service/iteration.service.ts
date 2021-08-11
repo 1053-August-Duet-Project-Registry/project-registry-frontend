@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { REGISTRY_URL } from 'src/environments/environment';
 import { Iteration } from '../models/iteration.model';
@@ -12,6 +11,9 @@ import { IterationDTO } from '../models/DTO/iteration-dto.model';
 })
 export class IterationService {
 
+  // url for the API containing batches
+  apiUrl = 'https://caliber2-mock.revaturelabs.com/mock/training/batch';
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -20,41 +22,39 @@ export class IterationService {
         })
   };
 
-  
+
   constructor(private http: HttpClient) { }
   getAllIterations(): Observable<Iteration[]>{
     return this.http.get<Iteration[]>(`${ REGISTRY_URL }iteration`);
   }
 
-  getIterationById(id:number): Observable<Iteration> {
+  getIterationById(id: number): Observable<Iteration> {
     return this.http.get<Iteration>(`${ REGISTRY_URL }iteration/id/${id}`);
   }
 
-  createIteration(newInteration:IterationDTO) : Observable<any> {
-    return this.http.post<any>(`${ REGISTRY_URL }iteration`,newInteration);
+  createIteration(newInteration: IterationDTO): Observable<any> {
+    return this.http.post<any>(`${ REGISTRY_URL }iteration`, newInteration);
   }
 
-  updateIteration(updateIteration: IterationDTO, id:number) : Observable<any>{
-    return this.http.put<any>(`${ REGISTRY_URL }iteration`, updateIteration)
+  updateIteration(updateIteration: IterationDTO, id: number): Observable<any>{
+    return this.http.put<any>(`${ REGISTRY_URL }iteration`, updateIteration);
   }
 
-  deleteIteration(id:number): Observable<any>{
-    return this.http.delete<any>(`${ REGISTRY_URL }iteration/id/${id}`)
-  } 
+  deleteIteration(id: number): Observable<any>{
+    return this.http.delete<any>(`${ REGISTRY_URL }iteration/id/${id}`);
+  }
 
 
-  // url for the API containing batches
-  apiUrl = "https://caliber2-mock.revaturelabs.com/mock/training/batch";
   getBatchService(): Observable<BatchTemplate[]>{
-    return this.http.get<BatchTemplate[]>(`${REGISTRY_URL}iteration`)
+    return this.http.get<BatchTemplate[]>(`${REGISTRY_URL}iteration`);
   }
 
   getBatchServiceMock(): Observable<BatchTemplate[]>{
-    return this.http.get<BatchTemplate[]>(this.apiUrl)
+    return this.http.get<BatchTemplate[]>(this.apiUrl);
   }
 
   getIterationMock(): Observable<Iteration[]>{
-    return this.http.get<Iteration[]>(this.apiUrl)
+    return this.http.get<Iteration[]>(this.apiUrl);
   }
 
   // sendIteration(iteration: Iteration): Observable<Iteration> {

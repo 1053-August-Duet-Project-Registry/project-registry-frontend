@@ -87,15 +87,15 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     const batch: BatchTemplate[] = await this.iter
       .getBatchService()
       .pipe(
-        map((batch) =>
-          [...batch]
+        map((batch1) =>
+          [...batch1]
             .sort(
               (a, b) =>
                 new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
             )
             .filter(
-              (batch) =>
-                new Date(batch.endDate).getTime() -
+              (batch2) =>
+                new Date(batch2.endDate).getTime() -
                   this.timelineLowerBound.toDate().getTime() >
                 0
             )
