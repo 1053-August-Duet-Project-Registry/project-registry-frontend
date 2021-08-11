@@ -132,7 +132,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
         name: `${batch[i].batchId} : ${batch[i].skill} @ ${batch[i].location}`,
         start: moment(new Date(batch[i].startDate)).startOf('day'),
         end: moment(new Date(batch[i].endDate)),
-        classes: '',
+        classes: `class${i}`,
       });
       
     }
@@ -143,7 +143,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     let myDiv = document.createElement('div');
     let parentDiv = document.querySelector('.displayInfo');
     this.events.ItemClicked = (items) => {
-      myDiv.innerHTML = items.classes + " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
+      myDiv.innerHTML = " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
       " <br />StartDate: " + items.start.toDate() + " <br />EndDate: " + items.end.toDate();
       parentDiv?.appendChild(myDiv);
       console.log(myDiv);

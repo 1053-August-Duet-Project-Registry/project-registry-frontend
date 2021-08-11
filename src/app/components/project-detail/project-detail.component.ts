@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ProjectService } from 'src/app/service/project.service';
 import { Project } from 'src/app/models/project.model';
-import { ViewProjectService } from './../../service/view-project.service';
+import { ViewProjectService } from '../../service/view-project.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Iteration } from '../../models/iteration.model';
@@ -16,13 +16,9 @@ import { Phase } from 'src/app/models/phase.models';
 import { PhaseService } from 'src/app/service/phase.service';
 import { ViewProjectsComponent } from '../view-projects/view-projects.component';
 import { Location } from '@angular/common';
-import {Tag} from '../../models/tag.model';
+import { Tag } from '../../models/tag.model';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
-import {LoginServiceService} from "../../service/login-service.service";
-
-
-
-
+import {LoginServiceService} from '../../service/login-service.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -30,10 +26,17 @@ import {LoginServiceService} from "../../service/login-service.service";
   styleUrls: ['./project-detail.component.css']
 })
 
-
-
-
 export class ProjectDetailComponent implements OnInit {
+
+   arr!: Tag[];
+  public desiredId = 1;
+  public projects?: Project[] = [];
+
+  public project?: Project;
+
+  sendBatch?: BatchTemplate;
+  iteration?: Iteration ;
+  tempIteration?: Iteration ;
 
   constructor(
               public data: ProjectTagManagementService,
@@ -45,8 +48,6 @@ export class ProjectDetailComponent implements OnInit {
               private location: Location,
               private phaseService: PhaseService,
               private loginService: LoginServiceService) { }
-
-   arr!: Tag[];
 
 
   // In future link to status table?
@@ -63,26 +64,24 @@ export class ProjectDetailComponent implements OnInit {
 
 
   public statuses = ['ACTIVE', 'NEEDS_ATTENTION', 'ARCHIVED', 'CODE_REVIEW'];
-  public phases = ['BACKLOG_GENERATED', 'TRAINER_APPROVED', 'HANDOFF_SCHEDULED', 'RESOURCE_ALLOCATION', 'CHECKPOINT_MEETING', 'CODE_REVIEW', 'COMPLETE'];
+  public phases = ['BACKLOG_GENERATED', 'TRAINER_APPROVED', 'HANDOFF_SCHEDULED',
+    'RESOURCE_ALLOCATION', 'CHECKPOINT_MEETING', 'CODE_REVIEW', 'COMPLETE'];
 
 
 
   // Temporary model
-  model = new Project(1, "name", new Status(1, "name"), "sample desc", new User(1, "username", new Role(1, "string")), [], []);
+
+
+  model = new Project(1,  'name', new Status(1, 'name'), 'sample desc',
+    new User(1, 'username', new Role(1, 'string')), [], []);
 
   submitted = false;
 
-  sendBatch ?: BatchTemplate;
-  iteration?: Iteration ;
-  tempIteration?: Iteration ;
+  // needs logic
+  onSubmit(): void { this.submitted = true; }
 
-  public desiredId = 1;
-  public project?: Project;
-  public projects?: Project[] = [];
 
-  onSubmit() { this.submitted = true; }
-
-  changeBatch(value: BatchTemplate){
+  changeBatch(value: BatchTemplate): void {
     this.sendBatch = value;
     console.log(this.sendBatch);
   }
@@ -105,32 +104,33 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   // Update Project in the backend
-  public submit(): void{
+  public submit(): void {
     if (!this.project){ return; }
 
     if (this.sendBatch){
-      this.iteration = new Iteration(this.sendBatch.batchId,
-        this.project,
-        this.sendBatch.id,
-        this.sendBatch.startDate,
-        this.sendBatch.endDate, null);
+
+      // TODO change final parameter to a phase
+      this.iteration = new Iteration(this.sendBatch.batchId, this.project, this.sendBatch.id,
+        this.sendBatch.startDate, this.sendBatch.endDate, null);
+
     }
 
     // Setting the status id
     this.project.status.id = this.statusMap[this.project.status.name];
 
-    if(this.project != undefined){
-      // let phaseFound = this.phaseService.phases.find(p=>{
-      //   if(this.project){
-      //     // return p.kind==this.project.phase.kind
-      //   }
-      //   else {
-      //     return false
-      //   }
-      // });
-      // if(phaseFound!=undefined)
-      //   this.project.phase = phaseFound;
-    }
+
+    // umm idek
+    // if (this.project !== undefined){
+    //   const phaseFound = this.phaseService.phases.find(p => {
+    //     if (!this.project){
+    //       return false;
+    //     }
+    //   });
+    //   if (phaseFound !== undefined) {
+    //     this.project.iterations[this.project.iterations.length - 1].phase = phaseFound;
+    //   }
+    // }
+
     this.project.tags = this.arr;
 
     this.projectService.updateProject(this.project).subscribe((data) => {
