@@ -1,10 +1,10 @@
 export class TagDTO {
     name: string;
     description : string;
-    isEnable : boolean;
-    constructor (name: string, description : string, isEnable : boolean){
+    isEnabled : boolean;
+    constructor (name: string, description : string, isEnabled : boolean){
         this.name =name;
         this.description =description;
-        this.isEnable = isEnable;
+        this.isEnabled = isEnabled;
     }
 }
