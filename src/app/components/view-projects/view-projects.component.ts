@@ -202,17 +202,7 @@ export class ViewProjectsComponent implements OnInit {
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
     */
-    // console.log("onInIt");
-    // console.log("ngOnInit selected Status: " + this.statusSelected);
-    // this.getProjectTags();
-    // this.getProjectPhase();
-    // // this.getProjectStatus();
-    // this.getAllStatuses();
-    // this.getIteration(); // group 5 getIteration, save them to allBatches (a seperate Iteration class without project object)
-    // this.getBatches();
-
-    // this.filterStatus();
-
+    
     // mattabledataasource determines what goes in table on page/ functions put project data into datasource
     this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
 
