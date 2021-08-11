@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { REGISTRY_URL } from 'src/environments/environment';
 import { Iteration } from '../models/iteration.model';
@@ -21,10 +22,32 @@ export class IterationService {
   // url for the API containing batches
   apiUrl = 'https://caliber2-mock.revaturelabs.com/mock/training/batch';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getBatchService(): Observable<BatchTemplate[]>{
-    return this.http.get<BatchTemplate[]>(`${REGISTRY_URL}iteration`);
+  getBatchService(): Observable<BatchTemplate[]> {
+    return forkJoin([
+      this.http.get<BatchTemplate[]>(`${REGISTRY_URL}iteration`),
+      this.http.get<BatchTemplate[]>(this.apiUrl),
+    ]).pipe(
+      map((d) => {
+        d[0].forEach((iteration) => {
+          const foundBatch = d[1].find((n) => {
+            return n.batchId === iteration.batchId ? n : undefined;
+          });
+          iteration.location = foundBatch?.location ?? 'Unknown';
+          iteration.skill = foundBatch?.skill ?? 'Unknown';
+
+          // Not using the start/end date coming from Caliber because those
+          // dates are ancient and also our own database currently contain
+          // startDate and endDate for a particular batch.  If you want to use
+          // the dates from Caliber uncomment the following:
+          // iteration.startDate =
+          //   foundBatch?.startDate ?? new Date().toUTCString();
+          // iteration.endDate = foundBatch?.endDate ?? new Date().toUTCString();
+        });
+        return d[0];
+      })
+    );
   }
 
   getIteration(): Observable<Iteration[]>{
