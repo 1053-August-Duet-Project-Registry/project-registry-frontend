@@ -9,14 +9,20 @@ import { Status } from '../models/status.model';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { Tag } from '../models/tag.model';
-import { Phase } from '../models/phase.models';
-import { Iteration } from '../models/iteration.model';
 import { ProjectDTO } from '../models/DTO/project-dto.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+
+  // This is left by the previous teams.
+  // It's might be for testing purpose before connecting with backend
+
+  public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
+    '', new User(1, 'william', new Role(1, 'admin')),
+    [new Tag(-1, 'Revature', 'Made by Revature', true),
+      new Tag(-2, 'Java', 'server language', true)], []);
 
   constructor(private http: HttpClient) { }
 
@@ -40,7 +46,7 @@ export class ProjectService {
         );
   }
 
-  public deleteProject( id:number ) : Observable<Project> {
+  public deleteProject( id: number ): Observable<Project> {
     return this.http.delete<any>(`${REGISTRY_URL}project/id/${id}`)
       .pipe(
         tap(_ => console.log('deleting project..')),
@@ -63,12 +69,6 @@ export class ProjectService {
     };
   }
 
-  ///// This is left by the previous teams. It's might be for testing purpose before connecting with backend 
-
-  public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
-    '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag(-1, 'Revature', 'Made by Revature', true),
-      new Tag(-2, 'Java', 'server language', true)], []);
 
   public setCurrentProject(project: Project): void {
     window.localStorage.setItem('currentProject', JSON.stringify(project));

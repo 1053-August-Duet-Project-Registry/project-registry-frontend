@@ -6,8 +6,6 @@ import { ViewProjectsComponent } from './components/view-projects/view-projects.
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
 import { StatusComponent } from './components/status/status.component';
-import { AddTagsComponent } from './components/add-tags/add-tags.component';
-import { TagsComponent } from './components/tags/tags.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/homepage-login', pathMatch: 'full'},
@@ -19,7 +17,6 @@ const routes: Routes = [
   {path: 'homepage-login' , component: ProjectLoginComponent},
   {path: 'timeline' , component: TimelineComponent},
   {path: 'status', component: StatusComponent} // do we need this?
-  // {path: 'add-tags', component: AddTagsComponent}//do we need this?
 ];
 
 @NgModule({

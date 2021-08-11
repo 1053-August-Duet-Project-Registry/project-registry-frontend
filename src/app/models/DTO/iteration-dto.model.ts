@@ -1,6 +1,5 @@
-import { NumberFormatStyle } from "@angular/common";
-import { Phase } from "../phase.models";
-import { Project } from "../project.model";
+import { Phase } from '../phase.models';
+import { Project } from '../project.model';
 
 
 export class IterationDTO {
@@ -9,10 +8,10 @@ export class IterationDTO {
     project?: Project;
     startDate: string;
     endDate: string;
-    phase?: Phase
+    phase?: Phase;
 
 
-constructor(batchId:string, project:Project, id: number, startDate: string, endDate: string, phase: Phase) {
+constructor(batchId: string, project: Project, id: number, startDate: string, endDate: string, phase: Phase) {
     this.batchId = batchId;
     this.project = project;
     this.id = id;

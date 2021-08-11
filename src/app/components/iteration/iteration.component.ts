@@ -1,9 +1,7 @@
-import { BatchTemplate } from './../../models/batch.model';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { BatchTemplate } from '../../models/batch.model';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { IterationService } from 'src/app/service/iteration.service';
-import { forkJoin, Subscription } from 'rxjs';
-import { Iteration } from 'src/app/models/iteration.model';
-import { Project } from 'src/app/models/project.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-iteration',
@@ -30,15 +28,15 @@ ngOnInit(): void {
 }
 
 // Clean up memory
-ngOnDestroy(): void{
+ngOnDestroy(): void {
   this.sub.unsubscribe();
 }
 
-selectBatch(){
+selectBatch(): void {
   // skip placeholder value
   if (this.seletedIdAndBatchId !== 'Batches'){
     const separateBatchAndId = this.seletedIdAndBatchId.split('|');
-    // id:number, batchId: string, skill:string,location:string, startDate:string, endDate:string
+    // (for reference) id:number, batchId: string, skill: string, location: string, startDate: string, endDate: string
     this.sendBatch.emit(new BatchTemplate(Number(separateBatchAndId[0]), separateBatchAndId[1], '', '',
       separateBatchAndId[2], separateBatchAndId[3]));
 
@@ -46,15 +44,11 @@ selectBatch(){
 }
 
   // make a call to the API to retrieve all batches
-  httpGet(){
-    // this.http.get(environment.gameDealApi+ "?id=" + i)
+  // maybe change the name of the function to provide more clarity
+  httpGet(): void {
+
       this.sub = this.iterationService.getBatchServiceMock().subscribe(batches => this.theBatches = batches);
-    /*let a;
-      forkJoin([this.iterationService.getBatchServiceMock(), this.iterationService.getBatchService()]).subscribe(data => {
-        //this.theBatches = data as batchTemplate[] // cast t
-        a =  ([] as batchTemplate[]).concat(...data);
-        console.log("dsdsd get", a )
-      })  */
+
   }
 
 }

@@ -6,7 +6,7 @@ table {
 }
 .mat-header-cell {
 
-  width:0px;
+  width: 0;
 }
 
 .mat-form-field {
@@ -65,7 +65,7 @@ mat-label.ng-star-inserted {
   font-size: 1.1rem;
 }
 mat-form-field-wrapper{
-  padding:auto;
+  padding: inherit;
   /* color: white; */
 }
 
@@ -93,7 +93,7 @@ div.mat-id{
 }
 
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
-  padding-right: 0px;
+  padding-right: 0;
   justify-content: flex-end;
 }
 
