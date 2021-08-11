@@ -52,11 +52,16 @@
             <!--feels like one should be able to edit this but no-->
           </div>
           <!--showing what tags are attached to the current project-->
-          <div id="TCP1" class="tags-of-current-project">
-            <label for="TCP1">Tags for {{project.name}}</label>
-            <h4 *ngFor="let tag of project.tags">{{tag.name}}, {{tag.isEnabled}}</h4>
+          <div id="tags-for-current-project" class="form-group col-md-6">
+            <mat-chip-list id="TCP1" class="tags-of-current-project">
+              <label for="TCP1">Tags for {{project.name}}:</label>
+              <mat-chip style="background-color: rgb(242, 105, 38); color: #fff;"
+                      *ngFor="let tag of project.tags">
+                {{tag.name}}
+              </mat-chip>
+            </mat-chip-list>
+            <!--TODO change color of tags that isEnabled: false-->
           </div>
-
           <div class="form-group col-md-6">
             <app-add-tags></app-add-tags>
           </div>

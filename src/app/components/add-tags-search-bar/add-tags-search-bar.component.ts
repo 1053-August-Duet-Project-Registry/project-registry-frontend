@@ -81,7 +81,9 @@ export class AddTagsSearchBarComponent implements OnInit {
    // put the selected tag into the project found in project-details component
    // TODO make sure tag is not already in project
    this.projectDetails.project?.tags.push(selectTag);
-   
-   // TODO from here you need to update the database with the new tag. Probably the best way to do it is call updateProject() in project-tag-management.service
+
+   /* TODO from here you need to update the database with the new tag.
+       Probably the best way to do it is call updateProject() in project-tag-management.service
+    */
  }
 }
