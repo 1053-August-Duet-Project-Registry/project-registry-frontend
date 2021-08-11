@@ -35,7 +35,6 @@ import { TimelineComponent } from './components/timeline/timeline.component';
 import { AddTagsComponent } from './components/add-tags/add-tags.component';
 import { AddTagsSearchBarComponent } from './components/add-tags-search-bar/add-tags-search-bar.component';
 import { AddTagsAddedTagsComponent } from './components/add-tags-added-tags/add-tags-added-tags.component';
-import { TestServicesComponent } from './components/test-services/test-services.component';
 import { StatusComponent } from './components/status/status.component';
 
 
@@ -55,7 +54,6 @@ import { StatusComponent } from './components/status/status.component';
     AddTagsComponent,
     AddTagsSearchBarComponent,
     AddTagsAddedTagsComponent,
-    TestServicesComponent,
     StatusComponent
   ],
   imports: [

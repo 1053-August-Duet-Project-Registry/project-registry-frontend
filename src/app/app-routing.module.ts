@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewProjectsComponent } from './components/view-projects/view-projects.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
 import { TimelineComponent } from './components/timeline/timeline.component';
-import { TestServicesComponent } from './components/test-services/test-services.component';
 import { StatusComponent } from './components/status/status.component';
 import { AddTagsComponent } from './components/add-tags/add-tags.component';
 import { TagsComponent } from './components/tags/tags.component';
