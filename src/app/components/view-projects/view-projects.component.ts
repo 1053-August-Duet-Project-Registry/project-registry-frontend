@@ -120,8 +120,9 @@ export class ViewProjectsComponent implements OnInit {
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
   public phase: Phase[] = [];
-  public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
-  
+  // public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
+  public dataSource: MatTableDataSource<Project> = new MatTableDataSource();
+
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
@@ -316,7 +317,7 @@ export class ViewProjectsComponent implements OnInit {
 
       this.projects = report as Project[];
 
-      this.dataSource.data = this.projects.filter;
+      this.dataSource.data = this.projects;
     });
   }
 
