@@ -8,10 +8,6 @@ import { MatOption } from '@angular/material/core';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 import { ProjectDetailComponent } from '../project-detail/project-detail.component';
 
-// import 'rxjs/add/operator/debounceTime'
-// import 'rxjs/add/operator/map'
-// import 'rxjs/add/operator/distinctUntilChanged'
-
 @Component({
   selector: 'app-add-tags-search-bar',
   templateUrl: './add-tags-search-bar.component.html',
@@ -21,7 +17,6 @@ import { ProjectDetailComponent } from '../project-detail/project-detail.compone
 export class AddTagsSearchBarComponent implements OnInit {
 
   selectedTag!: Tag;
-  allSelectedTags: string[] = [];
   allSelectedTagsObject: Tag[] = [];
   myControl = new FormControl();
   options: string[] = [];

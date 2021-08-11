@@ -1,3 +1,3 @@
 p {
-  color: green;
+  color: green; /* for testing where things show up on the html and there is a 'code smell' if the file is empty */
 }

@@ -3,13 +3,13 @@
     animation-name: example;
     animation-duration: 2s;
   }
-  
+
   @keyframes example {
     0% {
       opacity: 0;
       transform: scale(0);
     }
-  
+
     60% {
       transform: scale(1.5);
       opacity: 1;
@@ -24,7 +24,7 @@
     animation-duration: 2s;
   }
   .login-box{
-    padding: auto 150px;
+    padding: 150px;
     margin-top: 50px;
     margin-bottom: 50px;
   }
@@ -41,7 +41,7 @@
       opacity: 0;
       transform: translate(10px, 0);
     }
-  
+
     60% {
       transform: translate(-100px, 0);
       opacity: 1;
@@ -54,8 +54,7 @@
   .hidden-validate-height{
     min-height: 30px;
   }
- 
 
 
 
-  
+

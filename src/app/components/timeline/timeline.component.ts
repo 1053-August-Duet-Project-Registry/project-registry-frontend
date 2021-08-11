@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import moment from 'moment';
-import { Item, Period, Section, Events, NgxTimeSchedulerService } from 'ngx-time-scheduler';
+import { Item, Period, Section, Events } from 'ngx-time-scheduler';
 import { map } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { LoginServiceService } from 'src/app/service/login-service.service';
@@ -32,9 +32,10 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   topLeftHeaderName = 'Batch';
   @ViewChildren('ngxTs', { read: ElementRef }) ngxTs!: QueryList<ElementRef>;
 
-  constructor(public iter: IterationService, private datePipe: DatePipe, private loginService: LoginServiceService, private route: Router) {}
+  constructor(public iter: IterationService, private datePipe: DatePipe,
+              private loginService: LoginServiceService, private route: Router) {}
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     /**
      * ngx-time-scheduler css hack heavy lifting.
      * Code below is to make sure the timeline table is ready to be
@@ -43,7 +44,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     this.ngxTs.changes.subscribe((next: QueryList<ElementRef>) => {
       const ngxTs = next.first.nativeElement;
       const colWidthCoefficient = 90;
-      ngxTs.querySelector('.time-sch-table-wrapper').style['width'] = `${
+      ngxTs.querySelector('.time-sch-table-wrapper').style.width = `${
         200 + colWidthCoefficient * this.numOfDays
       }px`;
       const topLeftHeader: HTMLElement = ngxTs.querySelector(
@@ -77,7 +78,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<any> {
   // Check if user is logged in, otherwise redirect.
     if (! this.loginService.checkSessionLogin()) {
       this.route.navigate(['/homepage-login']);
@@ -94,7 +95,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
             )
             .filter(
               (batch) =>
-                new Date(batch['endDate']).getTime() -
+                new Date(batch.endDate).getTime() -
                   this.timelineLowerBound.toDate().getTime() >
                 0
             )
