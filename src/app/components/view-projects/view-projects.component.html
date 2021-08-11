@@ -44,14 +44,14 @@
               <mat-option value="noStatus">Select a status...</mat-option>
 
               <!-- Where is it grabbing statuses from? if DB we need to fill in values for devlopment-->
-              <mat-option value="ACTIVE">Active</mat-option>
+              <!-- <mat-option value="ACTIVE">Active</mat-option>
               <mat-option value="CODE_REVIEW">Code-Review</mat-option>
               <mat-option value="FINISH">Finished</mat-option>
               <mat-option value="PLANNED">Planned</mat-option>
-              <mat-option value="AVAILABLE">Available</mat-option>
+              <mat-option value="AVAILABLE">Available</mat-option> -->
 
-              <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
-                {{ statuses }}
+              <mat-option *ngFor="let status of statuses" value='{{ status.name }}'>
+                {{ status.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -109,9 +109,6 @@
             [(ngModel)]="tagSelected"
           >
             <mat-option value="noTag">Select a tag...</mat-option>
-            <mat-option value="Test">Test</mat-option>
-            <mat-option value="Result">Result</mat-option>
-            <mat-option value="Review">Review</mat-option>
 
             <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
               {{ tags.name }}

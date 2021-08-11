@@ -10,10 +10,13 @@ import { filter } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
 import { Phase } from 'src/app/models/phase.models';
+import { Status } from 'src/app/models/status.model';
 import { Tag } from 'src/app/models/tag.model';
 import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
 import { ViewProjectService } from 'src/app/service/view-project.service';
+import { StatusService } from 'src/app/service/status.service';
+import { TagService } from 'src/app/service/tag.service';
 import { Project } from '../../models/project.model';
 import { LoginServiceService } from '../../service/login-service.service';
 
@@ -28,7 +31,7 @@ export class ViewProjectsComponent implements OnInit {
 
 
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
-              private iterationService: IterationService, private route: Router, private location: Location,
+              private iterationService: IterationService, private route: Router, private location: Location, private statusService: StatusService, private tagService: TagService, 
               private loginService: LoginServiceService) {
 
     let numberOfTimesAround = 0;
@@ -41,76 +44,77 @@ export class ViewProjectsComponent implements OnInit {
     });
 
   }
-  public projects: Project[] =
-  [
-      {
-          id: 1,
-          name: 'rideforce',
-          status: {
-              id: 3,
-              name: 'ACTIVE'
-          },
-          description: 'rideforce project',
-          owner: {
-              id: 3,
-              username: 'william',
-              role: {
-                  id: 1,
-                  type: 'admin'
-              }
-          },
+  // public projects: Project[] =
+  // [
+  //     {
+  //         id: 1,
+  //         name: 'rideforce',
+  //         status: {
+  //             id: 3,
+  //             name: 'ACTIVE'
+  //         },
+  //         description: 'rideforce project',
+  //         owner: {
+  //             id: 3,
+  //             username: 'william',
+  //             role: {
+  //                 id: 1,
+  //                 type: 'admin'
+  //             }
+  //         },
 
-          // "phase": {
-          //     "id": 2,
-          //     "kind": "TRAINER_APPROVED",
-          //     "description": "Trainer has reviewed backlog and approves of scope and domain"
-          // },
-          tags: [],
-          iterations: [],
-      },
-      {
-          id: 2,
-          name: 'Make A Recruiting Application',
-          status: {
-              id: 2,
-              name: 'ACTIVE'
-          },
-          description: 'Finds potential condadites by scrapping facebook.',
-          owner: {
-              id: 1,
-              username: 'william',
-              role: {
-                  id: 1,
-                  type: 'admin'
-              }
-          },
-          tags: [],
-          iterations: [],
-      },
-      {
-          id: 3,
-          name: 'Caliber Staging Module',
-          status: {
-              id: 3,
-              name: 'CODE_REVIEW'
-          },
-          description: 'Allows for staging to be remote',
-          owner: {
-              id: 4,
-              username: 'Bob',
-              role: {
-                  id: 2,
-                  type: 'user'
-              }
-          },
-          tags: [],
-          iterations: [],
-      }
-  ];
-
+  //         // "phase": {
+  //         //     "id": 2,
+  //         //     "kind": "TRAINER_APPROVED",
+  //         //     "description": "Trainer has reviewed backlog and approves of scope and domain"
+  //         // },
+  //         tags: [],
+  //         iterations: [],
+  //     },
+  //     {
+  //         id: 2,
+  //         name: 'Make A Recruiting Application',
+  //         status: {
+  //             id: 2,
+  //             name: 'ACTIVE'
+  //         },
+  //         description: 'Finds potential condadites by scrapping facebook.',
+  //         owner: {
+  //             id: 1,
+  //             username: 'william',
+  //             role: {
+  //                 id: 1,
+  //                 type: 'admin'
+  //             }
+  //         },
+  //         tags: [],
+  //         iterations: [],
+  //     },
+  //     {
+  //         id: 3,
+  //         name: 'Caliber Staging Module',
+  //         status: {
+  //             id: 3,
+  //             name: 'CODE_REVIEW'
+  //         },
+  //         description: 'Allows for staging to be remote',
+  //         owner: {
+  //             id: 4,
+  //             username: 'Bob',
+  //             role: {
+  //                 id: 2,
+  //                 type: 'user'
+  //             }
+  //         },
+  //         tags: [],
+  //         iterations: [],
+  //     }
+  // ];
+  public projects: Project[] = [];
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
+  public statuses: Status[] = [] //added statuses to pull all statuses from backend
   public filteredTags: Project[] = [];
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
@@ -119,7 +123,9 @@ export class ViewProjectsComponent implements OnInit {
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
-  public statusSelected = 'ACTIVE';
+
+  // use this to apply initial status, and possibly add filtering based off initial
+  public statusSelected = 'noStatus';
 
 
   // based on project.model.ts
@@ -237,6 +243,8 @@ export class ViewProjectsComponent implements OnInit {
     }
 
     this.getProjectsInit();
+    this.getAllProjectStatuses();
+    this.getTags();
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
     */
@@ -287,13 +295,16 @@ export class ViewProjectsComponent implements OnInit {
     /*
     * This code is to get the projects from localhost:8085
     */
-    // this.viewProjectService.GetAllProjects().subscribe((report: any) => {
-    //   // this.projects = report as Project[];
-    //   //changed this to make sure if any functions use report data it would get the project mock data
-    //   report as Project[];
-    //   report = this.projects;
-    //   this.dataSource.data = this.projects.filter;
-    // });
+    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+      // this.projects = report as Project[];
+      //changed this to make sure if any functions use report data it would get the project mock data
+      report as Project[];
+      this.projects = report;
+      console.log(this.projects);
+
+      // removed .filter as it causes projects to not appear
+      this.dataSource.data = this.projects;
+    });
   }
 
   public getProjects(): void {
@@ -311,6 +322,17 @@ export class ViewProjectsComponent implements OnInit {
     this.viewProjectService
       .GetAllProjectTags()
       .subscribe((data: Tag[]) => (this.tag = data));
+  }
+
+  //get all tags from backend
+  getTags(): void {
+    this.tagService.getAllTags().subscribe((data: Tag[]) => {
+      this.tag = data;
+      console.log(this.tag);
+    })
+    // his.statusService.getAllStatus().subscribe((data: Status[]) => {
+    //   this.statuses = data;
+    //   console.log(this.statuses)
   }
 
   // return all phase from db
@@ -331,6 +353,14 @@ export class ViewProjectsComponent implements OnInit {
         }
       });
 
+  }
+
+  //gets all statuses from backend
+  getAllProjectStatuses(): void {
+    this.statusService.getAllStatus().subscribe((data: Status[]) => {
+      this.statuses = data;
+      console.log(this.statuses)
+    })
   }
 
   getProjectStatus(): void {
