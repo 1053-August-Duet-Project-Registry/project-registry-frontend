@@ -19,6 +19,7 @@ import { StatusService } from 'src/app/service/status.service';
 import { TagService } from 'src/app/service/tag.service';
 import { Project } from '../../models/project.model';
 import { LoginServiceService } from '../../service/login-service.service';
+import { PhaseService } from '../../service/phase.service';
 
 export interface statusFilter { }
 
@@ -32,7 +33,7 @@ export class ViewProjectsComponent implements OnInit {
 
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
               private iterationService: IterationService, private route: Router, private location: Location, private statusService: StatusService, private tagService: TagService, 
-              private loginService: LoginServiceService) {
+              private loginService: LoginServiceService, private phaseService: PhaseService) {
 
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
@@ -120,6 +121,7 @@ export class ViewProjectsComponent implements OnInit {
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
   public phase: Phase[] = [];
   public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
+  
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
@@ -245,6 +247,7 @@ export class ViewProjectsComponent implements OnInit {
     this.getProjectsInit();
     this.getAllProjectStatuses();
     this.getTags();
+    this.getPhases();
     /*
     * commented out other functions since they eventually call on filterResults which breaks table
     */
@@ -344,6 +347,14 @@ export class ViewProjectsComponent implements OnInit {
       });
   }
 
+  // get all phases from backend
+  getPhases(): void {
+    this.phaseService.getAllPhases().subscribe((data: Phase[]) => {
+      this.phase = data;
+      console.log(this.phase)
+    })
+  }
+
   // grabs all of the statuses
   getAllStatuses(): void {
     this.viewProjectService.getAllStatuses()
@@ -373,6 +384,9 @@ export class ViewProjectsComponent implements OnInit {
       });
     });
   }
+
+
+  
 
   // this function filters by status correctly, if disabled filtering status doesn't work
   filterProjectsByStatus() {

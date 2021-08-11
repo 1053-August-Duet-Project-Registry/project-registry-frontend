@@ -50,12 +50,36 @@ h1 {
 
 ::ng-deep .time-sch-wrapper .class0 {
   
-  background-color:blue !important;
+  background-color:#F26925 !important;
 
 }
 
 ::ng-deep .time-sch-wrapper .class1 {
 
-  background-color:red !important;
+  background-color:#72A4C2 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class2 {
+
+  background-color: #FCB414 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class3 {
+
+  background-color: #F26925 !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class4 {
+
+  background-color:#72A4C2  !important;
+  
+}
+
+::ng-deep .time-sch-wrapper .class5 {
+
+  background-color:#FCB414 !important;
   
 }

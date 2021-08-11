@@ -143,7 +143,7 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     let myDiv = document.createElement('div');
     let parentDiv = document.querySelector('.displayInfo');
     this.events.ItemClicked = (items) => {
-      myDiv.innerHTML = items.classes + " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
+      myDiv.innerHTML = " <br />SectionId: " + items.sectionID + " <br />Name: " + items.name + 
       " <br />StartDate: " + items.start.toDate() + " <br />EndDate: " + items.end.toDate();
       parentDiv?.appendChild(myDiv);
       console.log(myDiv);
