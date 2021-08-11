@@ -10,6 +10,7 @@ import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
 import { Tag } from '../models/tag.model';
 import { Phase } from '../models/phase.models';
+import { Iteration } from '../models/iteration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +21,14 @@ export class ProjectService {
 
   public currentProject: Project = new Project(0, '', new Status(1, 'IN_ITERATION'),
     '', new User(1, 'william', new Role(1, 'admin')),
-    [new Tag(1, 'Revature', 'Made by Revature', true)], []);
+    [new Tag(-1, 'Revature', 'Made by Revature', true),
+      new Tag(-2, 'Java', 'server language', true)], []);
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
-  public setCurrentProject(project: Project) {
+  public setCurrentProject(project: Project): void {
     window.localStorage.setItem('currentProject', JSON.stringify(project));
     this.currentProject = project;
   }
@@ -59,7 +61,7 @@ export class ProjectService {
         );
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
+  private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to a remote logging infrastructure

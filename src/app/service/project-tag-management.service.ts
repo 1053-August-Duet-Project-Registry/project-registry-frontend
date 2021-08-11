@@ -13,10 +13,13 @@ existing array tag if an existing project otherwise if new, this array is just e
  */
   private tagArray = new BehaviorSubject<Tag[]>([]);
   currentTagArray = this.tagArray.asObservable();
+  // array that shows in the drop-down list for search bar
+  public universalTags = [new Tag(-404, 'No Tags Available', 'description', true)];
 
   constructor() { }
+
   // simply overwrites previous tag to new one
-  updateTagArray(arr: Tag[]){
+  updateTagArray(arr: Tag[]): void{
     this.tagArray.next(arr);
   }
 }
