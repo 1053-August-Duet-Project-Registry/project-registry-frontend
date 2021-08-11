@@ -19,8 +19,7 @@ export class IterationService {
         })
   };
 
-  //url for the API containing batches
-  // apiUrl = "https://caliber2-mock.revaturelabs.com/mock/training/batch";
+  
 
   constructor(private http: HttpClient) { }
   getIterations(): Observable<Iteration[]>{
@@ -44,22 +43,19 @@ export class IterationService {
   } 
 
 
+  // url for the API containing batches
+  apiUrl = "https://caliber2-mock.revaturelabs.com/mock/training/batch";
+  getBatchService(): Observable<BatchTemplate[]>{
+    return this.http.get<BatchTemplate[]>(`${REGISTRY_URL}iteration`)
+  }
 
+  getBatchServiceMock(): Observable<BatchTemplate[]>{
+    return this.http.get<BatchTemplate[]>(this.apiUrl)
+  }
 
-  // getBatchService(): Observable<batchTemplate[]>{
-  //   return this.http.get<batchTemplate[]>(`${REGISTRY_URL}iteration`)
-  // }
-
-
-
-
-  // getBatchServiceMock(): Observable<batchTemplate[]>{
-  //   return this.http.get<batchTemplate[]>(this.apiUrl)
-  // }
-
-  // getIterationMock(): Observable<Iteration[]>{
-  //   return this.http.get<Iteration[]>(this.apiUrl)
-  // }
+  getIterationMock(): Observable<Iteration[]>{
+    return this.http.get<Iteration[]>(this.apiUrl)
+  }
 
   // sendIteration(iteration: Iteration): Observable<Iteration> {
   //   console.log("Here is the iteration we're about to send: " + JSON.stringify(iteration));
