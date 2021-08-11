@@ -10,12 +10,16 @@ import { filter } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
 import { Phase } from 'src/app/models/phase.models';
+import { Status } from 'src/app/models/status.model';
 import { Tag } from 'src/app/models/tag.model';
 import { IterationService } from 'src/app/service/iteration.service';
 import { ProjectService } from 'src/app/service/project.service';
 import { ViewProjectService } from 'src/app/service/view-project.service';
+import { StatusService } from 'src/app/service/status.service';
+import { TagService } from 'src/app/service/tag.service';
 import { Project } from '../../models/project.model';
 import { LoginServiceService } from '../../service/login-service.service';
+import { PhaseService } from '../../service/phase.service';
 
 export interface statusFilter { }
 
@@ -28,8 +32,8 @@ export class ViewProjectsComponent implements OnInit {
 
 
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
-              private iterationService: IterationService, private route: Router, private location: Location,
-              private loginService: LoginServiceService) {
+              private iterationService: IterationService, private route: Router, private location: Location, private statusService: StatusService, private tagService: TagService, 
+              private loginService: LoginServiceService, private phaseService: PhaseService) {
 
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
@@ -40,21 +44,26 @@ export class ViewProjectsComponent implements OnInit {
       }
     });
   }
+
+  public projects: Project[] = [];
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
+  public statuses: Status[] = [] //added statuses to pull all statuses from backend
   public filteredTags: Project[] = [];
   public filteredPhase: Project[] = [];
   public filteredStatuses: Project[] = []; // should be more descriptive: projectsFilteredByStatus:
   public phase: Phase[] = [];
-  /*  MatTableDataSource is the class that renders its "data" field to the HTML table
-  *   Note: dataSource.data is often used in this file to get the projects displayed on the page
-  */
+  // public dataSource: MatTableDataSource<Project> | any; // source of data for the material based component: table
   public dataSource: MatTableDataSource<Project> = new MatTableDataSource();
+
 
   public tagSelected: string | undefined | null;
   public phaseSelected: string | undefined | null;
-  public statusSelected ? = 'ACTIVE';
+
+  // use this to apply initial status, and possibly add filtering based off initial
+  public statusSelected = 'noStatus';
+
 
 
   // based on project.model.ts
@@ -179,7 +188,27 @@ export class ViewProjectsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getProjects();
+
+
+    // Check if user is logged in, otherwise redirect.
+    if (! this.loginService.checkSessionLogin()) {
+      this.route.navigate(['/homepage-login']);
+    }
+
+    this.getProjectsInit();
+    this.getAllProjectStatuses();
+    this.getTags();
+    this.getPhases();
+    /*
+    * commented out other functions since they eventually call on filterResults which breaks table
+    */
+    
+    // mattabledataasource determines what goes in table on page/ functions put project data into datasource
+    this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
+
+    // console.log("ngOnInit projects: " + this.projects);
+    // perhaps a different method?
+
   }
 
   /*ngAfterViewInit() {
@@ -206,10 +235,32 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  // gets data from localhost:8085/api/project and puts data in dataSource.data
+
+  // returns all the projects in DB
+  public getProjectsInit(): void {
+    /*
+    * This code is to get the projects from localhost:8085
+    */
+    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+      // this.projects = report as Project[];
+      //changed this to make sure if any functions use report data it would get the project mock data
+      report as Project[];
+      this.projects = report;
+      console.log(this.projects);
+
+      // removed .filter as it causes projects to not appear
+      this.dataSource.data = this.projects;
+    });
+  }
+
   public getProjects(): void {
-    this.viewProjectService.GetAllProjects()
-      .subscribe((report: Project[]) => this.dataSource.data = report);
+    console.log('getProjects method: ');
+    this.viewProjectService.GetAllProjects().subscribe((report: any) => {
+
+      this.projects = report as Project[];
+
+      this.dataSource.data = this.projects;
+    });
   }
 
   // return all tags from db
@@ -219,6 +270,17 @@ export class ViewProjectsComponent implements OnInit {
       .subscribe((data: Tag[]) => (this.tag = data));
   }
 
+  //get all tags from backend
+  getTags(): void {
+    this.tagService.getAllTags().subscribe((data: Tag[]) => {
+      this.tag = data;
+      console.log(this.tag);
+    })
+    // his.statusService.getAllStatus().subscribe((data: Status[]) => {
+    //   this.statuses = data;
+    //   console.log(this.statuses)
+  }
+
   // return all phase from db
   getProjectPhase(): void {
     this.viewProjectService
@@ -226,6 +288,14 @@ export class ViewProjectsComponent implements OnInit {
       .subscribe((data: Phase[]) => {
         (this.phase = data);
       });
+  }
+
+  // get all phases from backend
+  getPhases(): void {
+    this.phaseService.getAllPhases().subscribe((data: Phase[]) => {
+      this.phase = data;
+      console.log(this.phase)
+    })
   }
 
   // grabs all of the statuses
@@ -239,6 +309,14 @@ export class ViewProjectsComponent implements OnInit {
 
   }
 
+  //gets all statuses from backend
+  getAllProjectStatuses(): void {
+    this.statusService.getAllStatus().subscribe((data: Status[]) => {
+      this.statuses = data;
+      console.log(this.statuses)
+    })
+  }
+
   getProjectStatus(): void {
     this.dataSource.data.forEach((project: Project) => {
       if (!this.status.includes(project.status.name)) {
@@ -246,6 +324,9 @@ export class ViewProjectsComponent implements OnInit {
       }
     });
   }
+
+
+  
 
   // this function filters by status correctly, if disabled filtering status doesn't work
   filterProjectsByStatus(): void {
