@@ -28,6 +28,7 @@ export class ProjectService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
 
+
   public setCurrentProject(project: Project): void {
     window.localStorage.setItem('currentProject', JSON.stringify(project));
     this.currentProject = project;

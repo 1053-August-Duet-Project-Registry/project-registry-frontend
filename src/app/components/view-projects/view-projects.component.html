@@ -37,15 +37,8 @@
             <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
               <mat-option value="noStatus">Select a status...</mat-option>
 
-              <!-- Where is it grabbing statuses from? if DB we need to fill in values for devlopment-->
-              <mat-option value="ACTIVE">Active</mat-option>
-              <mat-option value="CODE_REVIEW">Code-Review</mat-option>
-              <mat-option value="FINISH">Finished</mat-option>
-              <mat-option value="PLANNED">Planned</mat-option>
-              <mat-option value="AVAILABLE">Available</mat-option>
-
-              <mat-option *ngFor="let statuses of status" value="{{ statuses }}">
-                {{ statuses }}
+              <mat-option *ngFor="let status of statuses" value='{{ status.name }}'>
+                {{ status.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -59,20 +52,6 @@
               <mat-option value="noPhase">Select a Phase...</mat-option>
               <mat-option *ngFor="let fase of phase" value="{{ fase.kind }}">
                 {{ fase.kind }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-
-        <!-- Search By Description -->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Description</mat-label>
-            <mat-select name="allBatches" (selectionChange)="filterIteration($event)">
-              <mat-option value="">Select an Iterator...</mat-option>
-              <mat-option *ngFor="let i of allBatches" value="{{i.batchId}}">
-                {{i.startDate}} {{i.location}} {{i.skill}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -97,6 +76,7 @@
         <mat-grid-tile>
           <mat-form-field appearance="fill">
             <mat-label>Tags</mat-label>
+
             <mat-select name="tagList" (selectionChange)="filterTag($event)" [(ngModel)]="tagSelected">
               <mat-option value="noTag">Select a tag...</mat-option>
               <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
