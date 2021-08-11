@@ -76,8 +76,6 @@ export class ViewProjectsComponent implements OnInit {
   public statusSelected = 'noStatus';
 
   ngOnInit(): void {
-
-
     // Check if user is logged in, otherwise redirect.
     if (! this.loginService.checkSessionLogin()) {
       this.route.navigate(['/homepage-login']);
@@ -88,13 +86,11 @@ export class ViewProjectsComponent implements OnInit {
     this.getAllStatuses();
     this.getPhases();
     this.dataSource = new MatTableDataSource(this.projects); // want to send in a filtered group
-  
   }
 
   //// initiate variable
 
   // return all projects from db
-
   public getProjects(): void {
     console.log('getProjects method: ');
     this.viewProjectService.getAllProjects().subscribe((report: any) => {
@@ -114,7 +110,7 @@ export class ViewProjectsComponent implements OnInit {
     })
   }
 
-
+  // collecting the current onwer is showing in the table; 
   getProjectOwners(): void 
   {
     this.viewProjectService.GetAllProjects().subscribe( (data : any ) => {
@@ -145,20 +141,6 @@ export class ViewProjectsComponent implements OnInit {
   }
 
  //////////////////////////////////////////////////////////////
-
-  ///////// 2nd level of filtering
-
-  /// get status that currently exist on the table NOT from the database. This may be helpful for 2nd level filter 
-  getProjectStatus(): void {
-    this.dataSource.data.forEach((project: Project) => {
-      if (!this.status.includes(project.status.name)) {
-        this.status.push(project.status.name);
-      }
-    });
-  }
-
-  ////////////////////////////////////
-
 
 
   //////////////// Table configuation unused functions
@@ -376,9 +358,10 @@ export class ViewProjectsComponent implements OnInit {
       this.filteredPhase = [];
       for (const i of this.dataSource.data) {
         // finds projects with status name the same as selected status
-        // if (i.phase.kind === this.phaseSelected) {
-        //   this.filteredPhase.push(i);
-        // }
+        
+        if (i.iterations.length && i.iterations[i.iterations.length-1].phase?.kind === this.phaseSelected) {
+          this.filteredPhase.push(i);
+        }
       }
     }
     this.filterResults();
@@ -443,5 +426,18 @@ export class ViewProjectsComponent implements OnInit {
     this.route.navigateByUrl('project-detail');
   }
 
-  
+  ///////// 2nd level of filtering
+
+  /// get status that currently exist on the table NOT from the database. This may be helpful for 2nd level filter 
+  getProjectStatus(): void {
+    this.dataSource.data.forEach((project: Project) => {
+      if (!this.status.includes(project.status.name)) {
+        this.status.push(project.status.name);
+      }
+    });
+  }
+
+  ////////////////////////////////////
+
+
 }
