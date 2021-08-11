@@ -23,15 +23,19 @@ export class TagService {
     return this.http.get<Tag[]>(`${REGISTRY_URL}tag`);
   }
 
-
   public registerTag(newTag: Tag): Observable<string> {
     return this.http.post<Tag>(`${REGISTRY_URL}tag`, newTag)
-      .pipe(
-        tap(_ => console.log('posting tag..')),
+      .pipe(tap(_ => console.log('posting tag..')),
         catchError(this.handleError<any>('registerTag'))
-        );
+      );
   }
-  private handleError<T>(operation = 'operation', result?: T) {
+
+  // can make it into the function from the remove function from the add-tags-added-tags
+   public disableTag(tag: Tag): Observable<Tag> {
+    return this.http.put<Tag>(`${REGISTRY_URL}tag/id/${tag.id}/disable`, {});
+  }
+
+  private handleError<T>(operation = 'operation', result?: T): any {
     return (error: any): Observable<T> => {
       // TODO: send the error to a remote logging infrastructure
       // this.logger.error("WE ENCOUNTERED AN ERROR IN " + operation);

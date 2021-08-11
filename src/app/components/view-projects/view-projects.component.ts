@@ -37,80 +37,14 @@ export class ViewProjectsComponent implements OnInit {
 
     let numberOfTimesAround = 0;
     route.events.subscribe(val => {
-      if (location.path() == '/project-detail' && numberOfTimesAround < 1) {
+      if (location.path() === '/project-detail' && numberOfTimesAround < 1) {
         console.log('running');
         this.getProjects();
         numberOfTimesAround++;
       }
     });
-
   }
-  // public projects: Project[] =
-  // [
-  //     {
-  //         id: 1,
-  //         name: 'rideforce',
-  //         status: {
-  //             id: 3,
-  //             name: 'ACTIVE'
-  //         },
-  //         description: 'rideforce project',
-  //         owner: {
-  //             id: 3,
-  //             username: 'william',
-  //             role: {
-  //                 id: 1,
-  //                 type: 'admin'
-  //             }
-  //         },
 
-  //         // "phase": {
-  //         //     "id": 2,
-  //         //     "kind": "TRAINER_APPROVED",
-  //         //     "description": "Trainer has reviewed backlog and approves of scope and domain"
-  //         // },
-  //         tags: [],
-  //         iterations: [],
-  //     },
-  //     {
-  //         id: 2,
-  //         name: 'Make A Recruiting Application',
-  //         status: {
-  //             id: 2,
-  //             name: 'ACTIVE'
-  //         },
-  //         description: 'Finds potential condadites by scrapping facebook.',
-  //         owner: {
-  //             id: 1,
-  //             username: 'william',
-  //             role: {
-  //                 id: 1,
-  //                 type: 'admin'
-  //             }
-  //         },
-  //         tags: [],
-  //         iterations: [],
-  //     },
-  //     {
-  //         id: 3,
-  //         name: 'Caliber Staging Module',
-  //         status: {
-  //             id: 3,
-  //             name: 'CODE_REVIEW'
-  //         },
-  //         description: 'Allows for staging to be remote',
-  //         owner: {
-  //             id: 4,
-  //             username: 'Bob',
-  //             role: {
-  //                 id: 2,
-  //                 type: 'user'
-  //             }
-  //         },
-  //         tags: [],
-  //         iterations: [],
-  //     }
-  // ];
   public projects: Project[] = [];
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
@@ -129,6 +63,7 @@ export class ViewProjectsComponent implements OnInit {
 
   // use this to apply initial status, and possibly add filtering based off initial
   public statusSelected = 'noStatus';
+
 
 
   // based on project.model.ts
@@ -156,31 +91,33 @@ export class ViewProjectsComponent implements OnInit {
   iterationSuccess?: string;
   iterationError?: string;
 
-  changeBatch(value: BatchTemplate) {
+  changeBatch(value: BatchTemplate): void {
     this.sendBatch = value as BatchTemplate;
   }
 
-  getBatches() {
-    this.iterationService.getBatchServiceMock().subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
+  getBatches(): void {
+    this.iterationService.getBatchServiceMock()
+      .subscribe((data: BatchTemplate[] | undefined) => this.allBatches = data);
   }
 
-  getIteration() {
+  getIteration(): void {
     console.log('all iteration');
     this.iterationService.getIteration().subscribe((iteration: Iteration[]) => {
       this.allIterations = iteration;
-      console.log('all', this.allIterations);
     });
 
 
   }
 
-  sendIteration(row: Project) {
+  sendIteration(row: Project): void {
     if (this.sendBatch) {
-      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id, this.sendBatch.startDate, this.sendBatch.endDate, null);
+      // TODO add phase to last param instead of null
+      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id,
+        this.sendBatch.startDate, this.sendBatch.endDate, null);
 
-      let haventIterate: Boolean = true;
-      for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == this.sendBatch.batchId) {
+      let haventIterate = true;
+      for (const anIteration of this.allIterations) {
+        if (anIteration.batchId === this.sendBatch.batchId) {
           haventIterate = false;
         }
       }
@@ -192,7 +129,11 @@ export class ViewProjectsComponent implements OnInit {
       //     console.log(row.id, projects.id, this.sendBatch.batchId, this.allIterations[i].batchId, this.allIterations.length)
       //     if (row.id != projects.id && this.sendBatch.batchId == this.allIterations[i].batchId) {
 
-      //       this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //       this.iterationService.sendIteration(this.iteration)
+      //       .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //       startDate: any; batchId: any; }) => this.iterationSuccess =
+      //       `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //       to batch ${data.startDate} ${data.batchId}`);
       //       this.getIteration()
       //       this.selectedBatch = this.sendBatch.batchId
       //       this.iterationError = ''
@@ -200,7 +141,11 @@ export class ViewProjectsComponent implements OnInit {
 
       //     } else {
       //       if (haventIterate == true) {
-      //         this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //         this.iterationService.sendIteration(this.iteration)
+      //         .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //         startDate: any; batchId: any; }) => this.iterationSuccess =
+      //         `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //         to batch ${data.startDate} ${data.batchId}`);
       //         this.getIteration()
       //         this.iterationError = ''
       //         break;
@@ -214,7 +159,11 @@ export class ViewProjectsComponent implements OnInit {
       //     }
       //   }
       // } else {
-      //   this.iterationService.sendIteration(this.iteration).subscribe((data: { project: { name: string; owner: { username: string; }; }; startDate: any; batchId: any; }) => this.iterationSuccess = `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()} to batch ${data.startDate} ${data.batchId}`);
+      //   this.iterationService.sendIteration(this.iteration)
+      //   .subscribe((data: { project: { name: string; owner: { username: string; }; };
+      //   startDate: any; batchId: any; }) => this.iterationSuccess =
+      //   `Successfully iterate project ${data.project?.name.toUpperCase()} of ${data.project?.owner.username.toUpperCase()}
+      //   to batch ${data.startDate} ${data.batchId}`);
       //   this.getIteration()
       //   console.log("first time")
 
@@ -228,9 +177,9 @@ export class ViewProjectsComponent implements OnInit {
     if (this.allIterations && this.allIterations.length > 0) {
       const filtered: Project[] = [];
 
-      for (let i = 0; i < this.allIterations.length; i++) {
-        if (this.allIterations[i].batchId == event.value) {
-          filtered.push(this.allIterations[i].project as Project);
+      for (const iteration of this.allIterations) {
+        if (iteration.batchId === event.value) {
+          filtered.push(iteration.project as Project);
         }
       }
       this.dataSource = new MatTableDataSource(filtered);
@@ -239,6 +188,7 @@ export class ViewProjectsComponent implements OnInit {
 
 
   ngOnInit(): void {
+
 
     // Check if user is logged in, otherwise redirect.
     if (! this.loginService.checkSessionLogin()) {
@@ -268,9 +218,10 @@ export class ViewProjectsComponent implements OnInit {
 
     // console.log("ngOnInit projects: " + this.projects);
     // perhaps a different method?
+
   }
 
-  ngAfterViewInit() {
+  /*ngAfterViewInit() {
     // this.getProjects();
     // this.getProjectTags();
     // this.getProjectPhase();
@@ -278,14 +229,14 @@ export class ViewProjectsComponent implements OnInit {
     // this.dataSource = new MatTableDataSource(this.projects);
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
-  }
+  }*/
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.filterProjectsByStatus();
 
   }
   // Filter the columns
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -293,6 +244,7 @@ export class ViewProjectsComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
 
   // returns all the projects in DB
   public getProjectsInit(): void {
@@ -376,13 +328,10 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   getProjectStatus(): void {
-    this.viewProjectService.GetAllProjectStatus().subscribe((data: Project[]) => {
-      this.projects = data;
-      this.projects.forEach((project) => {
-        if (!this.status.includes(project.status.name)) {
-          this.status.push(project.status.name);
-        }
-      });
+    this.dataSource.data.forEach((project: Project) => {
+      if (!this.status.includes(project.status.name)) {
+        this.status.push(project.status.name);
+      }
     });
   }
 
@@ -390,14 +339,14 @@ export class ViewProjectsComponent implements OnInit {
   
 
   // this function filters by status correctly, if disabled filtering status doesn't work
-  filterProjectsByStatus() {
+  filterProjectsByStatus(): void {
     if (this.statusSelected === '') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredStatuses = [];
 
       // finds projects with status name the same as selected status
-      for (const project of this.projects) {
+      for (const project of this.dataSource.data) {
         if (project.status.name === this.statusSelected) {
           this.filteredStatuses.push(project);
         }
@@ -412,10 +361,10 @@ export class ViewProjectsComponent implements OnInit {
 
   filterTag(event: MatSelectChange): void {
     if (this.tagSelected === 'noTag') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredTags = [];
-      for (const i of this.projects) {
+      for (const i of this.dataSource.data) {
         for (const j of i.tags) {
           if (j.name === this.tagSelected) {
             this.filteredTags.push(i);
@@ -423,17 +372,14 @@ export class ViewProjectsComponent implements OnInit {
         }
       }
     }
-
-    // temp to make sure tag filtering works
-    this.dataSource = new MatTableDataSource(this.filteredProjects); // want to send in a filtered group
   }
 
   filterPhase(event: MatSelectChange): void {
     if (this.phaseSelected === 'noPhase') {
-      this.filteredProjects = this.projects;
+      this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredPhase = [];
-      for (const i of this.projects) {
+      for (const i of this.dataSource.data) {
         // finds projects with status name the same as selected status
         // if (i.phase.kind === this.phaseSelected) {
         //   this.filteredPhase.push(i);
@@ -453,7 +399,7 @@ export class ViewProjectsComponent implements OnInit {
       this.statusSelected !== 'noStatus'
     ) {
       temp = this.filteredTags.filter((x) => this.filteredStatuses.includes(x));
-    } else if (this.tagSelected != null && this.tagSelected != 'noTag') {
+    } else if (this.tagSelected != null && this.tagSelected !== 'noTag') {
       temp = this.filteredTags;
     } else if (
       this.statusSelected !== '' &&
@@ -461,10 +407,10 @@ export class ViewProjectsComponent implements OnInit {
     ) {
       temp = this.filteredStatuses;
     } else {
-      temp = this.projects;
+      temp = this.dataSource.data;
     }
 
-    if (this.phaseSelected != null && this.phaseSelected != 'noStatus') {
+    if (this.phaseSelected != null && this.phaseSelected !== 'noStatus') {
       this.dataSource = new MatTableDataSource(
         this.filteredPhase.filter((x) => temp.includes(x))
       );
@@ -474,8 +420,7 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  reset() {
-    this.dataSource = new MatTableDataSource(this.projects);
+  reset(): void {
     this.filteredProjects = [];
     this.filteredTags = [];
     this.filteredPhase = [];
@@ -488,10 +433,10 @@ export class ViewProjectsComponent implements OnInit {
   }
 
   // TODO this method is current non-functional.
-  rowClicked(projectId: number) {
+  rowClicked(projectId: number): void {
     let currentProject: Project | undefined;
     if (projectId) {
-       currentProject = this.projects.find(p => p.id === projectId);
+      currentProject = this.dataSource.data.find(p => p.id === projectId);
     }
 
     if (currentProject !== undefined) {
