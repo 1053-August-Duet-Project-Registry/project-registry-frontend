@@ -165,7 +165,7 @@ export class ViewProjectsComponent implements OnInit {
 
 
    changeBatch(value: BatchTemplate): void {
-    this.sendBatch = value as BatchTemplate;
+    this.sendBatch = value;
   }
 
   getBatches(): void {
@@ -185,7 +185,7 @@ export class ViewProjectsComponent implements OnInit {
   sendIteration(row: Project): void {
     if (this.sendBatch) {
       // TODO add phase to last param instead of null
-      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id,
+      this.iteration = new Iteration(this.sendBatch.batchId, row, this.sendBatch.id,
         this.sendBatch.startDate, this.sendBatch.endDate, null);
 
       let haventIterate = true;
