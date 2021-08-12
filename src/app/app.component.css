@@ -26,7 +26,8 @@ li {
   min-width: 200px;
   height: 100vh;
   background: white;
-  box-shadow: 1px 1px 1px solid grey;
+  box-shadow: 1px 1px 1px;
+  color: RGB(185, 185, 186); /*solid grey*/
 }
 .active a{
   text-decoration:none;
@@ -37,7 +38,7 @@ li {
   color: var(--orange);
 }
 .dropdown-toggle{
-  font-family: 16px;
+  font-size: 16px;
 }
 ul.collapse a{
   color: var(--orange);

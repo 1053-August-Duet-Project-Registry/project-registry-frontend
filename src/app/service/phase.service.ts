@@ -2,10 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { REGISTRY_URL } from 'src/environments/environment';
 import { Phase } from '../models/phase.models';
-import { Project } from '../models/project.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,29 +18,30 @@ export class PhaseService implements OnInit {
 
 
   public phases: Phase[] = [];
+
+  // look into this when you get a chance
+  // tslint:disable-next-line:contextual-lifecycle
   ngOnInit(): void {
-    this.getPhases();
+    // this.getAllPhases();
   }
 
-  public getPhases(): any {
-    return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
-      .pipe(
-        catchError(this.handleError<Phase[]>('getPhase', []))
-      ).subscribe(data => {
-        this.phases = data;
-      });
+  getAllPhases(): Observable<Phase[]>{
+    return this.http.get<Phase[]>(`${ REGISTRY_URL }phase`)
+    // .pipe(
+    //   catchError(this.handleError<Phase[]>('getPhase', []))
+    // ).subscribe(data => {
+    //   this.phases = data;
+    //   console.log(this.phases);
+    // })
+    ;
   }
 
-  public getAllPhases() {
-    return this.http.get<Phase[]>(`${REGISTRY_URL}phase`, this.httpOptions)
-    .pipe(
-      catchError(this.handleError<Phase[]>('getPhase', []))
-    )
-
+  getPhaseById(id: number): Observable<Phase>{
+    return this.http.get<Phase>(`${ REGISTRY_URL }phase/id/${id}`);
   }
+
 
   private handleError<T>(operation = 'operation', result?: T) {
-
     return (error: any): Observable<T> => {
 
       // TODO: send the error to a remote logging infrastructure

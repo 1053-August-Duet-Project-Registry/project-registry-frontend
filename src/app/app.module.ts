@@ -25,8 +25,6 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { DatePipe } from '@angular/common';
-
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TagsComponent } from './components/tags/tags.component';
 import { NavComponent } from './components/nav/nav.component';
@@ -36,9 +34,6 @@ import { AddTagsComponent } from './components/add-tags/add-tags.component';
 import { AddTagsSearchBarComponent } from './components/add-tags-search-bar/add-tags-search-bar.component';
 import { AddTagsAddedTagsComponent } from './components/add-tags-added-tags/add-tags-added-tags.component';
 import { StatusComponent } from './components/status/status.component';
-
-
-
 
 @NgModule({
   declarations: [
@@ -54,7 +49,7 @@ import { StatusComponent } from './components/status/status.component';
     AddTagsComponent,
     AddTagsSearchBarComponent,
     AddTagsAddedTagsComponent,
-    StatusComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,

@@ -11,104 +11,6 @@
 <form>
   <div class="container">
     <mat-card>
-      <!-- Search By ID -->
-      <mat-grid-list cols="8" rowHeight="1:0.5">
-
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>ID</mat-label>
-            <input matInput class="from-control" (keyup)="applyFilter($event)" placeholder="ID" #input />
-          </mat-form-field>
-        </mat-grid-tile>
-        <!-- Search By Name available -->
-
-        <!-- Search By Tag available -->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Name</mat-label>
-            <input matInput class="from-control" (keyup)="applyFilter($event)" placeholder="Name" #input />
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!-- Search by Status -->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Status</mat-label>
-            <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
-              <mat-option value="noStatus">Select a status...</mat-option>
-
-              <mat-option *ngFor="let status of statuses" value='{{ status.name }}'>
-                {{ status.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!-- Search By Phase status -->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Phase</mat-label>
-            <mat-select name="phaseList" (selectionChange)="filterPhase($event)" [(ngModel)]="phaseSelected">
-              <mat-option value="noPhase">Select a Phase...</mat-option>
-              <mat-option *ngFor="let fase of phase" value="{{ fase.kind }}">
-                {{ fase.kind }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!-- Search By Owner -->
-
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Owner</mat-label>
-            <mat-select name="allBatches" (selectionChange)="filterIteration($event)">
-              <mat-option value="">Select an Iterator...</mat-option>
-              <mat-option *ngFor="let i of allBatches" value="{{i.batchId}}">
-                {{i.startDate}} {{i.location}} {{i.skill}}
-
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!-- Search By Tags-->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Tags</mat-label>
-
-            <mat-select name="tagList" (selectionChange)="filterTag($event)" [(ngModel)]="tagSelected">
-              <mat-option value="noTag">Select a tag...</mat-option>
-              <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
-                {{ tags.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!--Search By Iteration-->
-        <mat-grid-tile>
-          <mat-form-field appearance="fill">
-            <mat-label>Iteration</mat-label>
-            <mat-select name="allBatches" (selectionChange)="filterIteration($event)">
-              <mat-option value="">Select an Iterator...</mat-option>
-              <mat-option *ngFor="let i of allBatches" value="{{i.batchId}}">
-                {{i.startDate}} {{i.location}} {{i.skill}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </mat-grid-tile>
-
-        <!-- Reset button -->
-
-
-
-      </mat-grid-list>
-
-
-
-
-
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" matSort>
           <!-- ID Column -->
@@ -128,39 +30,64 @@
           </ng-container>
 
 
-
-
           <!-- status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-form-field appearance="legacy" style="width: 7.8rem;">
+                <mat-label>Status</mat-label>
+                <mat-select name="statusList" (selectionChange)="filterStatus($event)" [(ngModel)]="statusSelected">
+                  <mat-option value="noStatus">Select a Status</mat-option>
+                  <mat-option *ngFor="let st of status" [value]="st">
+                    {{ st }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
             <td mat-cell *matCellDef="let row" (click)="rowClicked(row.id)">
               {{ row.status.name }}
             </td>
           </ng-container>
 
-
-
-
-
-
           <!-- phase Column -->
           <ng-container matColumnDef="phase">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phase</th>
-            <td mat-cell *matCellDef="let row">{{ row.phase?.kind }}</td>
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-form-field appearance="legacy" style="width: 5.5rem;">
+                <mat-label>Phase</mat-label>
+                <mat-select name="phaseList" (selectionChange)="filterPhase($event)" [(ngModel)]="phaseSelected">
+                  <mat-option value="noPhase" selected>Select a Phase</mat-option>
+                  <mat-option *ngFor="let fase of phase" [value]="fase.kind">
+                    {{ fase.kind }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.iterations.length &&
+              row.iterations[row.iterations.length-1].phase?.kind || '' }}</td>
           </ng-container>
 
           <!-- description Column -->
           <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 15.2rem;">
               Description
             </th>
             <td mat-cell *matCellDef="let row" (click)="rowClicked(row.id)">
               {{ row.description }}
             </td>
           </ng-container>
+
           <!-- Owner Column -->
           <ng-container matColumnDef="owner">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Owner</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-form-field appearance="legacy" style="width: 7.5rem;">
+                <mat-label>Owner</mat-label>
+                <mat-select name="ownerList" (selectionChange)="filterProjectsByOwners($event)" [(ngModel)]="ownerSelected">
+                  <mat-option value="noOwner">Select an Owner</mat-option>
+                  <mat-option *ngFor="let owner of owners" value="{{owner}}">
+                    {{owner}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
             <td mat-cell *matCellDef="let row" (click)="rowClicked(row.id)">
               {{ row.owner.username }}
             </td>
@@ -169,11 +96,23 @@
           <!-- Tags Column -->
           <!--on main page, gets rows of tags-->
           <ng-container matColumnDef="tags">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tags</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <mat-form-field appearance="legacy" style="width: 7.5rem;">
+                <mat-label>Tags</mat-label>
+                <mat-select name="tagList" (selectionChange)="filterTag($event)" [(ngModel)]="tagSelected">
+                  <mat-option value="noTag">Select a tag</mat-option>
+                  <mat-option *ngFor="let tags of tag" value="{{ tags.name }}">
+                    {{ tags.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </th>
             <td mat-cell *matCellDef="let row" (click)="rowClicked(row.id)">
-              <span *ngFor="let in of row.tags">
-                {{ in.name }}
-              </span>
+              <mat-chip-list cdkDropListOrientation="horizontal">
+                <mat-chip *ngFor="let loopTag of row.tags" style="cursor: pointer;">
+                  {{ loopTag.name }}
+                </mat-chip>
+              </mat-chip-list>
             </td>
           </ng-container>
 
@@ -196,13 +135,13 @@
 
               <!-- No *ngIf -->
               <!--<section class="pb-3 pt-3 pl-3 pb3 row " >
-                <article class="col-12">
-                  <app-iteration (sendBatch) = "changeBatch($event)"></app-iteration>
-                </article>
-                <article class="col-12">
-                  <button class="btn btn-primary form-control" (click)="sendIteration(row)">Iterate</button>
-                </article>
-            </section> -->
+                    <article class="col-12">
+                      <app-iteration (sendBatch) = "changeBatch($event)"></app-iteration>
+                    </article>
+                    <article class="col-12">
+                      <button class="btn btn-primary form-control" (click)="sendIteration(row)">Iterate</button>
+                    </article>
+                </section> -->
             </td>
           </ng-container>
 

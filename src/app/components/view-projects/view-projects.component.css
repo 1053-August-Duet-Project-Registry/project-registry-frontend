@@ -4,27 +4,31 @@ table {
 
   width: 100%;
 }
+
+.table-wrapper{
+  overflow-x: scroll;
+  width: 100%;
+}
+
 .mat-header-cell {
-  
-  width:0px;
+  width: 0;
 }
 
 .mat-form-field {
   font-size: 14px;
-  width: 100%;
 }
 h1 {
   text-align: center;
   padding: 10px 20px;
   font-size: 220%;
-  
+
 }
 
 /* ---------- Group 5-------------------- */
 .alert-viewpage{
   min-height: 30px;
   display: flex;
- 
+
 }
 
 .alert-message-viewpage{
@@ -36,10 +40,6 @@ h1 {
   max-width: 120px;
 }
 
-/* .iteration-select-width{ 
-  min-width: 200px;
-  max-width: 220px;
-} */
 /* ---------- End Group 5-------------------- */
 
 
@@ -56,17 +56,16 @@ h1 {
   color: white
 }
 mat-form-field {
-  background-color: var(--orange);
   color: white;
   height:50px;
- 
+
 }
-mat-label {
+mat-label.ng-star-inserted {
+  font-size: 1.1rem;
   color: #fff;
 }
 mat-form-field-wrapper{
-  padding:auto;
-  /* color: white; */
+  padding: inherit;
 }
 
 .mat-form-field-underline::before, .mat-form-field-underline{
@@ -74,12 +73,13 @@ mat-form-field-wrapper{
 }
 th.mat-id{
   width:60px;
-  padding-left: 100px;
   text-align:center;
 }
 th.mat-header-cell{
-  padding-left:50px;
-  justify-content: flex-end;
+  text-align: center;
+  background-color: rgb(242,105,38);
+  color: white;
+  
 }
 .mat-raised-button.mat-primary{
   background: var(--orange);
@@ -87,14 +87,26 @@ th.mat-header-cell{
 }
 
 div.mat-id{
-  padding-left:50px;
   justify-content: flex-end;
 
 }
 
+::ng-deep .mat-select-value {
+  color: unset;
+}
+mat-select[name$=List] .mat-select-min-line {
+  color: #fff;
+}
+
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
-  padding-right: 0px;
+  padding-right: 0;
   justify-content: flex-end;
+
+}
+
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
 }
 
 .reset-btn{
@@ -107,7 +119,7 @@ th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:
   color: white;
   height:40px;
   width:40px;
-  
+
 }
 
 #anime{

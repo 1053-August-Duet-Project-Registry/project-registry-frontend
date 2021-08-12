@@ -20,13 +20,13 @@ export class ProjectLoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  login() {
+  login(): void {
     this.route.navigate(['/viewProject']);
   }
 
   /* Method that validates the user credentials and will
   navigate to viewProject or display an error message. */
-  authenticate(){
+  authenticate(): void {
     if (this.userLogin.username === 'revature' && this.userLogin.password === 'revature'){
       /** Debugging */
       console.log('This is the sessionVar.loginKey: ' + SessionVar.loginKey);
