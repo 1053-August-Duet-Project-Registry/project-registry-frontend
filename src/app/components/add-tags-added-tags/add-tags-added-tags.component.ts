@@ -72,7 +72,7 @@ export class AddTagsAddedTagsComponent implements OnInit {
       this.data.updateTagArray(this.selectedTagArr);
       this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagNoMore.name);
 
-      // this should no be here, the project tag should not be tucthed by the remove method
+      // this should no be here, the project tag should not be touched by the remove method
       // TODO remove this part of the function
       if (this.project) {
         this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
