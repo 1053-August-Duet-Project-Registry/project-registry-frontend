@@ -10,90 +10,104 @@ import { Location } from '@angular/common';
 import { Tag } from '../../models/tag.model';
 import { ProjectTagManagementService } from 'src/app/service/project-tag-management.service';
 import {LoginServiceService} from '../../service/login-service.service';
+import { StatusService } from 'src/app/service/status.service';
+import { Status } from 'src/app/models/status.model';
+import { Phase } from 'src/app/models/phase.models';
 
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
-  styleUrls: ['./project-detail.component.css']
+  styleUrls: ['./project-detail.component.css'],
 })
-
 export class ProjectDetailComponent implements OnInit {
-
-   arr!: Tag[];
+  public desiredId = 1;
+  public projects?: Project[] = [];
 
   public project?: Project;
 
   sendBatch?: BatchTemplate;
-  iteration?: Iteration ;
+  iteration?: Iteration;
 
   constructor(
-     public data: ProjectTagManagementService,
-     private viewProjectService: ViewProjectService,
-     private projectService: ProjectService,
-     private router: ActivatedRoute,
-     private route: Router,
-     private location: Location,
-     private phaseService: PhaseService,
-     private loginService: LoginServiceService) { }
+    public data: ProjectTagManagementService,
+    private viewProjectService: ViewProjectService,
+    private projectService: ProjectService,
 
-  // In future link to status table?
-  public statusMap: Record<string, number> = {
-    IN_ITERATION: 1,
-    CODE_FREEZE: 2,
-    CODE_REVIEW: 3,
-    NEEDS_CLEANUP: 4,
-    READY_FOR_ITERATION: 5,
-    ACTIVE: 6,
-    NEEDS_ATTENTION: 7,
-    ARCHIVED: 8,
-  };
+    private router: ActivatedRoute,
+    private route: Router,
+    private location: Location,
+    private phaseService: PhaseService,
+    private statusService: StatusService,
+    private loginService: LoginServiceService
+  ) {}
 
-  // used in the HTML to display options for the status and phase for projects
-  public statuses = ['ACTIVE', 'NEEDS_ATTENTION', 'ARCHIVED', 'CODE_REVIEW'];
-  public phases = ['BACKLOG_GENERATED', 'TRAINER_APPROVED', 'HANDOFF_SCHEDULED',
-    'RESOURCE_ALLOCATION', 'CHECKPOINT_MEETING', 'CODE_REVIEW', 'COMPLETE'];
+  public statuses: Status[] = [];
+  public phases: Phase[] = [];
 
   submitted = false;
 
   // TODO needs logic
-  onSubmit(): void { this.submitted = true; }
-
-  changeBatch(value: BatchTemplate): void {
-    this.sendBatch = value;
-    console.log(this.sendBatch);
+  onSubmit(): void {
+    this.submitted = true;
   }
 
   ngOnInit(): void {
-
     // Check if user is logged in, otherwise redirect.
-    if (! this.loginService.checkSessionLogin()) {
+    if (!this.loginService.checkSessionLogin()) {
       this.route.navigate(['/homepage-login']);
     }
-
-    this.data.currentTagArray.subscribe(arr => this.arr = arr);
-
-    this.phaseService.getAllPhases();
+    this.statusService.getAllStatus().subscribe((d) => {
+      this.statuses = d;
+    });
+    this.phaseService.getAllPhases().subscribe((d) => {
+      this.phases = d.map((k) => {
+        delete (k as any)['iterations'];
+        return k;
+      });
+    });
     this.project = this.projectService.getCurrentProject();
-    if (this.project.id === 0){
+    if (this.project.id === 0) {
       this.route.navigate(['']);
     }
   }
 
+  phaseChange(e: any) {
+    if (!this.project?.iterations?.length) {
+      return;
+    }
+    const idx = this.project?.iterations.length! - 1;
+    this.project.iterations[idx].phase =
+      this.phases.find((d) => {
+        return d.id == e.target.value;
+      }) || null;
+  }
+
+  statusChange(e: any) {
+    if (!this.project) {
+      return;
+    }
+    this.project.status = this.statuses.find((d) => {
+      return d.id == e.target.value;
+    })!;
+  }
+
   // Update Project in the backend
   public submit(): void {
-    if (!this.project){ return; }
-
-    if (this.sendBatch){
-      // TODO change final parameter to a phase
-      this.iteration = new Iteration(this.sendBatch.batchId, this.project, this.sendBatch.id,
-        this.sendBatch.startDate, this.sendBatch.endDate, null);
+    if (!this.project) {
+      return;
     }
 
-    // Setting the status id
-    this.project.status.id = this.statusMap[this.project.status.name];
-
-    this.project.tags = this.arr;
-
+    if (this.sendBatch) {
+      // TODO change final parameter to a phase
+      this.iteration = new Iteration(
+        this.sendBatch.batchId,
+        this.project,
+        this.sendBatch.id,
+        this.sendBatch.startDate,
+        this.sendBatch.endDate,
+        null
+      );
+    }
     this.projectService.updateProject(this.project).subscribe((data) => {
       this.project = data;
       this.route.navigate(['viewProject']);
@@ -103,5 +117,4 @@ export class ProjectDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
-
 }

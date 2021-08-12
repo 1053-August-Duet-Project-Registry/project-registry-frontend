@@ -24,21 +24,22 @@
           <!--Added options in the drop down for status Available and status Planned -->
           <div class="form-group col-md-6">
             <label for="status">Status</label>
-            <select [(ngModel)]="this.project.status.name" class="form-control" id="status" required>
-
-              <option *ngFor="let status of statuses" [value]="status">{{status}}</option>
-              <option value="available">Available</option>
-              <option value="planned">Planned</option>
-
+            <select (change)="statusChange($event)" class="form-control" id="status" required>
+              <option *ngFor="let status of statuses" [value]="status.id" [selected]="status.id==project.status.id">{{status.name}}
+              </option>
             </select>
           </div>
 
           <div class="form-group col-md-6">
-            <label for="phase">Phase</label>
             <!-- This should definitely not be commented but it wouldn't compile so -->
-             <select [(ngModel)]="this.project.iterations[4]" class="form-control" id="phase" required>
-              <option *ngFor="let phase of phases" [value]="phase">{{phase}}</option>
-             </select>
+            <ng-container *ngIf="project.iterations.length">
+              <label for="phase">Phase</label>
+              <select (change)="phaseChange($event)" class="form-control" id="phase" required>
+                <option *ngFor="let phase of phases" [value]="phase.id"
+                  [selected]="phase.id==project.iterations[project.iterations.length-1].phase?.id">{{phase.kind}}
+                </option>
+              </select>
+            </ng-container>
           </div>
         </div>
 

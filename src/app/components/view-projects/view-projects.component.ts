@@ -29,8 +29,7 @@ export class ViewProjectsComponent implements OnInit {
 
 
   constructor(private viewProjectService: ViewProjectService, private projectService: ProjectService,
-              private iterationService: IterationService, private route: Router, private location: Location,
-              private statusService: StatusService, private tagService: TagService,
+              private iterationService: IterationService, private route: Router, private location: Location, private statusService: StatusService, private tagService: TagService,
               private loginService: LoginServiceService, private phaseService: PhaseService) {
 
     let numberOfTimesAround = 0;
@@ -51,6 +50,9 @@ export class ViewProjectsComponent implements OnInit {
   public filteredProjects: Project[] = [];
   public tag: Tag[] = [];
   public status: string[] = []; // should be statuses.....cmon guys
+
+
+
 
   public filteredOwners: Project[] = [];
   public statuses: Status[] = []; //  added statuses to pull all statuses from backend
@@ -110,12 +112,8 @@ export class ViewProjectsComponent implements OnInit {
 
   // return all projects from db
   public getProjects(): void {
-    console.log('getProjects method: ');
     this.viewProjectService.getAllProjects().subscribe((report: any) => {
-
-      this.projects = report;
-
-      this.dataSource.data = this.projects;
+      this.dataSource.data = this.projects = report;
     });
   }
 
@@ -128,7 +126,7 @@ export class ViewProjectsComponent implements OnInit {
     });
   }
 
-  // collecting the current owner is showing in the table;
+  // collecting the current onwer is showing in the table;
   getProjectOwners(): void
   {
     this.viewProjectService.GetAllProjects().subscribe( (data: any ) => {
@@ -137,7 +135,7 @@ export class ViewProjectsComponent implements OnInit {
             this.owners.push(element.owner.username);
         }
       });
-    });
+    })
   }
   // grabs all of the statuses
   getAllStatuses(): void {
@@ -158,11 +156,6 @@ export class ViewProjectsComponent implements OnInit {
       console.log(this.phase);
     });
   }
-
- //////////////////////////////////////////////////////////////
-
-
-
 
    changeBatch(value: BatchTemplate): void {
     this.sendBatch = value;
@@ -246,15 +239,15 @@ export class ViewProjectsComponent implements OnInit {
     }
   }
 
-  /*ngAfterViewInit() {
+  ngAfterViewInit() {
     // this.getProjects();
     // this.getProjectTags();
     // this.getProjectPhase();
     // this.getProjectStatus();
     // this.dataSource = new MatTableDataSource(this.projects);
     // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-  }*/
+    this.dataSource.sort = this.sort;
+  }
 
   // look into fixing the lifecycle stuff so it doesn't need the tslint:disable stuff
   // tslint:disable-next-line:use-lifecycle-interface
@@ -286,7 +279,8 @@ export class ViewProjectsComponent implements OnInit {
   }
 
 
-  filterProjectsByOwners(event: MatSelectChange): void {
+  filterProjectsByOwners(event: MatSelectChange)
+  {
     console.log(this.ownerSelected);
     if (this.ownerSelected === 'noOwner') {
       this.getProjects();
@@ -391,6 +385,7 @@ export class ViewProjectsComponent implements OnInit {
     else {
       this.dataSource = new MatTableDataSource(temp);
     }
+    this.dataSource.sort = this.sort;
   }
 
   reset(): void {
