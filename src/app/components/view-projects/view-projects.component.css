@@ -77,6 +77,9 @@ th.mat-id{
 }
 th.mat-header-cell{
   text-align: center;
+  background-color: rgb(242,105,38);
+  color: white;
+  
 }
 .mat-raised-button.mat-primary{
   background: var(--orange);
@@ -100,10 +103,7 @@ th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:
   justify-content: flex-end;
 
 }
-th.mat-header-cell{
-  background-color: rgb(242,105,38);
-  color: white;
-}
+
 
 ::ng-deep .mat-sort-header-container {
   justify-content: center;
