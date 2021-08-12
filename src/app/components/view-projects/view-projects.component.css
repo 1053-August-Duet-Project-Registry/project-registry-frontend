@@ -94,7 +94,7 @@ div.mat-id{
 ::ng-deep .mat-select-value {
   color: unset;
 }
-mat-select[name$=List] .mat-select-min-line {
+::ng-deep .mat-select-min-line {
   color: #fff;
 }
 
