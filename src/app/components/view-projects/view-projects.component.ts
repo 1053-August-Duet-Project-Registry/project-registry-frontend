@@ -203,6 +203,7 @@ export class ViewProjectsComponent implements OnInit {
     this.getProjectTags();
     this.getProjectOwners();
     this.getAllStatuses();
+    //this.getAllProjectStatuses();
 
     this.getPhases();
 
@@ -344,8 +345,8 @@ export class ViewProjectsComponent implements OnInit {
   filterProjectsByOwners(event: MatSelectChange) 
   {
     console.log(this.ownerSelected);
-    if (this.ownerSelected=== '') {
-      this.filteredProjects = this.projects;
+    if (this.ownerSelected=== 'noOwner') {
+      this.getProjects();
     }
     else  {
         this.filteredOwners = [];
@@ -360,18 +361,21 @@ export class ViewProjectsComponent implements OnInit {
   }
   // this function filters by status correctly, if disabled filtering status doesn't work
   filterProjectsByStatus(): void {
-    if (this.statusSelected === '') {
-      this.filteredProjects = this.dataSource.data;
+    console.log(this.statusSelected);
+
+    if (this.statusSelected === 'noStatus') {
+      this.getProjects();
     } else {
       this.filteredStatuses = [];
 
       // finds projects with status name the same as selected status
-      for (const project of this.dataSource.data) {
+      for (const project of this.projects) {
         if (project.status.name === this.statusSelected) {
           this.filteredStatuses.push(project);
         }
       }
     }
+    console.log(this.filteredStatuses);
   }
 
   filterStatus(event?: MatSelectChange): void {
@@ -381,10 +385,10 @@ export class ViewProjectsComponent implements OnInit {
 
   filterTag(event: MatSelectChange): void {
     if (this.tagSelected === 'noTag') {
-      this.filteredProjects = this.dataSource.data;
+      this.getProjectsInit();
     } else {
       this.filteredTags = [];
-      for (const i of this.dataSource.data) {
+      for (const i of this.projects) {
         for (const j of i.tags) {
           if (j.name === this.tagSelected) {
             this.filteredTags.push(i);
@@ -403,9 +407,9 @@ export class ViewProjectsComponent implements OnInit {
       this.filteredProjects = this.dataSource.data;
     } else {
       this.filteredPhase = [];
-      for (const i of this.dataSource.data) {
-        // finds projects with status name the same as selected status
-        // if (i.phase.kind === this.phaseSelected) {
+      for (const i of this.projects) {
+       // finds projects with status name the same as selected status
+        // if (i.iterations[0]?.phase.kind === this.phaseSelected) {
         //   this.filteredPhase.push(i);
         // }
       }
