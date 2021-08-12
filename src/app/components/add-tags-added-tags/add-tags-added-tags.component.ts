@@ -71,12 +71,15 @@ export class AddTagsAddedTagsComponent implements OnInit {
       // changes the display of tags on screen
       this.data.updateTagArray(this.selectedTagArr);
       this.selectedTagArr = this.selectedTagArr.filter(tag => tag.name !== tagNoMore.name);
+
+      // this should no be here, the project tag should not be tucthed by the remove method
+      // TODO remove this part of the function
       if (this.project) {
         this.project.tags = this.project.tags.filter(tag => tag.name !== tagNoMore.name);
       }
     });
 
-    /* 
+    /*
     * this dependency causes an error in the constructor
     */
     // const index: number = this.SearchBarComponent.searchTags.indexOf(tagNoMore.name);
