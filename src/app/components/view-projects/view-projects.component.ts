@@ -1,6 +1,4 @@
 import { Location } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { ConditionalExpr } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange } from '@angular/material/select';
@@ -8,7 +6,6 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { BatchTemplate } from 'src/app/models/batch.model';
 import { Iteration } from 'src/app/models/iteration.model';
 import { Phase } from 'src/app/models/phase.models';
@@ -22,8 +19,6 @@ import { TagService } from 'src/app/service/tag.service';
 import { Project } from '../../models/project.model';
 import { LoginServiceService } from '../../service/login-service.service';
 import { PhaseService } from '../../service/phase.service';
-
-export interface statusFilter { }
 
 @Component({
   selector: 'app-view-projects',
@@ -170,7 +165,7 @@ export class ViewProjectsComponent implements OnInit {
   iterationError?: string;
   
    changeBatch(value: BatchTemplate): void {
-    this.sendBatch = value as BatchTemplate;
+    this.sendBatch = value;
   }
 
   getBatches(): void {
@@ -190,7 +185,7 @@ export class ViewProjectsComponent implements OnInit {
   sendIteration(row: Project): void {
     if (this.sendBatch) {
       // TODO add phase to last param instead of null
-      this.iteration = new Iteration(this.sendBatch.batchId, row as Project, this.sendBatch.id,
+      this.iteration = new Iteration(this.sendBatch.batchId, row, this.sendBatch.id,
         this.sendBatch.startDate, this.sendBatch.endDate, null);
 
       let haventIterate = true;

@@ -4,6 +4,12 @@ table {
 
   width: 100%;
 }
+
+.table-wrapper{
+  overflow-x: scroll;
+  width: 100%;
+}
+
 .mat-header-cell {
 
   width: 0;
@@ -95,6 +101,11 @@ div.mat-id{
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
   padding-right: 0;
   justify-content: flex-end;
+
+}
+th.mat-header-cell{
+  background-color: rgb(242,105,38);
+  color: white;
 }
 
 .reset-btn{
